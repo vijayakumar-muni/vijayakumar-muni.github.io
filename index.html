@@ -30,7 +30,7 @@ section{margin-bottom:3rem}
 h2{font-size:1.65rem;color:var(--navy);margin-bottom:1.1rem;display:flex;align-items:center;gap:.7rem}
 @media(prefers-color-scheme:dark){h2{color:#fff}}
 h2::after{content:"";flex:1;height:1px;background:var(--line)}
-.hero h2{display:none}.hero .lead{font-family:'Source Serif 4',serif;font-size:1.35rem;line-height:1.5}
+.hero h2{display:none}.hero .lead{margin-bottom:1rem}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.8rem;margin:1.5rem 0}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem;text-align:center}
 .stat b{display:block;font:700 1.7rem 'Source Serif 4';color:var(--blue)}.stat span{font-size:.78rem;color:var(--mute)}
@@ -55,7 +55,7 @@ body.dopen #drawer{transform:none}
 #drawer iframe{flex:1;border:0;width:100%}
 footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82rem;border-top:1px solid var(--line)}
 @media(min-width:1280px){body.dopen{--dw:min(46vw,640px)}body.dopen footer{margin-right:var(--dw)}}
-@media(max-width:900px){aside{position:static;width:auto;flex-direction:column}aside nav{flex-direction:row;flex-wrap:wrap;justify-content:center}main,footer{margin:0;padding:1.5rem 1.2rem}.row{grid-template-columns:1fr;gap:.2rem}#drawer{width:100vw}}
+@media(max-width:900px){aside{position:static;width:auto;flex-direction:column}aside nav{flex-direction:row;flex-wrap:wrap;justify-content:center}main,footer{margin:0;padding:1.5rem .4rem}.item{padding:.9rem .8rem}.row{grid-template-columns:1fr;gap:.2rem}#drawer{width:100vw}}
 </style>
 </head>
 <body>
