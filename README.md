@@ -1,4 +1,4 @@
-# Dr. Vijayakumar Muni — academic website
+# Vijayakumar Muni — Academic Website
 
 ## Deploy on GitHub Pages (≈5 minutes)
 1. On GitHub create a **public** repo named `<your-username>.github.io` (or any name, e.g. `cv`).
