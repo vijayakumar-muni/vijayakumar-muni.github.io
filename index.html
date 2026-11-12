@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dr. Vijayakumar Muni — Assistant Professor of Mathematics</title>
+<meta name="description" content="Academic website of Dr. Vijayakumar Muni: control theory, multi-agent networked systems, impulsive and time-delay systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf8f4;--card:#fff;--ink:#1c2433;--mute:#5b6577;--line:#e6e1d6;--navy:#14284b;--blue:#2a5db0;--gold:#b88a2e;--chip:#f1ede3;--dw:0px}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1521;--card:#171f2e;--ink:#e8ebf2;--mute:#9aa5b8;--line:#263147;--navy:#0b1220;--blue:#7fa8ee;--gold:#d8ad55;--chip:#202a3d}}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;scroll-padding-top:1rem}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;font-size:15px}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+h1,h2,h3{font-family:'Source Serif 4',Georgia,serif}
+aside{position:fixed;inset:0 auto 0 0;width:280px;background:var(--navy);color:#dfe5f1;padding:2rem 1.4rem;overflow-y:auto;display:flex;flex-direction:column;gap:1.1rem;z-index:20}
+.photo{width:150px;height:150px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);margin:0 auto;display:block;background:#2b3c5f}
+aside h1{color:#fff;font-size:1.3rem;text-align:center;line-height:1.25}
+aside .role{text-align:center;font-size:.8rem;color:#aab6cf}
+aside nav{display:flex;flex-direction:column;gap:.1rem}
+aside nav a{color:#c9d3e6;padding:.35rem .7rem;border-radius:6px;font-size:.88rem;border-left:2px solid transparent}
+aside nav a:hover,aside nav a.on{background:rgba(255,255,255,.08);color:#fff;text-decoration:none;border-left-color:var(--gold)}
+.soc{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-top:auto}
+.soc a{font-size:.74rem;color:#fff;border:1px solid rgba(255,255,255,.25);padding:.2rem .55rem;border-radius:20px}
+.soc a:hover{background:rgba(255,255,255,.14);text-decoration:none}
+.cvbtn{background:var(--gold);color:#1a1405;border:0;border-radius:8px;padding:.6rem;font:600 .88rem Inter;cursor:pointer}
+main{margin-left:280px;margin-right:var(--dw);padding:3rem 3.2rem 2rem;max-width:calc(1000px + 280px);transition:margin .25s}
+section{margin-bottom:3rem}
+h2{font-size:1.65rem;color:var(--navy);margin-bottom:1.1rem;display:flex;align-items:center;gap:.7rem}
+@media(prefers-color-scheme:dark){h2{color:#fff}}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.hero h2{display:none}.hero .lead{font-family:'Source Serif 4',serif;font-size:1.35rem;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.8rem;margin:1.5rem 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem;text-align:center}
+.stat b{display:block;font:700 1.7rem 'Source Serif 4';color:var(--blue)}.stat span{font-size:.78rem;color:var(--mute)}
+.tags{display:flex;flex-wrap:wrap;gap:.5rem}.tag{background:var(--chip);border-radius:20px;padding:.25rem .8rem;font-size:.85rem}
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.7rem}
+.item.pub{border-left:3px solid var(--gold)}
+.item h3{font-size:1.02rem;line-height:1.4;margin-bottom:.2rem}
+.meta{font-size:.84rem;color:var(--mute)}.row{display:grid;grid-template-columns:130px 1fr;gap:1rem}
+.when{font-size:.82rem;font-weight:600;color:var(--gold)}
+.chip{display:inline-block;font-size:.72rem;font-weight:600;background:var(--chip);border-radius:4px;padding:.05rem .45rem;margin:.35rem .3rem 0 0}
+.me{font-weight:600;color:var(--ink)}
+.bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.bar button{font:500 .82rem Inter;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:.25rem .9rem;cursor:pointer}
+.bar button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:.6rem}
+summary{cursor:pointer;padding:.8rem 1.2rem;font-weight:600}details ul{padding:0 1.2rem 1rem 2.4rem;font-size:.9rem}
+details li{margin-bottom:.25rem}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(46vw,640px);background:var(--card);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .25s;z-index:30;display:flex;flex-direction:column}
+body.dopen #drawer{transform:none}
+#drawer header{display:flex;justify-content:space-between;align-items:center;padding:.6rem 1rem;border-bottom:1px solid var(--line);font-weight:600}
+#drawer header button{border:0;background:none;color:var(--ink);font-size:1.3rem;cursor:pointer}
+#drawer iframe{flex:1;border:0;width:100%}
+footer{margin-left:280px;padding:1.5rem 3.2rem;color:var(--mute);font-size:.82rem;border-top:1px solid var(--line)}
+@media(min-width:1280px){body.dopen{--dw:min(46vw,640px)}body.dopen footer{margin-right:var(--dw)}}
+@media(max-width:900px){aside{position:static;width:auto;flex-direction:column}aside nav{flex-direction:row;flex-wrap:wrap;justify-content:center}main,footer{margin:0;padding:1.5rem 1.2rem}.row{grid-template-columns:1fr;gap:.2rem}#drawer{width:100vw}}
+</style>
+</head>
+<body>
+<aside>
+  <img class="photo" src="assets/Photo1.jpg" alt="Dr. Vijayakumar Muni" onerror="this.removeAttribute('src');this.style.display='none'">
+  <div><h1>Dr. Vijayakumar Muni</h1><div class="role">Assistant Professor of Mathematics<br>Govt. First Grade Women’s College, Sagara</div></div>
+  <button class="cvbtn" data-doc="assets/Curriculum_Vitae.pdf">📄 View CV alongside</button>
+  <nav id="nav"></nav>
+  <div class="soc" id="soc"></div>
+</aside>
+
+<main>
+  <section id="about" class="hero">
+    <h2>About</h2>
+    <p class="lead">I study how groups of interacting agents can be steered, observed and brought to agreement — through the lens of control theory, impulsive dynamics and time delays.</p>
+    <div class="stats" id="stats"></div>
+    <p>I am an Assistant Professor in the Department of Mathematics at Smt. Indira Gandhi Government First Grade Women’s College, Sagara, Karnataka. I earned my PhD from the Indian Institute of Space Science and Technology (IIST), Thiruvananthapuram, under <a href="https://www.iist.ac.in/people-faculty-profile/raju-k-george">Dr. Raju K. George</a>, with a thesis on <a href="http://hdl.handle.net/10603/250475"><i>Studies on Controllability of Dynamical Systems with Impulses and Time-Delay Controls</i></a>.</p>
+  </section>
+  <section id="research"><h2>Research</h2><div class="tags" id="interests"></div></section>
+  <section id="publications"><h2>Publications</h2><div class="bar" id="pubbar"></div><div id="pubs"></div><h3 style="margin:1.5rem 0 .6rem">Scholarly &amp; Educational Resources</h3><div id="res"></div></section>
+  <section id="talks"><h2>Talks &amp; Media</h2><div id="talklist"></div><details><summary>Earlier invited talks &amp; conference presentations</summary><ul id="oldtalks"></ul></details><div id="media"></div></section>
+  <section id="career"><h2>Education &amp; Positions</h2><div id="edu"></div></section>
+  <section id="teaching"><h2>Teaching &amp; Supervision</h2><div id="teach"></div></section>
+  <section id="honors"><h2>Honors &amp; Fellowships</h2><div id="hon"></div></section>
+  <section id="service"><h2>Service &amp; Development</h2><div id="svc"></div></section>
+  <section id="contact"><h2>Contact</h2>
+    <div class="item"><b>Smt. Indira Gandhi Government First Grade Women’s College</b><br><span class="meta">Department of Mathematics · Sagara – 577401, Karnataka, India</span><br><br>
+    ✉ <a href="#" id="mail">Show e-mail</a> &nbsp;·&nbsp; <a href="https://gfgc.karnataka.gov.in/gfwcsagar/public/47/teaching-staff/en">College faculty page</a></div>
+  </section>
+</main>
+<footer>© <span id="yr"></span> Vijayakumar Muni · Last updated November 2026</footer>
+
+<div id="drawer"><header><span id="dtitle">Document</span><span><a id="dopen" target="_blank" rel="noopener" style="font-size:.8rem;margin-right:1rem">Open ↗</a><button id="dclose" aria-label="Close">×</button></span></header><iframe id="dframe" title="Document viewer"></iframe></div>
+
+<script>
+const ME="Muni";
+const links=[["Google Scholar","https://scholar.google.com/citations?user=RnnY47kAAAAJ&hl=en"],["ORCID","https://orcid.org/0000-0001-5749-8119"],["Scopus","https://www.scopus.com/authid/detail.uri?authorId=57204153141"],["ResearchGate","https://www.researchgate.net/profile/Vijayakumar_Muni"],["LinkedIn","https://www.linkedin.com/in/vijayakumar-muni-727b1937/"],["Math Genealogy","https://www.genealogy.math.ndsu.nodak.edu/id.php?id=260539"],["YouTube","https://www.youtube.com/@vijayakumarmuni5887"],["X","https://x.com/munivijay11"]];
+const stats=[[12,"Journal articles"],[6,"Zenodo reports"],[2,"NET/JRF-level AIRs (26, 36)"],[11,"Years teaching"],["84.8%","MSc, Gulbarga Univ."]];
+const interests=["Multi-agent networked systems","Controllability & observability","Consensus & signed networks","Impulsive systems","Time-delay systems","Fractional-order systems","Data envelopment analysis"];
+// [authors, title, venue, vol, year, doi/url, tags]
+const pubs=[
+["B. Aadhithyan, V. S. Muni*, V. S. Athira, M. R. Kallu Vetty, G. J. Reddy","Sensor–non-sensor observability of directed and weighted signed networks under heterogeneous dynamics in n-dimensional space","International Journal of Control","99(8), 2616–2637",2026,"10.1080/00207179.2026.2679225",["SCIE","Scopus","IF 1.6","Q3"]],
+["V. S. Athira, V. S. Muni*, K. V. M. Rafeek, B. Aadhithyan, G. J. Reddy","Observability study in weighted and directed signed multi-agent networks of single- and double-integrator dynamical agents","Indian Journal of Mathematics","67(2), 169–201",2025,"https://amsalld.org/wp-content/uploads/2026/07/IJM672.pdf",["Scopus","Q4"]],
+["V. S. Muni*, K. V. M. Rafeek, G. J. Reddy, D. S. Sharanappa","Signed networks with Laplacian feedback: Observability and minimal sensor problem","Bulletin of the Polish Academy of Sciences: Technical Sciences","73(4), e154061",2025,"10.24425/bpasts.2025.154061",["SCIE","Scopus","IF 1.2","Q3"]],
+["V. S. Muni*, K. V. M. Rafeek, G. J. Reddy, R. K. George","Observability of multi-agent networks over random-walk normalised Laplacian dynamics","Indian Journal of Mathematics","65(3), 295–322",2023,"https://amsalld.org/wp-content/uploads/2024/01/Contents-with-Abstract-IJM-Vol.-65-No.3-2023.pdf",["Scopus","Q4"]],
+["V. S. Muni*, K. V. M. Rafeek, V. S. Athira, G. J. Reddy","Controllability of consensus of multi-agent networks over heterogeneous dynamics","Results in Control and Optimization","12, 100272",2023,"10.1016/j.rico.2023.100272",["ESCI","Scopus","CiteScore 5.1","Q2"]],
+["V. S. Athira, V. S. Muni*, K. V. M. Rafeek, G. J. Reddy*","Controllability of consensus heterogeneous multi-agent networks over continuous time scale","Control and Cybernetics","52(2), 199–245",2023,"10.2478/candc-2023-0037",["Scopus","Q4"]],
+["V. S. Muni*, K. V. M. Rafeek, G. J. Reddy, R. K. George","On the selection of leaders for the controllability of multi-agent networks","Bulletin of the Iranian Mathematical Society","48(6), 3141–3183",2022,"10.1007/s41980-022-00683-2",["SCIE","Scopus","IF 0.7","Q2"]],
+["V. S. Muni* and R. K. George","On controllability of networked higher dimensional impulsive systems","Bulletin of the Iranian Mathematical Society","47(6), 1947–1968",2021,"10.1007/s41980-020-00481-8",["SCIE","Scopus","IF 0.7","Q2"]],
+["V. S. Muni* and R. K. George","Controllability of linear impulsive systems — an eigenvalue approach","Kybernetika","56(4), 727–752",2020,"10.14736/kyb-2020-4-0727",["SCIE","Scopus","IF 0.9","Q4"]],
+["V. S. Muni* and R. K. George","Controllability of semilinear impulsive control systems with multiple time delays in control","IMA Journal of Mathematical Control & Information","36(3), 869–899",2019,"10.1093/imamci/dny011",["SCIE","Scopus","IF 1.6","Q2"]],
+["V. S. Muni* and R. K. George","Controllability of linear impulsive matrix Lyapunov differential systems with delays in the control function","Kybernetika","54(4), 664–698",2018,"10.14736/kyb-2018-4-0664",["SCIE","Scopus","IF 0.9","Q4"]],
+["V. S. Muni*, V. Govindaraj, R. K. George","Controllability of fractional order semilinear systems with a delay in control","Indian Journal of Mathematics","60(2), 311–335",2018,"https://amsalld.org/wp-content/uploads/2023/04/ijm602-spec-iss-aug-18.pdf",["Scopus","Q4"]]];
+const res=[
+["V. Muni, M. Althaf, K. V. M. Rafeek, V. Govindaraj","A mathematical framework for controllability of single-agent systems modelled as a point-particle governed by linear dynamics in continuous-time (pedagogical exposition)","2026-05","10.5281/zenodo.20487021"],
+["V. Muni","Disparity to consensus: A social network as an example","2025-12","10.5281/zenodo.18049144"],
+["V. Muni, K. Kumari","Fundamental notions in a multi-agent network under ordinary differential dynamics (pedagogical exposition)","2025-10","10.5281/zenodo.17438770"],
+["V. Muni","E-Tracking controllability (special case: trajectory controllability), Part II","2025-07","10.5281/zenodo.15811114"],
+["V. Muni","Synchronization of self-driving cars: Velocity consensus","2025-02","10.5281/zenodo.15255747"],
+["V. Muni","E-Tracking controllability (special case: trajectory controllability), Part I","2025-02","10.5281/zenodo.15252115"]];
+const talks=[
+["2026-08","Controllability: Single-agent to multi-agent systems; Data envelopment analysis","Central University of Karnataka, Kadaganchi"],
+["2026-02","A mathematical framework for MAS controllability","Intl. Conf. on Science for a Sustainable Future, Rani Durgavati University, Jabalpur"],
+["2026-01","Importance of Mathematics in Computer Science, AI, and Machine Learning (online)","Kakatiya Institute of Technology & Science, Warangal"],
+["2025-12","Disparity to consensus: Two illustrating examples","Intl. Conf. on Recent Advances in Mathematical Sciences & Applications, GVP College of Engineering, Visakhapatnam"],
+["2025-11","Limitations of CCR & the birth of BCC; SBM model & a case study","Vel Tech Rangarajan Dr. Sagunthala R&D Institute, Avadi"],
+["2025-11","Efficiency measurement under variable returns to scale; Slack-based measure","Two-Day National Workshop on DEA, VIT Chennai"],
+["2025-08","Python programming for DEA and hybrid DEA-AI frameworks","South Asian University, New Delhi & Queen’s University Belfast"],
+["2025-06","E-Tracking controllability in MAS","Intl. Conf. on Mathematical Analysis & its Applications, Karnatak University, Dharwad"]];
+const old=["2025-07 · BCC model for DEA (online) — NIT Raipur","2024-06 · Agreement in social networks — GFGC Bhalki","2024-06 · Decoding signed networks: key observability insights — Guru Nanak FGC, Bidar","2024-06 · Topological data analysis — Karnatak ASC College, Bidar","2023-12 · Ordinary differential equations in everyday scenarios — Karnatak ASC College, Bidar","2023-10 · Lecture on linear algebra — NIT Puducherry, Karaikal","2020-01 · Lectures on control theory — Central University of Karnataka","2019-12 · Controllability of LTI complex networked systems with impulses — MLSU Udaipur","2019-12 · Impulsive and delay control systems: history & perspectives — MBIT, Vallabh Vidyanagar","2019-04 · Controllability of linear impulsive systems: a graph theory perspective — NIT Puducherry","2019-03 · Controllability of complex networks with impulses and time-delay controls — CUTN Thiruvarur","2018-10 · A PBH-rank condition for linear impulsive systems — Delhi Technological University","2018-09 · Networked higher-dimensional systems with multiple delays — Madurai Kamaraj University","2018-08 · Fractional order semilinear systems with delays in control — Integral University, Lucknow"];
+const media=[["Dainik Bhaskar, Jabalpur · 2026-02-28","Co-authored feature on quantum computing (Hindi)"],["Aaj ka Bharat, Jabalpur · 2026-02-26","Coverage of the Rani Durgavati University international conference","https://youtu.be/PssFCA9XH7U?t=389"]];
+const edu=[
+["2015 – 2019","PhD, Mathematics","Indian Institute of Space Science and Technology, Valiamala, Kerala. Supervisor: Dr. Raju K. George."],
+["2010 – 2012","MSc, Mathematics — 84.8%","Gulbarga University, Kalaburagi. Prof. V. P. Rathod Gold Medal (Numerical Analysis)."],
+["2007 – 2010","BSc (PCM) — 85.24%","Sharnbasveshwar College of Science, Kalaburagi. 6th Rank, Gulbarga University."],
+["2023 – Present","Assistant Professor (regular)","Smt. Indira Gandhi Government First Grade Women’s College, Sagara."],
+["2017 – 2023","Assistant Professor (regular)","Sri H. D. Devegowda Government First Grade College, Paduvalahippe."],
+["2014 – 2015","Faculty (contract)","Central University of Karnataka, Kadaganchi."]];
+const teach=[
+["Sagara (2023–)","Ordinary & Partial Differential Equations · Topology I–II · Numerical Analysis I–II"],
+["Paduvalahippe (2017–23)","Algebra · Linear Algebra · Graph Theory & Advanced Graph Theory · Complex Analysis · ODE/PDE · Functional Analysis · Topology I–II"],
+["Central Univ. of Karnataka (2014–15)","Complex Analysis · Lebesgue Measure Theory · Integral Equations · Discrete Mathematics · Functional Analysis"],
+["MSc supervision (4)","Distributed control & coordination of MAS (2025–26) · Controllability of single-agent systems (2025–26, with V. Govindaraj) · Cooperative tasks in MAS (2025) · Consensus, controllability & observability in MAS (2024)"]];
+const hon=[
+["2025","Fellow, Summer Research Fellowship Programme (IASc–INSA–NASI)","Indian Institute of Science, Bengaluru, hosted by Dept. of Electrical Engineering"],
+["2020","Fellow, Summer Faculty Research Fellow Programme (CEP)","IIT Delhi, Dept. of Mathematics (online)"],
+["2015","CSIR–UGC NET (Jun 2015) — AIR 36","Lectureship in Mathematical Sciences"],
+["2015","CSIR–UGC NET (Dec 2014) — AIR 26","Lectureship in Mathematical Sciences"],
+["2015","GATE Mathematics — AIR 716","Score 365"],
+["2014","KSET Lectureship — Mathematical Science","Karnataka State Eligibility Test, 2013"]];
+const svc=[
+["Reviewing","ISA Transactions (Elsevier) · IET Control Theory & Applications (Wiley) · Mathematical Reviews (AMS)"],
+["Session chair","Intl. Conf. on Fractional Calculus (NIT Puducherry, 2023) · Intl. Conf. on Multidisciplinary Research (Sharnbasva Univ., 2022) · ICRAAAA (MLSU Udaipur, 2019)"],
+["Convener / moderator","“An Hour with” guest-lecture series at Sagara — Enrique Zuazua, K. G. Arun, Veena V. S. (2026) · Webinar on Cosmos (2025)"],
+["Examinations","Board of Examinations, Kuvempu University (2025) · Question-paper setter & evaluator, University of Mysore and Sharnbasva University"],
+["Organising","Mathemattitude state-level teaching competitions (2018–2023) · National webinars and workshops at Paduvalahippe"],
+["Memberships","Life member, ISIAM · SIAM Outreach (2019) · IEEE (2019)"],
+["Professional development","UGC-MMTTC Refresher Courses (Assam Univ. 2025–26; SPPU 2025; CUSB 2024) · GIAN Course on Network Sciences & MAS, IIT (BHU) 2023 · Induction Training Programme-45 · Coursera: KAIST, Imperial College, HKUST, Univ. of Sydney"]];
+const $=s=>document.querySelector(s),E=(t,h,c)=>{const e=document.createElement(t);e.innerHTML=h;if(c)e.className=c;return e};
+const doi=d=>d.startsWith("http")?d:"https://doi.org/"+d;
+const bold=a=>a.replace(/V\. (S\. )?Muni\*?/g,m=>`<span class="me">${m}</span>`);
+$("#soc").innerHTML=links.map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${l[0]}</a>`).join("");
+$("#stats").innerHTML=stats.map(s=>`<div class="stat"><b>${s[0]}</b><span>${s[1]}</span></div>`).join("");
+$("#interests").innerHTML=interests.map(t=>`<span class="tag">${t}</span>`).join("");
+const years=["All",...new Set(pubs.map(p=>p[4]))];
+function drawPubs(y){$("#pubs").innerHTML="";pubs.filter(p=>y=="All"||p[4]==y).forEach(p=>$("#pubs").append(E("div",`<h3>${p[1]}</h3><div class="meta">${bold(p[0])}</div><div class="meta"><i>${p[2]}</i>, ${p[3]}, ${p[4]}</div>${p[6].map(t=>`<span class="chip">${t}</span>`).join("")}<a class="chip" href="${doi(p[5])}" target="_blank" rel="noopener">${p[5].startsWith("http")?"Full text ↗":"DOI ↗"}</a>`,"item pub")));
+ document.querySelectorAll("#pubbar button").forEach(b=>b.classList.toggle("on",b.dataset.y==y))}
+$("#pubbar").innerHTML=years.map(y=>`<button data-y="${y}">${y}</button>`).join("");
+$("#pubbar").onclick=e=>e.target.dataset.y&&drawPubs(e.target.dataset.y);drawPubs("All");
+res.forEach(r=>$("#res").append(E("div",`<h3>${r[1]}</h3><div class="meta">${r[0]} · Zenodo, ${r[2]}</div><a class="chip" href="https://doi.org/${r[3]}" target="_blank" rel="noopener">DOI ↗</a>`,"item")));
+const rows=(el,d)=>d.forEach(r=>$(el).append(E("div",`<div class="when">${r[0]}</div><div><h3>${r[1]}</h3><div class="meta">${r[2]||""}</div></div>`,"item row")));
+rows("#talklist",talks.map(t=>[t[0],t[1],t[2]]));
+$("#oldtalks").innerHTML=old.map(o=>`<li>${o}</li>`).join("");
+media.forEach(m=>$("#media").append(E("div",`<h3>${m[2]?`<a href="${m[2]}" target="_blank" rel="noopener">${m[0]}</a>`:m[0]}</h3><div class="meta">${m[1]}</div>`,"item")));
+rows("#edu",edu);rows("#teach",teach);rows("#hon",hon);rows("#svc",svc);
+const secs=[...document.querySelectorAll("main section")];
+$("#nav").innerHTML=secs.map(s=>`<a href="#${s.id}">${s.querySelector("h2").textContent}</a>`).join("");
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")=="#"+e.target.id))}),{rootMargin:"-30% 0px -60% 0px"});secs.forEach(s=>io.observe(s));
+// e-mail assembled at runtime to deter scrapers
+$("#mail").onclick=e=>{e.preventDefault();const a="vijayakumarmuni0"+"@"+"gmail.com";e.target.textContent=a;e.target.href="mailto:"+a};
+// side document drawer
+function openDoc(src,title){$("#dframe").src=src;$("#dopen").href=src;$("#dtitle").textContent=title||"Document";document.body.classList.add("dopen")}
+document.addEventListener("click",e=>{const d=e.target.closest("[data-doc]");if(d){e.preventDefault();openDoc(d.dataset.doc,d.textContent.replace("📄","").trim())}});
+$("#dclose").onclick=()=>document.body.classList.remove("dopen");
+document.addEventListener("keydown",e=>e.key=="Escape"&&document.body.classList.remove("dopen"));
+$("#yr").textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
