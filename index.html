@@ -165,7 +165,7 @@ $("#interests").innerHTML=interests.map(t=>`<span class="tag">${t}</span>`).join
 const yr=p=>String(p[4]).slice(0,4);
 const isRes=p=>p[2]=="Zenodo";
 const years=["All",...[...new Set(pubs.map(yr))].sort().reverse()];
-function card(p){return E("div",`<h3>${p[1]}</h3><div class="meta">${bold(p[0])}</div><div class="meta"><i>${p[2]}</i>, ${p[3]?p[3]+", ":""}${p[4]}</div>${p[6].map(t=>`<span class="chip">${t}</span>`).join("")}<a class="chip" href="${doi(p[5])}" target="_blank" rel="noopener">URL: ${doi(p[5])} ↗</a>`,"item pub")}
+function card(p){return E("div",`<h3>${p[1]}</h3><div class="meta">${bold(p[0])}</div><div class="meta"><i>${p[2]}</i>, ${p[3]?p[3]+", ":""}${p[4]}</div>${p[6].map(t=>`<span class="chip">${t}</span>`).join("")}<span class="chip">URL: <a href="${doi(p[5])}" target="_blank" rel="noopener">${doi(p[5])} ↗</a></span>`,"item pub")}
 function drawPubs(y){const f=pubs.filter(p=>y=="All"||yr(p)==y);
 [["#pubs","#hpubs",false],["#res","#hres",true]].forEach(([l,h,r])=>{$(l).innerHTML="";f.filter(p=>isRes(p)==r).forEach(p=>$(l).append(card(p)));$(h).style.display=$(l).children.length?"":"none"});
 document.querySelectorAll("#pubbar button").forEach(b=>b.classList.toggle("on",b.dataset.y==y));
