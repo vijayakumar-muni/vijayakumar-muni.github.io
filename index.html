@@ -57,6 +57,8 @@ footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82re
 @media(min-width:1280px){body.dopen{--dw:min(46vw,640px)}body.dopen footer{margin-right:var(--dw)}}
 @media(max-width:900px){aside{position:static;width:auto;flex-direction:column}aside nav{flex-direction:row;flex-wrap:wrap;justify-content:center}main,footer{margin:0;padding:1.5rem .4rem}.item{padding:.9rem .8rem}.row{grid-template-columns:1fr;gap:.2rem}#drawer{width:100vw}}
 </style>
+<script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
 </head>
 <body>
 <aside>
@@ -97,7 +99,7 @@ const stats=[[12,"Journal Articles"],[7,"Scholarly and Educational Resources"],[
 const interests=["Multi-agent networked systems","Control-theoretic properties","Impulsive systems","Time-delay systems","Fractional-order systems","Data envelopment analysis"];
 // [authors, title, venue, vol, year, doi/url, tags]
 const pubs=[
-["B. Aadhithyan, V. S. Muni*, V. S. Athira, K. V. M. Rafeek, and G. J. Reddy","Sensor&ndash;non-sensor observability of directed and weighted signed networks under heterogeneous dynamics in n-dimensional space","International Journal of Control","99(8), 2616&ndash;2637",2026-06-01,"10.1080/00207179.2026.2679225",["SCIE","Scopus","IF 1.6","Q3"]],
+["B. Aadhithyan, V. S. Muni*, V. S. Athira, K. V. M. Rafeek, and G. J. Reddy","Sensor&ndash;non-sensor observability of directed and weighted signed networks under heterogeneous dynamics in $n$-dimensional space","International Journal of Control","99(8), 2616&ndash;2637",2026-06-01,"10.1080/00207179.2026.2679225",["SCIE","Scopus","IF 1.6","Q3"]],
 ["V. S. Athira, V. S. Muni*, K. V. M. Rafeek, B. Aadhithyan, and G. J. Reddy","Observability study in weighted and directed signed multi-agent networks of single- and double-integrator dynamical agents","Indian Journal of Mathematics","67(2), 169&ndash;201",2025-08,"https://amsalld.org/wp-content/uploads/2026/07/IJM672.pdf",["Scopus","Q4"]],
 ["V. S. Muni*, K. V. M. Rafeek, G. J. Reddy, and D. S. Sharanappa","Signed networks with Laplacian feedback: Observability and minimal sensor problem","Bulletin of the Polish Academy of Sciences: Technical Sciences","73(4), e154061",2025-07-02,"10.24425/bpasts.2025.154061",["SCIE","Scopus","IF 1.2","Q3"]],
 ["V. S. Muni*, K. V. M. Rafeek, G. J. Reddy, and R. K. George","Observability of multi-agent networks over random-walk normalised Laplacian dynamics","Indian Journal of Mathematics","65(3), 295&ndash;322",2023-12,"https://amsalld.org/wp-content/uploads/2024/01/Contents-with-Abstract-IJM-Vol.-65-No.3-2023.pdf",["Scopus","Q4"]],
@@ -162,7 +164,7 @@ $("#stats").innerHTML=stats.map(s=>`<div class="stat"><b>${s[0]}</b><span>${s[1]
 $("#interests").innerHTML=interests.map(t=>`<span class="tag">${t}</span>`).join("");
 const years=["All",...new Set(pubs.map(p=>p[4]))];
 function drawPubs(y){$("#pubs").innerHTML="";pubs.filter(p=>y=="All"||p[4]==y).forEach(p=>$("#pubs").append(E("div",`<h3>${p[1]}</h3><div class="meta">${bold(p[0])}</div><div class="meta"><i>${p[2]}</i>, ${p[3]}, ${p[4]}</div>${p[6].map(t=>`<span class="chip">${t}</span>`).join("")}<a class="chip" href="${doi(p[5])}" target="_blank" rel="noopener">${p[5].startsWith("http")?"Full text ↗":"DOI ↗"}</a>`,"item pub")));
- document.querySelectorAll("#pubbar button").forEach(b=>b.classList.toggle("on",b.dataset.y==y))}
+ document.querySelectorAll("#pubbar button").forEach(b=>b.classList.toggle("on",b.dataset.y==y));window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([$("#pubs")])}
 $("#pubbar").innerHTML=years.map(y=>`<button data-y="${y}">${y}</button>`).join("");
 $("#pubbar").onclick=e=>e.target.dataset.y&&drawPubs(e.target.dataset.y);drawPubs("All");
 res.forEach(r=>$("#res").append(E("div",`<h3>${r[1]}</h3><div class="meta">${r[0]} · Zenodo, ${r[2]}</div><a class="chip" href="https://doi.org/${r[3]}" target="_blank" rel="noopener">DOI ↗</a>`,"item")));
