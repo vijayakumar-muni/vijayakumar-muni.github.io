@@ -78,7 +78,7 @@ footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82re
     <p>I earned my Doctor of Philosophy from the Indian Institute of Space Science and Technology, Thiruvananthapuram, Kerala, in 2019, under <a href="https://www.iist.ac.in/people-faculty-profile/raju-k-george">Raju K. George</a>, with a thesis on <a href="http://hdl.handle.net/10603/250475"><i>Studies on Controllability of Dynamical Systems with Impulses and Time-Delay Controls</i></a>.</p>
   </section>
   <section id="research"><h2>Research</h2><div class="tags" id="interests"></div></section>
-  <section id="publications"><h2>Publications</h2><div class="bar" id="pubbar"></div><h3 class="sub">Journal Articles</h3><div id="pubs"></div><h3 class="sub">Scholarly &amp; Educational Resources</h3><div id="res"></div></section>
+  <section id="publications"><h2>Publications</h2><div class="bar" id="pubbar"></div><h3 class="sub" id="hpubs">Journal Articles</h3><div id="pubs"></div><h3 class="sub" id="hres">Scholarly &amp; Educational Resources</h3><div id="res"></div></section>
   <section id="talks"><h2>Talks and Media</h2><div id="talklist"></div><details><summary>Earlier invited talks &amp; conference presentations</summary><ul id="oldtalks"></ul></details><div id="media"></div></section>
   <section id="career"><h2>Education and Positions</h2><div id="edu"></div></section>
   <section id="teaching"><h2>Teaching and Supervision</h2><div id="teach"></div></section>
@@ -164,12 +164,13 @@ $("#soc").innerHTML=links.map(l=>`<a href="${l[1]}" target="_blank" rel="noopene
 $("#stats").innerHTML=stats.map(s=>`<div class="stat"><b>${s[0]}</b><span>${s[1]}</span></div>`).join("");
 $("#interests").innerHTML=interests.map(t=>`<span class="tag">${t}</span>`).join("");
 const yr=p=>String(p[4]).slice(0,4);
-const years=["All",...new Set(pubs.map(yr))];
+const ry=r=>String(r[2]).slice(0,4);
+const years=["All",...[...new Set([...pubs.map(yr),...res.map(ry)])].sort().reverse()];  
 function drawPubs(y){$("#pubs").innerHTML="";pubs.filter(p=>y=="All"||yr(p)==y).forEach(p=>$("#pubs").append(E("div",`<h3>${p[1]}</h3><div class="meta">${bold(p[0])}</div><div class="meta"><i>${p[2]}</i>, ${p[3]}, ${p[4]}</div>${p[6].map(t=>`<span class="chip">${t}</span>`).join("")}<a class="chip" href="${doi(p[5])}" target="_blank" rel="noopener">${p[5].startsWith("http")?"Full text ↗":"DOI ↗"}</a>`,"item pub")));
- document.querySelectorAll("#pubbar button").forEach(b=>b.classList.toggle("on",b.dataset.y==y));window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([$("#pubs")])}
+document.querySelectorAll("#pubbar button").forEach(b=>b.classList.toggle("on",b.dataset.y==y));drawRes(y);$("#hpubs").style.display=$("#pubs").children.length?"":"none";window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([$("#pubs"),$("#res")])}
 $("#pubbar").innerHTML=years.map(y=>`<button data-y="${y}">${y}</button>`).join("");
 $("#pubbar").onclick=e=>e.target.dataset.y&&drawPubs(e.target.dataset.y);drawPubs("All");
-res.forEach(r=>$("#res").append(E("div",`<h3>${r[1]}</h3><div class="meta">${r[0]} · Zenodo, ${r[2]}</div><a class="chip" href="https://doi.org/${r[3]}" target="_blank" rel="noopener">DOI ↗</a>`,"item")));
+function drawRes(y){$("#res").innerHTML="";res.filter(r=>y=="All"||ry(r)==y).forEach(r=>$("#res").append(E("div",`<h3>${r[1]}</h3><div class="meta">${r[0]} · Zenodo, ${r[2]}</div><a class="chip" href="https://doi.org/${r[3]}" target="_blank" rel="noopener">DOI ↗</a>`,"item")));$("#hres").style.display=$("#res").children.length?"":"none"}
 const rows=(el,d)=>d.forEach(r=>$(el).append(E("div",`<div class="when">${r[0]}</div><div><h3>${r[1]}</h3><div class="meta">${r[2]||""}</div></div>`,"item row")));
 rows("#talklist",talks.map(t=>[t[0],t[1],t[2]]));
 $("#oldtalks").innerHTML=old.map(o=>`<li>${o}</li>`).join("");
