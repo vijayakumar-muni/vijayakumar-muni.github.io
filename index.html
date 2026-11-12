@@ -97,7 +97,7 @@ const ME="Muni";
 const links=[["Google Scholar","https://scholar.google.com/citations?user=RnnY47kAAAAJ&hl=en"],["ORCID","https://orcid.org/0000-0001-5749-8119"],["Scopus","https://www.scopus.com/authid/detail.uri?authorId=57204153141"],["ResearchGate","https://www.researchgate.net/profile/Vijayakumar_Muni"],["LinkedIn","https://www.linkedin.com/in/vijayakumar-muni-727b1937/"],["Math Genealogy","https://www.genealogy.math.ndsu.nodak.edu/id.php?id=260539"],["YouTube","https://www.youtube.com/@vijayakumarmuni5887"],["X","https://x.com/munivijay11"]];
 const stats=[[12,"Journal Articles"],[7,"Scholarly and Educational Resources"],[8,"Honours and Fellowships"],[10,"Teaching Years"],[17,"Invited Academic Talks"]];
 const interests=["Multi-agent networked systems","Control-theoretic properties","Impulsive systems","Time-delay systems","Fractional-order systems","Data envelopment analysis"];
-// [authors, title, venue, vol, date, doi/url, tags]
+// [authors, title, venue, vol, year, doi/url, tags]
 const pubs=[
 ["B. Aadhithyan, V. S. Muni*, V. S. Athira, K. V. M. Rafeek, and G. J. Reddy","Sensor&ndash;non-sensor observability of directed and weighted signed networks under heterogeneous dynamics in $n$-dimensional space","International Journal of Control","99(8), 2616&ndash;2637","2026-06-01","10.1080/00207179.2026.2679225",["SCIE","Scopus","IF 1.6","Q3"]],
 ["V. S. Athira, V. S. Muni*, K. V. M. Rafeek, B. Aadhithyan, and G. J. Reddy","Observability study in weighted and directed signed multi-agent networks of single- and double-integrator dynamical agents","Indian Journal of Mathematics","67(2), 169&ndash;201","2025-08","https://amsalld.org/wp-content/uploads/2026/07/IJM672.pdf",["Scopus","Q4"]],
@@ -162,8 +162,9 @@ const bold=a=>a.replace(/V\. (S\. )?Muni\*?/g,m=>`<span class="me">${m}</span>`)
 $("#soc").innerHTML=links.map(l=>`<a href="${l[1]}" target="_blank" rel="noopener">${l[0]}</a>`).join("");
 $("#stats").innerHTML=stats.map(s=>`<div class="stat"><b>${s[0]}</b><span>${s[1]}</span></div>`).join("");
 $("#interests").innerHTML=interests.map(t=>`<span class="tag">${t}</span>`).join("");
-const years=["All",...new Set(pubs.map(p=>p[4]))];
-function drawPubs(y){$("#pubs").innerHTML="";pubs.filter(p=>y=="All"||p[4]==y).forEach(p=>$("#pubs").append(E("div",`<h3>${p[1]}</h3><div class="meta">${bold(p[0])}</div><div class="meta"><i>${p[2]}</i>, ${p[3]}, ${p[4]}</div>${p[6].map(t=>`<span class="chip">${t}</span>`).join("")}<a class="chip" href="${doi(p[5])}" target="_blank" rel="noopener">${p[5].startsWith("http")?"Full text ↗":"DOI ↗"}</a>`,"item pub")));
+const yr=p=>String(p[4]).slice(0,4);
+const years=["All",...new Set(pubs.map(yr))];
+function drawPubs(y){$("#pubs").innerHTML="";pubs.filter(p=>y=="All"||yr(p)==y).forEach(p=>$("#pubs").append(E("div",`<h3>${p[1]}</h3><div class="meta">${bold(p[0])}</div><div class="meta"><i>${p[2]}</i>, ${p[3]}, ${p[4]}</div>${p[6].map(t=>`<span class="chip">${t}</span>`).join("")}<a class="chip" href="${doi(p[5])}" target="_blank" rel="noopener">${p[5].startsWith("http")?"Full text ↗":"DOI ↗"}</a>`,"item pub")));
  document.querySelectorAll("#pubbar button").forEach(b=>b.classList.toggle("on",b.dataset.y==y));window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([$("#pubs")])}
 $("#pubbar").innerHTML=years.map(y=>`<button data-y="${y}">${y}</button>`).join("");
 $("#pubbar").onclick=e=>e.target.dataset.y&&drawPubs(e.target.dataset.y);drawPubs("All");
