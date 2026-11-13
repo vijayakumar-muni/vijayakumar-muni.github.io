@@ -90,7 +90,7 @@ footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82re
   <section id="research"><h2>Research</h2><div class="tags" id="interests"></div></section>
   <section id="publications"><h2>Publications</h2><div class="bar" id="pubbar"></div><h3 class="sub" id="hpubs">Journal Articles</h3><div id="pubs"></div><h3 class="sub" id="hres">Scholarly and Educational Resources</h3><div id="res"></div></section>
   <section id="talks"><h2>Talks and Media</h2><div class="bar" id="tbar"></div><h3 class="sub" id="hinv">Invited Talks</h3><div id="talklist"></div><h3 class="sub" id="hconf">Conference Presentations</h3><div id="confs"></div><h3 class="sub" id="hmed">Media</h3><div id="media"></div></section>
-  <section id="career"><h2>Education and Positions</h2><div id="edu"></div></section>
+  <section id="career"><h2>Education and Positions</h2><h3 class="sub">Education</h3><div id="edu"></div><h3 class="sub">Positions</h3><div id="pos"></div></section>
   <section id="teaching"><h2>Teaching and Supervision</h2><div id="teach"></div></section>
   <section id="honours"><h2>Honours and Fellowships</h2><div id="hon"></div></section>
   <section id="service"><h2>Service and Development</h2><div id="svc"></div></section>
@@ -159,7 +159,8 @@ const media=[
 const edu=[
 ["2015 – 2019","PhD, Mathematics","Indian Institute of Space Science and Technology, Valiamala, Kerala. Supervisor: Dr. Raju K. George."],
 ["2010 – 2012","MSc, Mathematics — 84.8%","Gulbarga University, Kalaburagi. Prof. V. P. Rathod Gold Medal (Numerical Analysis)."],
-["2007 – 2010","BSc (PCM) — 85.24%","Sharnbasveshwar College of Science, Kalaburagi. 6th Rank, Gulbarga University."],
+["2007 – 2010","BSc (PCM) — 85.24%","Sharnbasveshwar College of Science, Kalaburagi. 6th Rank, Gulbarga University."]];
+const pos=[
 ["2023 – Present","Assistant Professor (regular)","Smt. Indira Gandhi Government First Grade Women’s College, Sagara."],
 ["2017 – 2023","Assistant Professor (regular)","Sri H. D. Devegowda Government First Grade College, Paduvalahippe."],
 ["2014 – 2015","Faculty (contract)","Central University of Karnataka, Kadaganchi."]];
@@ -241,7 +242,7 @@ document.querySelectorAll("#tbar button").forEach(b=>b.classList.toggle("on",b.d
 window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([$("#talklist"),$("#confs")])}
 $("#tbar").innerHTML=tyears.map(y=>`<button data-y="${y}">${y}</button>`).join("");
 $("#tbar").onclick=e=>e.target.dataset.y&&drawTalks(e.target.dataset.y);drawTalks("All");
-rows("#edu",edu);rows("#teach",teach);rows("#hon",hon);rows("#svc",svc);
+rows("#edu",edu);rows("#pos",pos);rows("#teach",teach);rows("#hon",hon);rows("#svc",svc);
 const secs=[...document.querySelectorAll("main section")];
 $("#nav").innerHTML=secs.map(s=>`<a href="#${s.id}">${s.querySelector("h2").textContent}</a>`).join("");
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")=="#"+e.target.id))}),{rootMargin:"-30% 0px -60% 0px"});secs.forEach(s=>io.observe(s));
