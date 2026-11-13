@@ -85,7 +85,7 @@ footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82re
     <h2>About</h2>
     <p class="lead">I study how groups of interacting agents can be steered, observed, and brought to agreement &ndash; through the lens of control theory, impulsive dynamics, and time-delays.</p>
     <div class="stats" id="stats"></div>
-    <p>I earned my Doctor of Philosophy from the Indian Institute of Space Science and Technology, Thiruvananthapuram, Kerala, in 2019, under <a href="https://www.iist.ac.in/people-faculty-profile/raju-k-george">Raju K. George</a>, with a thesis on <a href="http://hdl.handle.net/10603/250475"><i>Studies on Controllability of Dynamical Systems with Impulses and Time-Delay Controls</i></a>.</p>
+    <p>I earned my Doctor of Philosophy from the Indian Institute of Space Science and Technology, Thiruvananthapuram, Kerala, in 2019, under <a href="https://www.iist.ac.in/people-faculty-profile/raju-k-george" target="_blank" rel="noopener">Raju K. George</a>, with a thesis on <a href="http://hdl.handle.net/10603/250475" target="_blank" rel="noopener"><i>Studies on Controllability of Dynamical Systems with Impulses and Time-Delay Controls</i></a>.</p>
   </section>
   <section id="research"><h2>Research</h2><div class="tags" id="interests"></div></section>
   <section id="publications"><h2>Publications</h2><div class="bar" id="pubbar"></div><h3 class="sub" id="hpubs">Journal Articles</h3><div id="pubs"></div><h3 class="sub" id="hres">Scholarly and Educational Resources</h3><div id="res"></div></section>
@@ -254,6 +254,7 @@ document.addEventListener("click",e=>{const d=e.target.closest("[data-doc]");if(
 $("#dclose").onclick=()=>document.body.classList.remove("dopen");
 document.addEventListener("keydown",e=>e.key=="Escape"&&document.body.classList.remove("dopen"));
 $("#yr").textContent=new Date().getFullYear();
+document.querySelectorAll('a[href^="http"]').forEach(a=>{if(!a.target){a.target="_blank";a.rel="noopener"}});  
 </script>
 </body>
 </html>
