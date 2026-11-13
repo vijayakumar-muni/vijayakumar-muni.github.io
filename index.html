@@ -215,7 +215,7 @@ const PH={
 "2025-11-10/2025-11-11":["TDNWEMDEA_1.png","TDNWEMDEA_2.png","TDNWEMDEA_3.png","TDNWEMDEA_4.png"],
 "2025-08-03":["IWADEAAIMLSAU_1.png","IWADEAAIMLSAU_2.png","IWADEAAIMLSAU_3.png"],
 "2025-07-12":["STTPFAPMCQDT_1.png","STTPFAPMCQDT_2.png"],
-"2025-06-28/2025-06-30":["ICMAAHM-2025_1.png","ICMAAHM-2025_2.png"],  
+"2025-06-28/2025-06-30":["ICMAAHM-2025_1.png","ICMAAHM-2025_2.png","ICMAAHM-2025_3.png"],  
 "Dainik Bhaskar, Jabalpur · 2026-02-28":["DB.png"]
 };
 function pics(k){const a=(PH[k]||[]).slice(0,4);return a.length?`<div class="pics n${a.length}">`+a.map(f=>/\.pdf$/i.test(f)?`<object data="assets/talks/${f}#toolbar=0&navpanes=0&view=FitH" type="application/pdf"></object>`:`<img src="assets/talks/${f}" alt="Photograph" loading="lazy">`).join("")+`</div>`:""}
