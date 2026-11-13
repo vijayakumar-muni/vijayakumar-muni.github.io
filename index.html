@@ -209,6 +209,7 @@ const PH={
 "2026-08-21/2026-08-22":["LCTDS_1.png","LCTDS_2.png","LCTDS_3.png"],
 "2026-02-26/2026-02-28":["SSFIIPAR_1.png","SSFIIPAR_2.png","SSFIIPAR_3.png"],
 "2026-01-10":["ETS4T2.png"],
+"2025-12-19/2025-12-22":["RAMSA2025_1.png","RAMSA2025_2.png"],  
 "Dainik Bhaskar, Jabalpur · 2026-02-28":["DB.png"]
 };
 function pics(k){const a=(PH[k]||[]).slice(0,3);return a.length?`<div class="pics n${a.length}">`+a.map(f=>/\.pdf$/i.test(f)?`<object data="assets/talks/${f}#toolbar=0&navpanes=0&view=FitH" type="application/pdf"></object>`:`<img src="assets/talks/${f}" alt="Photograph" loading="lazy">`).join("")+`</div>`:""}
