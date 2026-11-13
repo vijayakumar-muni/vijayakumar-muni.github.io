@@ -75,7 +75,7 @@ footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82re
 <aside>
   <img class="photo" src="assets/Photo.jpg" alt="Vijayakumar Muni" onerror="this.removeAttribute('src');this.style.display='none'">
   <div><h1>Vijayakumar Muni</h1><div class="role">Assistant Professor of Mathematics<br>Smt. Indira Gandhi Government First Grade Women's College, Sagara (PIN: 577401), Karnataka</div></div>
-  <button class="cvbtn" data-doc="assets/Curriculum%20Vitae.pdf">📄 View CV alongside</button>
+  <button class="cvbtn" data-doc="assets/Curriculum_Vitae.pdf">📄 View CV alongside</button>
   <nav id="nav"></nav>
   <div class="soc" id="soc"></div>
 </aside>
@@ -157,7 +157,7 @@ const media=[
 ["2026-02-26","Coverage of the International Conference on Science for a Sustainable Future: Innovation at the Interface of Pure and Applied Research @ Rani Durgavati University, Jabalpur","Aaj ka Bharat, Jabalpur","https://youtu.be/PssFCA9XH7U?t=389"],
 ["2026-02-28","Co-authored feature on quantum computing (Hindi)","Dainik Bhaskar, Jabalpur"]];
 const edu=[
-["2015-07-27/2019-07-05","Doctor of Philosophy (Mathematics)","Indian Institute of Space Science and Technology, Thiruvanathapuram, Kerala"],
+["2015-07-27/2019-07-05","Doctor of Philosophy (Mathematics)","Indian Institute of Space Science and Technology, Thiruvananthapuram, Kerala",[["PhD Documents","assets/docs/PhD_documents.pdf"],["Course Work Documents","assets/docs/Course_Work_documents.pdf"],["Convocation","assets/docs/convocation.pdf"],["PhD Genuinity","assets/docs/PhD_genuinity.pdf"]]],
 ["2010-07-01/2012-07-27","Master of Science (Mathematics)","Gulbarga University, Kalaburagi, Karnataka"],
 ["2007-07-01/2010-07-25","Bachelor of Science (Physics, Chemistry, and Mathematics)","Sharnbasveshwar College of Science/Gulbarga University, Kalaburagi, Karnataka"]];
 const pos=[
@@ -203,7 +203,7 @@ document.querySelectorAll("#pubbar button").forEach(b=>b.classList.toggle("on",b
 window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([$("#pubs"),$("#res")])}
 $("#pubbar").innerHTML=years.map(y=>`<button data-y="${y}">${y}</button>`).join("");
 $("#pubbar").onclick=e=>e.target.dataset.y&&drawPubs(e.target.dataset.y);drawPubs("All");
-const rows=(el,d)=>d.forEach(r=>$(el).append(E("div",`<div class="when">${String(r[0]).replace(/(\d)\/(?=\S)/g,"$1/<br>")}</div><div><h3>${r[1]}</h3><div class="meta">${r[2]||""}</div></div>`,"item row")));
+const rows=(el,d)=>d.forEach(r=>$(el).append(E("div",`<div class="when">${String(r[0]).replace(/(\d)\/(?=\S)/g,"$1/<br>")}</div><div><h3>${r[1]}</h3><div class="meta">${r[2]||""}</div>${(r[3]||[]).map(f=>`<a class="chip" href="${encodeURI(f[1])}" data-doc="${encodeURI(f[1])}">${f[0]}</a>`).join("")}</div>`,"item row")));
 // photos: key = the exact date text of the talk (or the title text of the media item) -> 1 or 2 files in assets/talks/
 const PH={
 "2026-08-21/2026-08-22":["LCTDS_1.png","LCTDS_2.png","LCTDS_3.png"],
