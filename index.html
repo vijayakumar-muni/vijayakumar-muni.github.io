@@ -89,7 +89,7 @@ footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82re
   </section>
   <section id="research"><h2>Research</h2><div class="tags" id="interests"></div></section>
   <section id="publications"><h2>Publications</h2><div class="bar" id="pubbar"></div><h3 class="sub" id="hpubs">Journal Articles</h3><div id="pubs"></div><h3 class="sub" id="hres">Scholarly and Educational Resources</h3><div id="res"></div></section>
-  <section id="talks"><h2>Talks and Media</h2><div id="talklist"></div><details id="confbox"><summary>Conference Presentations</summary><div id="confs"></div></details><div id="media"></div></section>
+  <section id="talks"><h2>Talks and Media</h2><div class="bar" id="tbar"></div><h3 class="sub" id="hinv">Invited Talks</h3><div id="talklist"></div><h3 class="sub" id="hconf">Conference Presentations</h3><div id="confs"></div><h3 class="sub" id="hmed">Media</h3><div id="media"></div></section>
   <section id="career"><h2>Education and Positions</h2><div id="edu"></div></section>
   <section id="teaching"><h2>Teaching and Supervision</h2><div id="teach"></div></section>
   <section id="honours"><h2>Honours and Fellowships</h2><div id="hon"></div></section>
@@ -153,10 +153,6 @@ const confs=[
 ["2018-10-23/2018-10-25","A PBH-rank condition for the controllability of linear impulsive systems","International Conference on Recent Advances in Pure and Applied Mathematics","Delhi Technological University, New Delhi","https://www.aconf.org/conf_159844.html"],
 ["2018-09-06/2018-09-08","Controllability of networked higher dimensional systems with one-dimensional communications having multiple constant time-delays in control","International Conference on Advances in Pure &amp; Applied Mathematics","Madurai Kamaraj University, Madurai","https://www.imrfedu.org/mkuicm2018"],
 ["2018-08-09/2018-08-11","Controllability of fractional order semilinear systems with multiple time-delays in control","International Conference on Algebra and Applied Analysis","Integral University, Lucknow","http://icaaa2018.iul.ac.in/"]];
-function drawConfs(){
-const ys=[...new Set(confs.map(c=>c[0].slice(0,4)))].sort().reverse();
-$("#confs").innerHTML=ys.map(y=>`<h4 class="yr">${y}</h4>`+confs.filter(c=>c[0].slice(0,4)==y).map(c=>`<div class="item row"><div class="when">${c[0].replace("/","/<br>")}</div><div><h3>${c[1]}</h3><div class="meta"><a href="${c[4]}" target="_blank" rel="noopener">${c[2]}</a><br>${c[3]}</div>${pics(c[0])}</div></div>`).join("")).join("");
-$("#confbox summary").textContent=`Conference Presentations (${confs.length})`}
 const media=[["Dainik Bhaskar, Jabalpur · 2026-02-28","Co-authored feature on quantum computing (Hindi)"],["Aaj ka Bharat, Jabalpur · 2026-02-26","Coverage of the Rani Durgavati University international conference","https://youtu.be/PssFCA9XH7U?t=389"]];
 const edu=[
 ["2015 – 2019","PhD, Mathematics","Indian Institute of Space Science and Technology, Valiamala, Kerala. Supervisor: Dr. Raju K. George."],
@@ -228,9 +224,16 @@ const PH={
 };
 function pics(k){const a=(PH[k]||[]).slice(0,4);return a.length?`<div class="pics n${a.length}">`+a.map(f=>/\.pdf$/i.test(f)?`<object data="assets/talks/${f}#toolbar=0&navpanes=0&view=FitH" type="application/pdf"></object>`:`<img src="assets/talks/${f}" alt="Photograph" loading="lazy">`).join("")+`</div>`:""}
 function tcard(t){const ev=t.length>3?t[2]:"",inst=t[t.length-1];return E("div",`<div class="when">${t[0].replace("/","/<br>")}</div><div><h3>${t[1]}</h3><div class="meta">${ev?ev+"<br>":""}${inst}</div>${pics(t[0])}</div>`,"item row")}
-talks.forEach(t=>$("#talklist").append(tcard(t)));
-drawConfs();
-media.forEach(m=>$("#media").append(E("div",`<h3>${m[2]?`<a href="${m[2]}" target="_blank" rel="noopener">${m[0]}</a>`:m[0]}</h3><div class="meta">${m[1]}</div>${pics(m[0])}`,"item")));
+const ty=x=>(String(x).match(/\d{4}/)||[""])[0];
+function ccard(c){return E("div",`<div class="when">${c[0].replace("/","/<br>")}</div><div><h3>${c[1]}</h3><div class="meta"><a href="${c[4]}" target="_blank" rel="noopener">${c[2]}</a><br>${c[3]}</div>${pics(c[0])}</div>`,"item row")}
+function mcard(m){return E("div",`<h3>${m[2]?`<a href="${m[2]}" target="_blank" rel="noopener">${m[0]}</a>`:m[0]}</h3><div class="meta">${m[1]}</div>${pics(m[0])}`,"item")}
+const tyears=["All",...[...new Set([...talks.map(t=>ty(t[0])),...confs.map(c=>ty(c[0])),...media.map(m=>ty(m[0]))])].sort().reverse()];
+function drawTalks(y){
+[["#talklist","#hinv",talks,tcard,t=>t[0]],["#confs","#hconf",confs,ccard,c=>c[0]],["#media","#hmed",media,mcard,m=>m[0]]].forEach(([l,h,d,f,k])=>{$(l).innerHTML="";d.filter(x=>y=="All"||ty(k(x))==y).forEach(x=>$(l).append(f(x)));$(h).style.display=$(l).children.length?"":"none"});
+document.querySelectorAll("#tbar button").forEach(b=>b.classList.toggle("on",b.dataset.y==y));
+window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([$("#talklist"),$("#confs")])}
+$("#tbar").innerHTML=tyears.map(y=>`<button data-y="${y}">${y}</button>`).join("");
+$("#tbar").onclick=e=>e.target.dataset.y&&drawTalks(e.target.dataset.y);drawTalks("All");
 rows("#edu",edu);rows("#teach",teach);rows("#hon",hon);rows("#svc",svc);
 const secs=[...document.querySelectorAll("main section")];
 $("#nav").innerHTML=secs.map(s=>`<a href="#${s.id}">${s.querySelector("h2").textContent}</a>`).join("");
