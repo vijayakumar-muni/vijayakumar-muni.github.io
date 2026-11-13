@@ -203,7 +203,7 @@ document.querySelectorAll("#pubbar button").forEach(b=>b.classList.toggle("on",b
 window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([$("#pubs"),$("#res")])}
 $("#pubbar").innerHTML=years.map(y=>`<button data-y="${y}">${y}</button>`).join("");
 $("#pubbar").onclick=e=>e.target.dataset.y&&drawPubs(e.target.dataset.y);drawPubs("All");
-const rows=(el,d)=>d.forEach(r=>$(el).append(E("div",`<div class="when">${r[0]}</div><div><h3>${r[1]}</h3><div class="meta">${r[2]||""}</div></div>`,"item row")));
+const rows=(el,d)=>d.forEach(r=>$(el).append(E("div",`<div class="when">${String(r[0]).replace(/(\d)\/(?=\S)/g,"$1/<br>")}</div><div><h3>${r[1]}</h3><div class="meta">${r[2]||""}</div></div>`,"item row")));
 // photos: key = the exact date text of the talk (or the title text of the media item) -> 1 or 2 files in assets/talks/
 const PH={
 "2026-08-21/2026-08-22":["LCTDS_1.png","LCTDS_2.png","LCTDS_3.png"],
