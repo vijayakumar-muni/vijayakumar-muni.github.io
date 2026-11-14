@@ -60,6 +60,7 @@ details li{margin-bottom:.25rem}
 .pics object{height:320px}
 @media(max-width:600px){.pics.n2,.pics.n3{grid-template-columns:1fr}.pics.n4{grid-template-columns:1fr 1fr}}
 .fig{margin:1rem 0;max-width:460px}.fig img{width:100%;display:block;border-radius:10px;border:1px solid var(--line)}.fig figcaption{font-size:.8rem;color:var(--mute);margin-top:.35rem}
+.sc{font-variant:small-caps}
 #drawer{position:fixed;top:0;right:0;bottom:0;width:min(46vw,640px);background:var(--card);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .25s;z-index:30;display:flex;flex-direction:column}
 body.dopen #drawer{transform:none}
 #drawer header{display:flex;justify-content:space-between;align-items:center;padding:.6rem 1rem;border-bottom:1px solid var(--line);font-weight:600}
@@ -200,7 +201,7 @@ const svc=[
 ["Organising","2025-09-24","Political Theory and Politics","Smt. Indira Gandhi Government First Grade Women's College, Sagara",[["Flyer","assets/SLWPTP.pdf"]]],
 ["Organising","2025-08-20/2025-08-22","Cosmos &ndash; Into the Unknown","Smt. Indira Gandhi Government First Grade Women's College, Sagara",[["Flyer-cum-Certificate","assets/WCIU.pdf"],["URL-1","https://youtu.be/0gbRvIYGJj8"],["URL-2","https://youtu.be/m8CvJq_v-wE"]]],
 ["Organising","2023-07-18","Strategies to Crack Competitive Examination after Graduation & Postgraduation","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/WSCCEGPSHDDGFGCP.pdf"]]],
-["Organising","2023-06-12","Mathemattitude 2023 &ndash; A State Level Teaching Competition","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/MSLTC-2023.pdf"]]],
+["Organising","2023-06-12","Mathemattitude 2023","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/MSLTC-2023.pdf"]]],
 ["Organising","2023-02-15","Writing Skills: Commercial Writing","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/SLWWSCW.pdf"]]],
 ["Organising","2023-01-27","Applications of Graph Theory","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/WFNIWAGT.pdf"]]],
 ["Organising","2021-12-27","Mathematics and Ramanujan","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/NLWMR.pdf"]]],
@@ -211,14 +212,14 @@ const svc=[
 ["Organising","2021-07-10","Challenges of Entrepreneurship","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/NLWCE.pdf"]]],
 ["Organising","2021-06-28/2021-07-01","Awareness of Intellectual Property Rights","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/NLVWAIPR.pdf"]]],
 ["Organising","2021-06-21","7th International Day of Yoga","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/NLW7IDY.pdf"]]],
-["Organising","2020-02-14","Mathemattitude 2020 &ndash; State Level Mathematics Teaching Competition","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/MSLMTC-2020.pdf"]]],
+["Organising","2020-02-14","Mathemattitude 2020","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/MSLMTC-2020.pdf"]]],
 ["Organising","2019-02-20","Life Skill Awareness","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/LSA.pdf"]]],
-["Organising","2019-02-13","Mathemattitude &ndash; An Inter-Collegiate Mathematics Teaching Competition","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/MICMTC-2019.pdf"]]],
-["Organising","2018-11-16","One Day National Level Workshop on Goods and Services Tax","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/ODNLWGST.pdf"]]],
+["Organising","2019-02-13","Mathemattitude","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/MICMTC-2019.pdf"]]],
+["Organising","2018-11-16","Goods and Services Tax","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/ODNLWGST.pdf"]]],
 ["Organising","2018-04-12","Life Skill Training","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/LST.pdf"]]],
-["Organising","2018-03-22","Mathemattitude &ndash; An Inter-Collegiate Mathematics Teaching Competition","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/MICMTC-2018.pdf"]]],
-["Organising","2017-11-21","One Day State Level Workshop on Legal System in India","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/ODSLWLSI.pdf"]]],
-["Organising","2015-05-06/2015-05-08","Three-Day National Workshop on Basic MATLAB Programming and Simulink","Central University of Karnataka, Kadaganchi",[["Certificate","assets/TDNWBMPS.pdf"]]],
+["Organising","2018-03-22","Mathemattitude","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/MICMTC-2018.pdf"]]],
+["Organising","2017-11-21","Legal System in India","Sri H. D. Devegowda Government First Grade College, Paduvalahippe",[["Certificate","assets/ODSLWLSI.pdf"]]],
+["Organising","2015-05-06/2015-05-08","Basic <span class="sc">Matlab</span> Programming and Simulink","Central University of Karnataka, Kadaganchi",[["Certificate","assets/TDNWBMPS.pdf"]]],
 ["Examinations","2025-07-03","Member, Board of Examinations 2025&ndash;26 (Undergraduate Mathematics and Statistics)","Kuvempu University, Shivamogga"],
 ["Examinations","2024-09-26","Question paper setter, MSc Mathematics II Semester","Sharnbasva University, Kalaburagi"],
 ["Examinations","2024-04-16","Question paper setter, MSc Mathematics I Semester","Sharnbasva University, Kalaburagi"],
