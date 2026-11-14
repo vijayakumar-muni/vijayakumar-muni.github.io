@@ -278,7 +278,7 @@ const PH={
 "2018-08-09/2018-08-11":["ICAAA.png"],  
 "2026-02-28":["DB.png"]
 };
-function pics(k){const a=(PH[k]||[]).slice(0,4);return a.length?`<details class="ph"><summary>Photos (${a.length})</summary><div class="pics n${a.length}">`+a.map(f=>/\.pdf$/i.test(f)?`<object data="assets/talks/${f}#toolbar=0&navpanes=0&view=FitH" type="application/pdf"></object>`:`<img src="assets/talks/${f}" alt="Photograph" loading="lazy" decoding="async">`).join("")+`</div></details>`:""}
+function pics(k){const a=(PH[k]||[]).slice(0,4);return a.length?`<a class="chip" href="#" data-pics="${k}">📷 Photos (${a.length})</a>`:""}
 function tcard(t){const ev=t.length>3?t[2]:"",inst=t[t.length-1];return E("div",`<div class="when">${t[0].replace("/","/<br>")}</div><div><h3>${t[1]}</h3><div class="meta">${ev?ev+"<br>":""}${inst}</div>${pics(t[0])}</div>`,"item row")}
 const ty=x=>(String(x).match(/\d{4}/)||[""])[0];
 function ccard(c){return E("div",`<div class="when">${c[0].replace("/","/<br>")}</div><div><h3>${c[1]}</h3><div class="meta"><a href="${c[4]}" target="_blank" rel="noopener">${c[2]}</a><br>${c[3]}</div>${pics(c[0])}</div>`,"item row")}
@@ -306,7 +306,11 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)documen
 // e-mail assembled at runtime to deter scrapers
 $("#mail").onclick=e=>{e.preventDefault();const a="vijayakumarmuni0"+"@"+"gmail.com";e.target.textContent=a;e.target.href="mailto:"+a};
 // side document drawer
-function openDoc(src,title){$("#dframe").src=src;$("#dopen").href=src;$("#dtitle").textContent=title||"Document";document.body.classList.add("dopen")}
+function openDoc(src,title){$("#dframe").removeAttribute("srcdoc");$("#dframe").src=src;$("#dopen").href=src;$("#dopen").style.display="";$("#dtitle").textContent=title||"Document";document.body.classList.add("dopen")}
+function openPics(k){const a=(PH[k]||[]).slice(0,4),base=new URL("assets/talks/",location.href).href;
+const body=a.map(f=>/\.pdf$/i.test(f)?`<embed src="${base+f}" type="application/pdf" style="width:100%;height:85vh">`:`<img src="${base+f}" style="width:100%;display:block;margin:0 0 12px;border-radius:8px">`).join("");
+$("#dframe").removeAttribute("src");$("#dframe").srcdoc=`<body style="margin:12px;background:#f4f1ea">${body}</body>`;$("#dtitle").textContent="Photographs";$("#dopen").style.display="none";document.body.classList.add("dopen")}
+document.addEventListener("click",e=>{const p=e.target.closest("[data-pics]");if(p){e.preventDefault();openPics(p.dataset.pics)}});
 document.addEventListener("click",e=>{const d=e.target.closest("[data-doc]");if(d){e.preventDefault();openDoc(d.dataset.doc,d.textContent.replace("📄","").trim())}});
 $("#dclose").onclick=()=>document.body.classList.remove("dopen");
 document.addEventListener("keydown",e=>e.key=="Escape"&&document.body.classList.remove("dopen"));
