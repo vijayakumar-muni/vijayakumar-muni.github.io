@@ -56,7 +56,7 @@ details li{margin-bottom:.25rem}
 .pics.n2{grid-template-columns:1fr 1fr}
 .pics.n3{grid-template-columns:repeat(3,1fr)}
 .pics.n4{grid-template-columns:repeat(4,1fr)}  
-.pics img,.pics object{width:100%;display:block;border:1px solid var(--line);border-radius:8px;background:#fff}
+.pics img,.pics object{width:100%;display:block;border:1px solid var(--line);border-radius:8px;background:#fff;min-height:120px}
 .pics object{height:320px}
 @media(max-width:600px){.pics.n2,.pics.n3{grid-template-columns:1fr}.pics.n4{grid-template-columns:1fr 1fr}}
 .fig{margin:1rem 0;max-width:460px}.fig img{width:100%;display:block;border-radius:10px;border:1px solid var(--line)}.fig figcaption{font-size:.8rem;color:var(--mute);margin-top:.35rem}
@@ -277,7 +277,7 @@ const PH={
 "2018-08-09/2018-08-11":["ICAAA.png"],  
 "2026-02-28":["DB.png"]
 };
-function pics(k){const a=(PH[k]||[]).slice(0,4);return a.length?`<div class="pics n${a.length}">`+a.map(f=>/\.pdf$/i.test(f)?`<object data="assets/talks/${f}#toolbar=0&navpanes=0&view=FitH" type="application/pdf"></object>`:`<img src="assets/talks/${f}" alt="Photograph" loading="lazy">`).join("")+`</div>`:""}
+function pics(k){const a=(PH[k]||[]).slice(0,4);return a.length?`<div class="pics n${a.length}">`+a.map(f=>/\.pdf$/i.test(f)?`<object data="assets/talks/${f}#toolbar=0&navpanes=0&view=FitH" type="application/pdf"></object>`:`<img src="assets/talks/${f}" alt="Photograph" loading="lazy" decoding="async">`).join("")+`</div>`:""}
 function tcard(t){const ev=t.length>3?t[2]:"",inst=t[t.length-1];return E("div",`<div class="when">${t[0].replace("/","/<br>")}</div><div><h3>${t[1]}</h3><div class="meta">${ev?ev+"<br>":""}${inst}</div>${pics(t[0])}</div>`,"item row")}
 const ty=x=>(String(x).match(/\d{4}/)||[""])[0];
 function ccard(c){return E("div",`<div class="when">${c[0].replace("/","/<br>")}</div><div><h3>${c[1]}</h3><div class="meta"><a href="${c[4]}" target="_blank" rel="noopener">${c[2]}</a><br>${c[3]}</div>${pics(c[0])}</div>`,"item row")}
