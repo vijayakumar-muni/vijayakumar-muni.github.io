@@ -345,6 +345,7 @@ document.querySelectorAll('a[href^="http"]').forEach(a=>{if(!a.target){a.target=
 document.addEventListener("click",e=>{const h=e.target.closest("a.home");if(h){e.preventDefault();window.scrollTo({top:0,behavior:"smooth"})}});
 let wasTop=null;
 function homeOn(){const top=scrollY<250;document.querySelectorAll("a.home").forEach(a=>a.classList.toggle("on",top));if(top)document.querySelectorAll("#nav a:not(.home),#mnav a:not(.home)").forEach(a=>a.classList.remove("on"));if(top&&wasTop!==true)$("#mnav").scrollTo({left:0,behavior:"smooth"});wasTop=top}
+addEventListener("scroll",homeOn,{passive:true});homeOn();
 </script>
 </body>
 </html>
