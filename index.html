@@ -303,7 +303,7 @@ $("#sbar").innerHTML=syears.map(y=>`<button data-y="${y}">${y}</button>`).join("
 $("#sbar").onclick=e=>e.target.dataset.y&&drawSvc(e.target.dataset.y);drawSvc("All");  
 rows("#edu",edu);rows("#pos",pos);rows("#teach",teach);rows("#hon",hon);
 const secs=[...document.querySelectorAll("main section")];
-$("#nav").innerHTML=secs.map(s=>`<a href="#${s.id}">${s.querySelector("h2").textContent}</a>`).join("");
+$("#nav").innerHTML=`<a href="#" class="home">Home</a>`+secs.map(s=>`<a href="#${s.id}">${s.querySelector("h2").textContent}</a>`).join("");
 $("#mnav").innerHTML=$("#nav").innerHTML;
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)document.querySelectorAll("#nav a,#mnav a").forEach(a=>{const on=a.getAttribute("href")=="#"+e.target.id;a.classList.toggle("on",on);if(on&&a.parentElement.id=="mnav")a.parentElement.scrollTo({left:a.offsetLeft-30,behavior:"smooth"})})}),{rootMargin:"-30% 0px -60% 0px"});secs.forEach(s=>io.observe(s));
 // e-mail assembled at runtime to deter scrapers
@@ -318,7 +318,10 @@ document.addEventListener("click",e=>{const d=e.target.closest("[data-doc]");if(
 $("#dclose").onclick=()=>document.body.classList.remove("dopen");
 document.addEventListener("keydown",e=>e.key=="Escape"&&document.body.classList.remove("dopen"));
 $("#yr").textContent=new Date().getFullYear();
-document.querySelectorAll('a[href^="http"]').forEach(a=>{if(!a.target){a.target="_blank";a.rel="noopener"}});  
+document.querySelectorAll('a[href^="http"]').forEach(a=>{if(!a.target){a.target="_blank";a.rel="noopener"}});
+document.addEventListener("click",e=>{const h=e.target.closest("a.home");if(h){e.preventDefault();window.scrollTo({top:0,behavior:"smooth"})}});
+function homeOn(){const top=scrollY<250;document.querySelectorAll("a.home").forEach(a=>a.classList.toggle("on",top));if(top)document.querySelectorAll("#nav a:not(.home),#mnav a:not(.home)").forEach(a=>a.classList.remove("on"))}
+addEventListener("scroll",homeOn,{passive:true});homeOn();  
 </script>
 </body>
 </html>
