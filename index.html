@@ -294,7 +294,7 @@ const syears=["All",...[...new Set(svc.map(sy).filter(y=>y!="Ongoing"))].sort().
 function drawSvc(y){const b=$("#svcbody");b.innerHTML="";
 SCATS.forEach(c=>{const f=svc.filter(s=>s[0]==c&&(y=="All"||sy(s)==y)).sort((a,z)=>z[1].localeCompare(a[1]));if(!f.length)return;
 b.append(E("h3",c,"sub"));
-f.forEach(s=>b.append(E("div",`<div class="when">${s[1]?s[1].replace(/(\d)\/(?=\S)/g,"$1/<br>"):"Ongoing"}</div><div><h3>${s[2]}</h3><div class="meta">${s[3]||""}</div>${(Array.isArray(s[4])?s[4]:[]).map(f=>f[0]=="URL"?`<span class="chip">URL: <a href="${f[1]}" target="_blank" rel="noopener">${f[1]}</a></span>`:/^https?:/.test(f[1])?`<a class="chip" href="${f[1]}" target="_blank" rel="noopener">${f[0]} ↗</a>`:`<a class="chip" href="${encodeURI(f[1])}" data-doc="${encodeURI(f[1])}">${f[0]}</a>`).join("")}</div>`,"item row")))});
+f.forEach(s=>b.append(E("div",`<div class="when">${s[1]?s[1].replace(/(\d)\/(?=\S)/g,"$1/<br>"):"Ongoing"}</div><div><h3>${s[2]}</h3><div class="meta">${s[3]||""}</div>${(Array.isArray(s[4])?s[4]:[]).map(f=>/^URL/.test(f[0])?`<span class="chip">${f[0]}: <a href="${f[1]}" target="_blank" rel="noopener">${f[1]}</a></span>`:/^https?:/.test(f[1])?`<a class="chip" href="${f[1]}" target="_blank" rel="noopener">${f[0]} ↗</a>`:`<a class="chip" href="${encodeURI(f[1])}" data-doc="${encodeURI(f[1])}">${f[0]}</a>`).join("")}</div>`,"item row")))});
 document.querySelectorAll("#sbar button").forEach(x=>x.classList.toggle("on",x.dataset.y==y))}
 $("#sbar").innerHTML=syears.map(y=>`<button data-y="${y}">${y}</button>`).join("");
 $("#sbar").onclick=e=>e.target.dataset.y&&drawSvc(e.target.dataset.y);drawSvc("All");  
