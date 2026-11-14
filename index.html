@@ -174,7 +174,7 @@ const teach=[
 const hon=[
 ["2025-09/2025-10","Fellow, Summer Research Fellowship Programme (IASc&ndash;INSA&ndash;NASI)","Department of Electrical Engineering, Indian Institute of Science, Bengaluru",[["Letter","assets/SRFP-2025.pdf"]]],
 ["2020-06-08/2020-08-08","Fellow, Summer Faculty Research Fellow Programme under Continuing Education Programme","Department of Mathematics, Indian Institute of Technology, Delhi",[["Letter","assets/SFRFPCEP-2020.pdf"]]],
-["2016-01-27","CSIR&ndash;UGC&ndash;NET for Lectureship in Mathematical Sciences (2015-06-21)","AIR 36 of 338",[["Letter","assets/CSIRUGCNETLMSJ-2015.pdf"]]],
+["2016-01-27","CSIR&ndash;UGC&ndash;NET for Lectureship in Mathematical Sciences (2015-06-21)","AIR 36 of 338",[["Letter","assets/CSIRUGCNETLMSJ-2015.pdf"],["Result","https://csirhrdg.res.in/SiteContent/ManagedContent/ContentFiles/20181108153103947netresult_june2015.pdf"],["URL","http://14.139.227.220/Jun2015/wpadmitcard.asp?formno=400715"]]],
 ["2015-06-25","CSIR&ndash;UGC&ndash;NET for Lectureship in Mathematical Sciences (2014-12-21)","AIR 26 of 230",[["Letter","assets/CSIRUGCNETLMSD-2014.pdf"]]],
 ["2015-03-27","GATE 2015 in Mathematics","AIR 716 of 4899",[["Letter","assets/GATEM-2015.pdf"]]],
 ["2014-04-28","Karnataka SET for Lecturer/Assistant Professorship in Mathematical Science (2013-12-08)","",[["Letter","assets/KSETLMS-2013.pdf"]]],
@@ -207,7 +207,7 @@ document.querySelectorAll("#pubbar button").forEach(b=>b.classList.toggle("on",b
 window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([$("#pubs"),$("#res")])}
 $("#pubbar").innerHTML=years.map(y=>`<button data-y="${y}">${y}</button>`).join("");
 $("#pubbar").onclick=e=>e.target.dataset.y&&drawPubs(e.target.dataset.y);drawPubs("All");
-const rows=(el,d)=>d.forEach(r=>$(el).append(E("div",`<div class="when">${String(r[0]).replace(/(\d)\/(?=\S)/g,"$1/<br>")}</div><div><h3>${r[1]}</h3><div class="meta">${r[2]||""}</div>${(Array.isArray(r[3])?r[3]:[]).map(f=>`<a class="chip" href="${encodeURI(f[1])}" data-doc="${encodeURI(f[1])}">${f[0]}</a>`).join("")}</div>`,"item row")));
+const rows=(el,d)=>d.forEach(r=>$(el).append(E("div",`<div class="when">${String(r[0]).replace(/(\d)\/(?=\S)/g,"$1/<br>")}</div><div><h3>${r[1]}</h3><div class="meta">${r[2]||""}</div>${(Array.isArray(r[3])?r[3]:[]).map(f=>/^https?:/.test(f[1])?`<a class="chip" href="${f[1]}" target="_blank" rel="noopener">${f[0]} ↗</a>`:`<a class="chip" href="${encodeURI(f[1])}" data-doc="${encodeURI(f[1])}">${f[0]}</a>`).join("")}</div>`,"item row")));
 // photos: key = the exact date text of the talk (or the title text of the media item) -> 1 or 2 files in assets/talks/
 const PH={
 "2026-08-21/2026-08-22":["LCTDS_1.png","LCTDS_2.png","LCTDS_3.png"],
