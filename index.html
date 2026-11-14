@@ -95,7 +95,7 @@ footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82re
   <section id="career"><h2>Education and Positions</h2><h3 class="sub">Education</h3><div id="edu"></div><h3 class="sub">Positions</h3><div id="pos"></div></section>
   <section id="teaching"><h2>Teaching and Supervision</h2><div id="teach"></div></section>
   <section id="honours"><h2>Honours and Fellowships</h2><div id="hon"></div></section>
-  <section id="service"><h2>Service and Development</h2><div id="svc"></div></section>
+  <section id="service"><h2>Service and Development</h2><div class="bar" id="sbar"></div><div id="svcbody"></div></section>
   <section id="contact"><h2>Contact</h2>
     <div class="item"><b>Smt. Indira Gandhi Government First Grade Women’s College</b><br><span class="meta">Department of Mathematics · Sagara (PIN: 577401), Karnataka, India</span><br><br>
     ✉ <a href="#" id="mail">Show e-mail</a> &nbsp;·&nbsp; <a href="https://gfgc.karnataka.gov.in/gfwcsagar/public/47/teaching-staff/en">College faculty page</a></div>
@@ -180,14 +180,34 @@ const hon=[
 ["2014-04-28","Karnataka SET for Lecturer/Assistant Professorship in Mathematical Science (2013-12-08)","",[["Certificate","assets/KSETLMS-2013.pdf"]]],
 ["2013-03-06","Prof. V. P. Rathod Gold Medal","Highest Marks in Numerical Analysis &ndash; Gulbarga University MSc Examinations (2010/2012)",[["Certificate","assets/PVPRGM.pdf"]]],
 ["2011-01","VI Rank","Gulbarga University BSc Examinations (2007/2010)",[["Notice board","assets/6RBSc.pdf"]]]];
+const SCATS=["Reviewing","Session chair","Convener / moderator","Examinations","Organising","Memberships","Professional development"];
 const svc=[
-["Reviewing","ISA Transactions (Elsevier) · IET Control Theory & Applications (Wiley) · Mathematical Reviews (AMS)"],
-["Session chair","Intl. Conf. on Fractional Calculus (NIT Puducherry, 2023) · Intl. Conf. on Multidisciplinary Research (Sharnbasva Univ., 2022) · ICRAAAA (MLSU Udaipur, 2019)"],
-["Convener / moderator","“An Hour with” guest-lecture series at Sagara — Enrique Zuazua, K. G. Arun, Veena V. S. (2026) · Webinar on Cosmos (2025)"],
-["Examinations","Board of Examinations, Kuvempu University (2025) · Question-paper setter & evaluator, University of Mysore and Sharnbasva University"],
-["Organising","Mathemattitude state-level teaching competitions (2018–2023) · National webinars and workshops at Paduvalahippe"],
-["Memberships","Life member, ISIAM · SIAM Outreach (2019) · IEEE (2019)"],
-["Professional development","UGC-MMTTC Refresher Courses (Assam Univ. 2025–26; SPPU 2025; CUSB 2024) · GIAN Course on Network Sciences & MAS, IIT (BHU) 2023 · Induction Training Programme-45 · Coursera: KAIST, Imperial College, HKUST, Univ. of Sydney"]];
+["Reviewing","","ISA Transactions","Elsevier"],
+["Reviewing","","IET Control Theory &amp; Applications","John Wiley &amp; Sons"],
+["Reviewing","","Mathematical Reviews","American Mathematical Society"],
+["Session chair","2023-01-28","International Conference on Fractional Calculus: Theory, Applications and Numerics (online)","Department of Mathematics, National Institute of Technology Puducherry, Karaikal"],
+["Session chair","2022-11-22/2022-11-24","International Conference on Multidisciplinary Research","Sharnbasva University, Kalaburagi"],
+["Session chair","2019-12-20/2019-12-22","International Conference on Recent Advances in Algebra, Analysis, and Applications","Mohanlal Sukhadia University, Udaipur"],
+["Convener / moderator","2026-10-01","An Hour with Veena V. S. (Convener)","Smt. Indira Gandhi Government First Grade Women's College, Sagara"],
+["Convener / moderator","2026-09-18","An Hour with K. G. Arun (Convener)","Smt. Indira Gandhi Government First Grade Women's College, Sagara"],
+["Convener / moderator","2026-09-17","Online Talk by Abhipsa Pal (Moderator)","Smt. Indira Gandhi Government First Grade Women's College, Sagara"],
+["Convener / moderator","2026-09-16","Online Talk by Pritha Dev (Moderator)","Smt. Indira Gandhi Government First Grade Women's College, Sagara"],
+["Convener / moderator","2026-08-06","An Hour with Enrique Zuazua (Convener cum moderator)","Smt. Indira Gandhi Government First Grade Women's College, Sagara"],
+["Convener / moderator","2025-08-20/2025-08-22","Webinar on Cosmos &ndash; Into the Unknown (Convener cum moderator)","Smt. Indira Gandhi Government First Grade Women's College, Sagara"],
+["Examinations","2025-07-03","Member, Board of Examinations 2025&ndash;26 (Undergraduate Mathematics and Statistics)","Kuvempu University, Shivamogga"],
+["Examinations","2024-09-26","Question paper setter, MSc Mathematics II Semester","Sharnbasva University, Kalaburagi"],
+["Examinations","2024-04-16","Question paper setter, MSc Mathematics I Semester","Sharnbasva University, Kalaburagi"],
+["Examinations","2022-06-16","Question paper setter, MSc Mathematics IV and II Semesters","University of Mysore, Mysuru"],
+["Organising","2023-06-12","Convener, Mathemattitude 2023 &ndash; A State Level Teaching Competition","Sri H. D. Devegowda Government First Grade College, Paduvalahippe"],
+["Organising","2019-02-13","Organising secretary, Mathemattitude &ndash; An Inter-Collegiate Mathematics Teaching Competition","Sri H. D. Devegowda Government First Grade College, Paduvalahippe"],
+["Organising","2018-03-22","Organising secretary, Mathemattitude &ndash; An Inter-Collegiate Mathematics Teaching Competition","Sri H. D. Devegowda Government First Grade College, Paduvalahippe"],
+["Memberships","","Life-time member, Indian Society for Industrial and Applied Mathematics (ISIAM)",""],
+["Memberships","2019-01-01/2019-12-31","Outreach member, SIAM",""],
+["Memberships","2019-01-01/2019-12-31","Member and young professional, IEEE",""],
+["Professional development","2025-12-29/2026-01-12","UGC-MMTTC Two-Week Refresher Course in Mathematics and Its Applications (online)","Assam University, Silchar"],
+["Professional development","2025-02-15/2025-02-28","UGC-MMTTC Refresher Programme in Mathematics &amp; Computational Sciences","Savitribai Phule Pune University, Pune"],
+["Professional development","2024-10-14/2024-10-26","UGC-MMTTC Two-Week Interdisciplinary Refresher Course (online)","Central University of South Bihar, Gaya"],
+["Professional development","2023-06-19/2023-06-30","Two-Week GIAN Course on Network Sciences and Multi-Agent Systems","Indian Institute of Technology (BHU), Varanasi"]];
 const $=s=>document.querySelector(s),E=(t,h,c)=>{const e=document.createElement(t);e.innerHTML=h;if(c)e.className=c;return e};
 const doi=d=>d.startsWith("http")?d:"https://doi.org/"+d;
 const bold=a=>a.replace(/V\. (S\. )?Muni\*?/g,m=>`<span class="me">${m}</span>`);
@@ -246,7 +266,16 @@ document.querySelectorAll("#tbar button").forEach(b=>b.classList.toggle("on",b.d
 window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([$("#talklist"),$("#confs")])}
 $("#tbar").innerHTML=tyears.map(y=>`<button data-y="${y}">${y}</button>`).join("");
 $("#tbar").onclick=e=>e.target.dataset.y&&drawTalks(e.target.dataset.y);drawTalks("All");
-rows("#edu",edu);rows("#pos",pos);rows("#teach",teach);rows("#hon",hon);rows("#svc",svc);
+const sy=s=>ty(s[1])||"Ongoing";
+const syears=["All",...[...new Set(svc.map(sy).filter(y=>y!="Ongoing"))].sort().reverse(),...(svc.some(s=>sy(s)=="Ongoing")?["Ongoing"]:[])];
+function drawSvc(y){const b=$("#svcbody");b.innerHTML="";
+SCATS.forEach(c=>{const f=svc.filter(s=>s[0]==c&&(y=="All"||sy(s)==y)).sort((a,z)=>z[1].localeCompare(a[1]));if(!f.length)return;
+b.append(E("h3",c,"sub"));
+f.forEach(s=>b.append(E("div",`<div class="when">${s[1]?s[1].replace(/(\d)\/(?=\S)/g,"$1/<br>"):"Ongoing"}</div><div><h3>${s[2]}</h3><div class="meta">${s[3]||""}</div>${(Array.isArray(s[4])?s[4]:[]).map(f=>/^https?:/.test(f[1])?`<a class="chip" href="${f[1]}" target="_blank" rel="noopener">${f[0]} ↗</a>`:`<a class="chip" href="${encodeURI(f[1])}" data-doc="${encodeURI(f[1])}">${f[0]}</a>`).join("")}</div>`,"item row")))});
+document.querySelectorAll("#sbar button").forEach(x=>x.classList.toggle("on",x.dataset.y==y))}
+$("#sbar").innerHTML=syears.map(y=>`<button data-y="${y}">${y}</button>`).join("");
+$("#sbar").onclick=e=>e.target.dataset.y&&drawSvc(e.target.dataset.y);drawSvc("All");  
+rows("#edu",edu);rows("#pos",pos);rows("#teach",teach);rows("#hon",hon);
 const secs=[...document.querySelectorAll("main section")];
 $("#nav").innerHTML=secs.map(s=>`<a href="#${s.id}">${s.querySelector("h2").textContent}</a>`).join("");
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")=="#"+e.target.id))}),{rootMargin:"-30% 0px -60% 0px"});secs.forEach(s=>io.observe(s));
