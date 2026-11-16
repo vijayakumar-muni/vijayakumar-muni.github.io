@@ -102,7 +102,7 @@ footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82re
   <section id="service"><h2>Service and Development</h2><div class="bar" id="sbar"></div><div id="svcbody"></div></section>
   <section id="contact"><h2>Contact</h2>
     <div class="item"><b>Smt. Indira Gandhi Government First Grade Women’s College</b><br><span class="meta">Department of Mathematics · Sagara (PIN: 577401), Karnataka, India</span><br><br>
-    ✉ <a href="#" id="mail">Show e-mail</a></div>
+    ✉ <a href="#" id="mail">Show e-mail</a> <a href="#" id="copymail" class="chip">Copy</a></div>
   </section>
 </main>
 <footer>© <span id="yr"></span> Vijayakumar Muni · Last updated November 2026</footer>
@@ -330,7 +330,7 @@ $("#nav").innerHTML=`<a href="#" class="home">Home</a>`+secs.map(s=>`<a href="#$
 $("#mnav").innerHTML=$("#nav").innerHTML;
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)document.querySelectorAll("#nav a,#mnav a").forEach(a=>{const on=a.getAttribute("href")=="#"+e.target.id;a.classList.toggle("on",on);if(on&&scrollY>=250&&a.parentElement.id=="mnav")a.parentElement.scrollTo({left:a.offsetLeft-30,behavior:"smooth"})})}),{rootMargin:"-30% 0px -60% 0px"});secs.forEach(s=>io.observe(s));
 // e-mail assembled at runtime to deter scrapers
-$("#mail").onclick=e=>{e.preventDefault();const a="vijayakumarmuni0"+"@"+"gmail.com";e.target.textContent=a;e.target.href="mailto:"+a};
+{const a="vijayakumarmuni0"+"@"+"gmail.com",m=$("#mail");m.textContent=a;m.href="mailto:"+a}
 // side document drawer
 function openDoc(src,title){$("#dframe").removeAttribute("srcdoc");$("#dframe").src=src;$("#dopen").href=src;$("#dopen").style.display="";$("#dtitle").textContent=title||"Document";document.body.classList.add("dopen")}
 function openPics(k){const a=(PH[k]||[]).slice(0,4),base=new URL("assets/talks/",location.href).href;
@@ -346,6 +346,10 @@ document.addEventListener("click",e=>{const h=e.target.closest("a.home");if(h){e
 let wasTop=null;
 function homeOn(){const top=scrollY<250;document.querySelectorAll("a.home").forEach(a=>a.classList.toggle("on",top));if(top)document.querySelectorAll("#nav a:not(.home),#mnav a:not(.home)").forEach(a=>a.classList.remove("on"));if(top&&wasTop!==true)$("#mnav").scrollTo({left:0,behavior:"smooth"});wasTop=top}
 addEventListener("scroll",homeOn,{passive:true});homeOn();
+$("#copymail").onclick=e=>{e.preventDefault();navigator.clipboard.writeText($("#mail").textContent);e.target.textContent="Copied"};
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>
