@@ -206,8 +206,8 @@ history.replaceState(null,"",location.pathname+location.search);
   <section id="talks-and-media"><h2>Talks and Media</h2><input class="srch" type="search" placeholder="Search talks and media…" aria-label="Search talks and media"><div class="bar" id="tbar"></div><h3 class="sub" id="hinv">Invited Talks</h3><div id="talklist"></div><h3 class="sub" id="hconf">Conference Presentations</h3><div id="confs"></div><h3 class="sub" id="hmed">Media</h3><div id="media"></div></section>
   <section id="education-and-positions"><h2>Education and Positions</h2><h3 class="sub">Education</h3><div id="edu"></div><h3 class="sub">Positions</h3><div id="pos"></div></section>
   <section id="teaching-and-supervision"><h2>Teaching and Supervision</h2><h3 class="sub">Teaching</h3><div id="teach"></div><h3 class="sub">Supervision</h3><div id="sup"></div></section>
-  <section id="honours"><h2>Honours and Fellowships</h2><div id="hon"></div></section>
-  <section id="service"><h2>Service and Development</h2><div class="bar" id="sbar"></div><div id="svcbody"></div></section>
+  <section id="honours-and-fellowships"><h2>Honours and Fellowships</h2><div id="hon"></div></section>
+  <section id="service-and-development"><h2>Service and Development</h2><div class="bar" id="sbar"></div><div id="svcbody"></div></section>
   <section id="contact"><h2>Contact</h2>
     <div class="item"><b>Smt. Indira Gandhi Government First Grade Women’s College</b><br><span class="meta">Department of Mathematics · Sagara (PIN: 577401), Karnataka, India</span><br><br>
     ✉ <a href="#" id="mail">Show e-mail</a> <a href="#" id="copymail" class="chip">Copy</a></div>
@@ -474,8 +474,8 @@ addEventListener("scroll",homeOn,{passive:true});homeOn();
 $("#copymail").onclick=e=>{e.preventDefault();navigator.clipboard.writeText($("#mail").textContent);e.target.textContent="Copied"};
 document.querySelectorAll(".srch").forEach(i=>i.oninput=()=>{const q=i.value.trim().toLowerCase();if(i.closest("#publications")){QP=q;drawPubs("All")}else{QT=q;drawTalks("All")}});
 document.addEventListener("click",e=>{const c=e.target.closest("[data-cite]");if(c){e.preventDefault();const p=pubs[+c.dataset.cite==0?0:+c.dataset.i],t=c.dataset.cite=="bib"?bib(pubs[+c.dataset.i]):apa(pubs[+c.dataset.i]),o=c.textContent;navigator.clipboard.writeText(t);c.textContent="Copied";setTimeout(()=>c.textContent=o,1500)}});
-document.addEventListener("click",e=>{const b=e.target.closest("#pubbar button,#tbar button,#sbar button");if(!b)return;const k={pubbar:"pubs",tbar:"talks-and-media",sbar:"service"}[b.parentElement.id],u=new URL(location);b.dataset.y=="All"?u.searchParams.delete(k):u.searchParams.set(k,b.dataset.y);history.replaceState(null,"",u)});
-{const q=new URLSearchParams(location.search);if(q.get("pubs"))drawPubs(q.get("pubs"));if(q.get("talks-and-media"))drawTalks(q.get("talks-and-media"));if(q.get("service"))drawSvc(q.get("service"));
+document.addEventListener("click",e=>{const b=e.target.closest("#pubbar button,#tbar button,#sbar button");if(!b)return;const k={pubbar:"pubs",tbar:"talks-and-media",sbar:"service-and-development"}[b.parentElement.id],u=new URL(location);b.dataset.y=="All"?u.searchParams.delete(k):u.searchParams.set(k,b.dataset.y);history.replaceState(null,"",u)});
+{const q=new URLSearchParams(location.search);if(q.get("pubs"))drawPubs(q.get("pubs"));if(q.get("talks-and-media"))drawTalks(q.get("talks-and-media"));if(q.get("service-and-development"))drawSvc(q.get("service-and-development"));
 if(location.hash.length>1)setTimeout(()=>{try{document.querySelector(location.hash).scrollIntoView()}catch(e){}},300)}
 {const r=document.documentElement,b=$("#theme"),cur=()=>r.dataset.theme||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"),lab=()=>b.textContent=cur()=="dark"?"☀ Light mode":"🌙 Dark mode";lab();
 b.onclick=()=>{r.dataset.theme=cur()=="dark"?"light":"dark";lab();try{localStorage.setItem("theme",r.dataset.theme)}catch(e){}}}
