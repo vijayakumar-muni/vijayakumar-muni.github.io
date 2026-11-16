@@ -360,6 +360,9 @@ addEventListener("scroll",homeOn,{passive:true});homeOn();
 $("#copymail").onclick=e=>{e.preventDefault();navigator.clipboard.writeText($("#mail").textContent);e.target.textContent="Copied"};
 document.querySelectorAll(".srch").forEach(i=>i.oninput=()=>{const q=i.value.trim().toLowerCase();if(i.closest("#publications")){QP=q;drawPubs("All")}else{QT=q;drawTalks("All")}});
 document.addEventListener("click",e=>{const c=e.target.closest("[data-cite]");if(c){e.preventDefault();const p=pubs[+c.dataset.cite==0?0:+c.dataset.i],t=c.dataset.cite=="bib"?bib(pubs[+c.dataset.i]):apa(pubs[+c.dataset.i]),o=c.textContent;navigator.clipboard.writeText(t);c.textContent="Copied";setTimeout(()=>c.textContent=o,1500)}});
+document.addEventListener("click",e=>{const b=e.target.closest("#pubbar button,#tbar button,#sbar button");if(!b)return;const k={pubbar:"pubs",tbar:"talks",sbar:"service"}[b.parentElement.id],u=new URL(location);b.dataset.y=="All"?u.searchParams.delete(k):u.searchParams.set(k,b.dataset.y);history.replaceState(null,"",u)});
+{const q=new URLSearchParams(location.search);if(q.get("pubs"))drawPubs(q.get("pubs"));if(q.get("talks"))drawTalks(q.get("talks"));if(q.get("service"))drawSvc(q.get("service"));
+if(location.hash.length>1)setTimeout(()=>{try{document.querySelector(location.hash).scrollIntoView()}catch(e){}},300)}
 </script>
 </body>
 </html>
