@@ -491,10 +491,22 @@ rows("#edu",edu);rows("#pos",pos);rows("#teach",teach);rows("#sup",sup);rows("#h
 const secs=[...document.querySelectorAll("main section")];
 $("#nav").innerHTML=`<a href="#" class="home">Home</a>`+secs.map(s=>`<a href="#${s.id}">${s.querySelector("h2").textContent}</a>`).join("");
 $("#mnav").innerHTML=$("#nav").innerHTML;
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)document.querySelectorAll("#nav a,#mnav a").forEach(a=>{const on=a.getAttribute("href")=="#"+e.target.id;a.classList.toggle("on",on);if(on&&scrollY>=250&&a.parentElement.id=="mnav")a.parentElement.scrollTo({left:a.offsetLeft-30,behavior:"smooth"})})}),{rootMargin:"-30% 0px -60% 0px"});secs.forEach(s=>io.observe(s));
+function updateSectionNav(){
+let current=secs[0];
+const marker=scrollY+innerHeight*0.35;
+secs.forEach(s=>{if(s.offsetTop<=marker)current=s});
+if(innerHeight+scrollY>=document.documentElement.scrollHeight-5)current=secs[secs.length-1];
+document.querySelectorAll("#nav a,#mnav a").forEach(a=>{
+const on=a.getAttribute("href")==="#"+current.id;
+a.classList.toggle("on",on);
+if(on&&scrollY>=250&&a.parentElement.id==="mnav")a.parentElement.scrollTo({left:a.offsetLeft-30,behavior:"smooth"});
+});
+}
+addEventListener("scroll",updateSectionNav,{passive:true});
+addEventListener("resize",updateSectionNav);
+updateSectionNav();
 // e-mail assembled at runtime to deter scrapers
 {const a="vijayakumarmuni0"+"@"+"gmail.com",m=$("#mail");m.textContent=a;m.href="mailto:"+a}
-
 
 // Accessible side document drawer
 let drawerTrigger=null;
