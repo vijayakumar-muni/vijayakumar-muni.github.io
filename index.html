@@ -65,6 +65,10 @@ details li{margin-bottom:.25rem}
 #mnav{display:none}
 @media(max-width:900px){aside nav{display:none}html{scroll-padding-top:3.4rem}#mnav{display:flex;gap:.3rem;position:sticky;top:0;z-index:25;overflow-x:auto;white-space:nowrap;padding:.5rem .6rem;background:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.25)}#mnav a{color:#c9d3e6;font-size:.84rem;padding:.3rem .75rem;border-radius:16px;flex:none}#mnav a:hover{text-decoration:none}#mnav a.on{background:rgba(255,255,255,.16);color:#fff;box-shadow:inset 0 -2px 0 var(--gold)}}
 .srch{width:100%;max-width:420px;font:400 .9rem Inter,sans-serif;padding:.5rem .9rem;border:1px solid var(--line);border-radius:20px;background:var(--card);color:var(--ink);margin-bottom:.8rem}
+:root[data-theme=dark]{--bg:#0f1521;--card:#171f2e;--ink:#e8ebf2;--mute:#9aa5b8;--line:#263147;--navy:#0b1220;--blue:#7fa8ee;--gold:#d8ad55;--chip:#202a3d}
+:root[data-theme=light]{--bg:#faf8f4;--card:#fff;--ink:#1c2433;--mute:#5b6577;--line:#e6e1d6;--navy:#14284b;--blue:#2a5db0;--gold:#b88a2e;--chip:#f1ede3}
+:root[data-theme=dark] h2{color:#fff}:root[data-theme=light] h2{color:var(--navy)}
+.tbtn{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:.45rem;font:500 .82rem Inter,sans-serif;cursor:pointer}
 #drawer{position:fixed;top:0;right:0;bottom:0;width:min(46vw,640px);background:var(--card);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .25s;z-index:30;display:flex;flex-direction:column}
 body.dopen #drawer{transform:none}
 #drawer header{display:flex;justify-content:space-between;align-items:center;padding:.6rem 1rem;border-bottom:1px solid var(--line);font-weight:600}
@@ -76,12 +80,13 @@ footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82re
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
 <aside>
   <img class="photo" src="assets/Photo.jpg" alt="Vijayakumar Muni" onerror="this.removeAttribute('src');this.style.display='none'">
   <div><h1>Vijayakumar Muni</h1><div class="role">Assistant Professor of Mathematics<br>Smt. Indira Gandhi Government First Grade Women's College, Sagara (PIN: 577401), Karnataka</div></div>
-  <button class="cvbtn" data-doc="assets/Curriculum_Vitae.pdf">📄 Download CV</button>
+  <button class="cvbtn" data-doc="assets/Curriculum_Vitae.pdf">📄 Download CV</button><button class="tbtn" id="theme" type="button">Dark mode</button>
   <nav id="nav"></nav>
   <div class="soc" id="soc"></div>
 </aside>
@@ -363,6 +368,8 @@ document.addEventListener("click",e=>{const c=e.target.closest("[data-cite]");if
 document.addEventListener("click",e=>{const b=e.target.closest("#pubbar button,#tbar button,#sbar button");if(!b)return;const k={pubbar:"pubs",tbar:"talks",sbar:"service"}[b.parentElement.id],u=new URL(location);b.dataset.y=="All"?u.searchParams.delete(k):u.searchParams.set(k,b.dataset.y);history.replaceState(null,"",u)});
 {const q=new URLSearchParams(location.search);if(q.get("pubs"))drawPubs(q.get("pubs"));if(q.get("talks"))drawTalks(q.get("talks"));if(q.get("service"))drawSvc(q.get("service"));
 if(location.hash.length>1)setTimeout(()=>{try{document.querySelector(location.hash).scrollIntoView()}catch(e){}},300)}
+{const r=document.documentElement,b=$("#theme"),cur=()=>r.dataset.theme||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"),lab=()=>b.textContent=cur()=="dark"?"☀ Light mode":"🌙 Dark mode";lab();
+b.onclick=()=>{r.dataset.theme=cur()=="dark"?"light":"dark";lab();try{localStorage.setItem("theme",r.dataset.theme)}catch(e){}}}
 </script>
 </body>
 </html>
