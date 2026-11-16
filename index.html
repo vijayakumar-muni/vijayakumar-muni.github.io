@@ -388,7 +388,7 @@ if(location.hash.length>1)setTimeout(()=>{try{document.querySelector(location.ha
 b.onclick=()=>{r.dataset.theme=cur()=="dark"?"light":"dark";lab();try{localStorage.setItem("theme",r.dataset.theme)}catch(e){}}}
 try{const j=pubs.filter(p=>!isRes(p)).map(p=>({"@type":"ScholarlyArticle","name":cl(p[1]).replace(/\$/g,""),"datePublished":p[5],"isPartOf":{"@type":"Periodical","name":cl(p[2])},"url":doi(p[6]),"author":auth(p).map(a=>({"@type":"Person","name":a[1]+" "+a[0]}))}));
 const s=document.createElement("script");s.type="application/ld+json";s.textContent=JSON.stringify({"@context":"https://schema.org","@graph":j});document.head.append(s)}catch(e){}
-document.getElementById("last-updated").textContent=new Date().toLocaleDateString("en-IN",{year:"numeric",month:"numeric",day:"numeric"});
+document.getElementById("last-updated").textContent=new Date().toLocaleDateString("en-CA");
 </script>
 <script data-goatcounter="https://vijayakumar-muni.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
