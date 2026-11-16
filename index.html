@@ -229,10 +229,10 @@ window.addEventListener("pageshow",()=>window.scrollTo(0,0));
   <img class="photo" src="assets/Photo.jpg" alt="Vijayakumar Muni" onerror="this.removeAttribute('src');this.style.display='none'">
   <div><h1>Vijayakumar Muni</h1><div class="role">Assistant Professor of Mathematics<br>Smt. Indira Gandhi Government First Grade Women's College, Sagara (PIN: 577401), Karnataka</div></div>
   <button class="cvbtn" data-doc="assets/Curriculum_Vitae.pdf">📄 Download CV</button><button class="tbtn" id="theme" type="button">Dark mode</button>
-  <nav id="nav"></nav>
+  <nav id="nav" aria-label="Main navigation"></nav>
   <div class="soc" id="soc"></div>
 </aside>
-<nav id="mnav"></nav>
+<nav id="mnav" aria-label="Mobile section navigation"></nav>
 <main id="main-content" tabindex="-1">
   <section id="about" class="hero">
     <h2>About</h2>
@@ -254,9 +254,7 @@ window.addEventListener("pageshow",()=>window.scrollTo(0,0));
   </section>
 </main>
 <footer>© <span id="yr"></span> Vijayakumar Muni · Last updated: <span id="last-updated"></span></footer>
-
-<div id="drawer"><header><span id="dtitle">Document</span><span><a id="dopen" target="_blank" rel="noopener" style="font-size:.8rem;margin-right:1rem">Open ↗</a><button id="dclose" aria-label="Close">×</button></span></header><iframe id="dframe" title="Document viewer"></iframe></div>
-
+<div id="drawer" role="dialog" aria-modal="true" aria-labelledby="dtitle" tabindex="-1"><header><span id="dtitle">Document</span><span><a id="dopen" target="_blank" rel="noopener" style="font-size:.8rem;margin-right:1rem">Open ↗</a><button id="dclose" aria-label="Close">×</button></span></header><iframe id="dframe" title="Document viewer"></iframe></div>
 <script>
 const ME="Muni";
 const links=[["ORCID","https://orcid.org/0000-0001-5749-8119","orcid","A6CE39"],["Google Scholar","https://scholar.google.com/citations?user=RnnY47kAAAAJ&hl=en","googlescholar","4285F4"],["Scopus","https://www.scopus.com/authid/detail.uri?authorId=57204153141","scopus","E9711C"],["ResearchGate","https://www.researchgate.net/profile/Vijayakumar_Muni","researchgate","00CCBB"],["LinkedIn","https://www.linkedin.com/in/vijayakumar-muni-727b1937/","linkedin","0A66C2"],["Math Genealogy","https://www.genealogy.math.ndsu.nodak.edu/id.php?id=260539","","","MGP"],["YouTube","https://www.youtube.com/@vijayakumarmuni","youtube","FF0000"],["X","https://x.com/munivijay11","x","000000"]];
