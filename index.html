@@ -120,7 +120,7 @@ footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82re
     ✉ <a href="#" id="mail">Show e-mail</a> <a href="#" id="copymail" class="chip">Copy</a></div>
   </section>
 </main>
-<footer>© <span id="yr"></span> Vijayakumar Muni · Last updated November 2026</footer>
+<footer>© <span id="yr"></span> Vijayakumar Muni · Last updated: <span id="last-updated"></span></footer>
 
 <div id="drawer"><header><span id="dtitle">Document</span><span><a id="dopen" target="_blank" rel="noopener" style="font-size:.8rem;margin-right:1rem">Open ↗</a><button id="dclose" aria-label="Close">×</button></span></header><iframe id="dframe" title="Document viewer"></iframe></div>
 
@@ -388,6 +388,7 @@ if(location.hash.length>1)setTimeout(()=>{try{document.querySelector(location.ha
 b.onclick=()=>{r.dataset.theme=cur()=="dark"?"light":"dark";lab();try{localStorage.setItem("theme",r.dataset.theme)}catch(e){}}}
 try{const j=pubs.filter(p=>!isRes(p)).map(p=>({"@type":"ScholarlyArticle","name":cl(p[1]).replace(/\$/g,""),"datePublished":p[5],"isPartOf":{"@type":"Periodical","name":cl(p[2])},"url":doi(p[6]),"author":auth(p).map(a=>({"@type":"Person","name":a[1]+" "+a[0]}))}));
 const s=document.createElement("script");s.type="application/ld+json";s.textContent=JSON.stringify({"@context":"https://schema.org","@graph":j});document.head.append(s)}catch(e){}
+document.getElementById("last-updated").textContent=new Date().toLocaleDateString("en-IN",{year:"numeric",month:"numeric",day:"numeric"});
 </script>
 <script data-goatcounter="https://vijayakumar-muni.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
