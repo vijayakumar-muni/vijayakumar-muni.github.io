@@ -127,7 +127,6 @@ footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82re
 <script>
 const ME="Muni";
 const links=[["ORCID","https://orcid.org/0000-0001-5749-8119","orcid","A6CE39"],["Google Scholar","https://scholar.google.com/citations?user=RnnY47kAAAAJ&hl=en","googlescholar","4285F4"],["Scopus","https://www.scopus.com/authid/detail.uri?authorId=57204153141","scopus","E9711C"],["ResearchGate","https://www.researchgate.net/profile/Vijayakumar_Muni","researchgate","00CCBB"],["LinkedIn","https://www.linkedin.com/in/vijayakumar-muni-727b1937/","linkedin","0A66C2"],["Math Genealogy","https://www.genealogy.math.ndsu.nodak.edu/id.php?id=260539","","","MGP"],["YouTube","https://www.youtube.com/@vijayakumarmuni","youtube","FF0000"],["X","https://x.com/munivijay11","x","000000"]];
-const stats=[[18,"Publications"],[17,"Invited Talks"],[8,"Honours/Fellowships"],[10,"Teaching Years"]];
 const interests=["Multi-agent networked systems","Control-theoretic properties","Impulsive systems","Time-delay systems","Fractional-order systems","Data envelopment analysis"];
 // [authors, title, journal/repository, volume(issue), pages, date, url, tags]
 const pubs=[
@@ -203,6 +202,12 @@ const hon=[
 ["2014-04-28","Karnataka SET for Lecturer/Assistant Professorship in Mathematical Science (2013-12-08)","",[["Certificate","assets/KSETLMS-2013.pdf"]]],
 ["2013-03-06","Prof. V. P. Rathod Gold Medal","Highest Marks in Numerical Analysis &ndash; Gulbarga University MSc Examinations (2010/2012)",[["Certificate","assets/PVPRGM.pdf"]]],
 ["2011-01","VI Rank","Gulbarga University BSc Examinations (2007/2010)",[["Notice board","assets/6RBSc.pdf"]]]];
+const stats = [
+  [pubs.length, "Publications"],
+  [talks.length + confs.length, "Talks & Presentations"],
+  [hon.length, "Honours & Fellowships"],
+  [10, "Teaching Years"]
+];  
 const SCATS=["Reviewing","Session Chair","Organising","Academic/Administrative","Memberships","Professional Development"];
 const svc=[
 ["Reviewing","","ISA Transactions","Elsevier"],
