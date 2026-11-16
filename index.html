@@ -88,6 +88,7 @@ footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82re
 <meta property="og:image" content="https://<your-username>.github.io/assets/social.png">
 <meta property="og:url" content="https://<your-username>.github.io/">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Vijayakumar Muni","jobTitle":"Assistant Professor of Mathematics","url":"https://<your-username>.github.io/","image":"https://<your-username>.github.io/assets/Photo.jpg","worksFor":{"@type":"CollegeOrUniversity","name":"Smt. Indira Gandhi Government First Grade Women's College, Sagara"},"alumniOf":{"@type":"CollegeOrUniversity","name":"Indian Institute of Space Science and Technology"},"knowsAbout":["Multi-agent systems","Controllability","Observability","Impulsive systems","Time-delay systems","Data envelopment analysis"],"sameAs":["https://orcid.org/0000-0001-5749-8119","https://scholar.google.com/citations?user=RnnY47kAAAAJ","https://www.scopus.com/authid/detail.uri?authorId=57204153141","https://www.researchgate.net/profile/Vijayakumar_Muni","https://www.linkedin.com/in/vijayakumar-muni-727b1937/"]}</script>
 </head>
 <body>
 <aside>
@@ -377,6 +378,8 @@ document.addEventListener("click",e=>{const b=e.target.closest("#pubbar button,#
 if(location.hash.length>1)setTimeout(()=>{try{document.querySelector(location.hash).scrollIntoView()}catch(e){}},300)}
 {const r=document.documentElement,b=$("#theme"),cur=()=>r.dataset.theme||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"),lab=()=>b.textContent=cur()=="dark"?"☀ Light mode":"🌙 Dark mode";lab();
 b.onclick=()=>{r.dataset.theme=cur()=="dark"?"light":"dark";lab();try{localStorage.setItem("theme",r.dataset.theme)}catch(e){}}}
+try{const j=pubs.filter(p=>!isRes(p)).map(p=>({"@type":"ScholarlyArticle","name":cl(p[1]).replace(/\$/g,""),"datePublished":p[5],"isPartOf":{"@type":"Periodical","name":cl(p[2])},"url":doi(p[6]),"author":auth(p).map(a=>({"@type":"Person","name":a[1]+" "+a[0]}))}));
+const s=document.createElement("script");s.type="application/ld+json";s.textContent=JSON.stringify({"@context":"https://schema.org","@graph":j});document.head.append(s)}catch(e){}
 </script>
 </body>
 </html>
