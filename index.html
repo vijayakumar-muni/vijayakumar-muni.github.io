@@ -209,7 +209,7 @@ const today=new Date();
 const currentDate=[today.getFullYear(),String(today.getMonth()+1).padStart(2,"0"),String(today.getDate()).padStart(2,"0")].join("-");
 const teachingDays=countServiceDays("2014-08-18","2015-02-14")+countServiceDays("2015-02-16","2015-05-29")+countServiceDays("2017-08-22",currentDate);
 const teachingYears=Math.floor(teachingDays/365.2425);
-const stats=[[pubs.length,"Publications"],[talks.length+confs.length,"Talks & Presentations"],[hon.length,"Honours & Fellowships"],[teachingYears,"Teaching Years"]];
+const stats=[[pubs.length,"Publications"],[talks.length,"Invited Talks"],[hon.length,"Honours and Fellowships"],[teachingYears,"Teaching Years"]];
 const SCATS=["Reviewing","Session Chair","Organising","Academic/Administrative","Memberships","Professional Development"];
 const svc=[
 ["Reviewing","","ISA Transactions","Elsevier"],
