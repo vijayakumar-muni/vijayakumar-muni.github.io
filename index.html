@@ -478,10 +478,10 @@ const D=260,R=(a,b)=>a+Math.random()*(b-a),WT=[.3,.5,.75,1];let W,H,N=[],E=[],la
 function theme(){const t=document.documentElement.dataset.theme,dk=t?t=="dark":matchMedia("(prefers-color-scheme:dark)").matches;
 gc=dk?"#5eea8e":"#1f9d55";rc=dk?"#ff7b7b":"#d63030";
 n1=dk?"#ffffff":"#fffbe8";n2=dk?"#ffd54a":"#f2b92c";n3=dk?"#b88414":"#a8780f";
-aE=dk?.8:.7;aN=dk?.95:.9}
+aE=dk?1:.9;aN=dk?1:.9}
 theme();
 function size(){const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;c.width=W*d;c.height=H*d;x.setTransform(d,0,0,d,0,0);
-const n=Math.round(Math.min(66,Math.max(24,W*H/24000)));while(N.length<n)N.push({x:R(0,W),y:R(0,H),vx:R(-.25,.25),vy:R(-.25,.25),r:3.5});N.length=n;E=E.filter(e=>e.a<n&&e.b<n)}
+const n=Math.round(Math.min(66,Math.max(24,W*H/24000)));while(N.length<n)N.push({x:R(0,W),y:R(0,H),vx:R(-.25,.25),vy:R(-.25,.25),r:5});N.length=n;E=E.filter(e=>e.a<n&&e.b<n)}
 function spawn(t){const deg=N.map(()=>0);E.forEach(e=>{deg[e.a]++;deg[e.b]++});
 const iso=[];deg.forEach((d,i)=>{if(!d)iso.push(i)});
 const a=iso.length?iso[Math.floor(R(0,iso.length))]:Math.floor(R(0,N.length));
@@ -500,7 +500,7 @@ x.clearRect(0,0,W,H);
 E=E.filter(e=>{const A=N[e.a],B=N[e.b],age=t-e.t;if(age>e.l||Math.hypot(A.x-B.x,A.y-B.y)>D*2)return false;
 const an=Math.atan2(B.y-A.y,B.x-A.x),cs=Math.cos(an),sn=Math.sin(an),
 x1=A.x+cs*(A.r+1.5),y1=A.y+sn*(A.r+1.5),x2=B.x-cs*(B.r+1.5),y2=B.y-sn*(B.r+1.5);
-x.globalAlpha=aE*e.w*Math.min(age/700,1,(e.l-age)/700);x.strokeStyle=x.fillStyle=e.s>0?gc:rc;x.lineWidth=0.7;
+x.globalAlpha=aE*e.w*Math.min(age/700,1,(e.l-age)/700);x.strokeStyle=x.fillStyle=e.s>0?gc:rc;x.lineWidth=0.5;
 x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
 if(e.d!=1)head(x2,y2,an,6);if(e.d!=0)head(x1,y1,an+Math.PI,6);return true});
 x.globalAlpha=aN;
