@@ -167,6 +167,17 @@ const pubs=[
 ["V. S. Muni","$\\mathbf{E}$-Tracking controllability (Special case: Trajectory controllability): Part II","Zenodo","","","2025-07-05","10.5281/zenodo.15811114",["OpenAIRE"]],
 ["V. S. Muni","Synchronization of self-driving cars: Velocity consensus","Zenodo","","","2025-02-24","10.5281/zenodo.15255747",["OpenAIRE"]],
 ["V. S. Muni","$\\mathbf{E}$-Tracking controllability (Special case: Trajectory controllability): Part I","Zenodo","","","2025-02-24","10.5281/zenodo.15252115",["OpenAIRE"]]];
+async function sharePub(p){
+const doi=p[6];
+const url=doi?"https://doi.org/"+doi:location.href;
+const title=p[1].replaceAll("&ndash;","–");
+const authors=p[0];
+const details=`${title}\n${authors}\n${p[2]}, ${p[3]}, ${p[4]}\n${url}`;
+if(navigator.share){
+try{await navigator.share({title, text:details, url})}
+catch(e){if(e.name!=="AbortError")console.error(e)}}else{
+try{await navigator.clipboard.writeText(details);alert("Publication details copied to clipboard.")}
+catch(e){prompt("Copy publication details:",details)}}}
 const talks=[
 ["2026-08-21/2026-08-22","Controllability: Single-agent to multi-agent systems; Data envelopment analysis: Efficiency through optimization","Central University of Karnataka, Kadaganchi"],
 ["2026-02-26/2026-02-28","A mathematical framework for MAS controllability","International Conference on Science for a Sustainable Future: Innovation at the Interface of Pure and Applied Research","Rani Durgavati University, Jabalpur"],
@@ -458,7 +469,6 @@ first.focus();
 }
 }
 });
-
 
 $("#yr").textContent=new Date().getFullYear();
 document.querySelectorAll('a[href^="http"]').forEach(a=>{if(!a.target){a.target="_blank";a.rel="noopener"}});
