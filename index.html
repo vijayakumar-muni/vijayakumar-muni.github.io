@@ -478,7 +478,7 @@ const D=260,R=(a,b)=>a+Math.random()*(b-a),WT=[.3,.5,.75,1];let W,H,N=[],E=[],la
 function theme(){const t=document.documentElement.dataset.theme,dk=t?t=="dark":matchMedia("(prefers-color-scheme:dark)").matches;
 gc=dk?"#5eea8e":"#1f9d55";rc=dk?"#ff7b7b":"#d63030";
 n1=dk?"#ffffff":"#fffbe8";n2=dk?"#ffd54a":"#f2b92c";n3=dk?"#b88414":"#a8780f";
-aE=dk?.8:.7;aN=dk?.8:.7}
+aE=dk?.8:.7;aN=dk?.95:.9}
 theme();
 function size(){const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;c.width=W*d;c.height=H*d;x.setTransform(d,0,0,d,0,0);
 const n=Math.round(Math.min(66,Math.max(24,W*H/24000)));while(N.length<n)N.push({x:R(0,W),y:R(0,H),vx:R(-.25,.25),vy:R(-.25,.25),r:3.5});N.length=n;E=E.filter(e=>e.a<n&&e.b<n)}
