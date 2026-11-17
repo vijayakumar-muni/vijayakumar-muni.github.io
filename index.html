@@ -472,14 +472,14 @@ const s=document.createElement("script");s.type="application/ld+json";s.textCont
 document.getElementById("last-updated").textContent=new Date().toLocaleDateString("en-CA");
 try{(()=>{const c=document.getElementById("net"),x=c.getContext("2d");
 if(matchMedia("(prefers-reduced-motion:reduce)").matches){c.style.display="none";return}
-const D=220,R=(a,b)=>a+Math.random()*(b-a),WT=[.3,.5,.75,1];let W,H,N=[],E=[],last=0,sp=0,t0=-2000,gc,rc,n1,n2,n3,aE,aN;
+const D=260,R=(a,b)=>a+Math.random()*(b-a),WT=[.3,.5,.75,1];let W,H,N=[],E=[],last=0,sp=0,t0=-2000,gc,rc,n1,n2,n3,aE,aN;
 function theme(){const t=document.documentElement.dataset.theme,dk=t?t=="dark":matchMedia("(prefers-color-scheme:dark)").matches;
 gc=dk?"#5eea8e":"#1f9d55";rc=dk?"#ff7b7b":"#d63030";
 n1=dk?"#ffffff":"#fffbe8";n2=dk?"#ffd54a":"#f2b92c";n3=dk?"#b88414":"#a8780f";
 aE=dk?1:.95;aN=dk?.95:.9}
 theme();
 function size(){const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;c.width=W*d;c.height=H*d;x.setTransform(d,0,0,d,0,0);
-const n=Math.round(Math.min(60,Math.max(22,W*H/26000)));while(N.length<n)N.push({x:R(0,W),y:R(0,H),vx:R(-.25,.25),vy:R(-.25,.25),r:3.5});N.length=n;E=E.filter(e=>e.a<n&&e.b<n)}
+const n=Math.round(Math.min(66,Math.max(24,W*H/24000)));while(N.length<n)N.push({x:R(0,W),y:R(0,H),vx:R(-.25,.25),vy:R(-.25,.25),r:3.5});N.length=n;E=E.filter(e=>e.a<n&&e.b<n)}
 function spawn(t){const deg=N.map(()=>0);E.forEach(e=>{deg[e.a]++;deg[e.b]++});
 const iso=[];deg.forEach((d,i)=>{if(!d)iso.push(i)});
 const a=iso.length?iso[Math.floor(R(0,iso.length))]:Math.floor(R(0,N.length));
@@ -493,7 +493,7 @@ function head(px,py,an,hs){x.beginPath();x.moveTo(px,py);x.lineTo(px-hs*Math.cos
 function frame(t){const dt=Math.min(t-last,50);last=t;
 if(t-t0>1000){t0=t;theme()}
 N.forEach(n=>{n.x+=n.vx*dt/16;n.y+=n.vy*dt/16;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1});
-if(t-sp>100&&E.length<N.length*1.8){sp=t;spawn(t)}
+if(t-sp>50&&E.length<N.length*1.5){sp=t;spawn(t)}
 x.clearRect(0,0,W,H);
 E=E.filter(e=>{const A=N[e.a],B=N[e.b],age=t-e.t;if(age>e.l||Math.hypot(A.x-B.x,A.y-B.y)>D*2)return false;
 const an=Math.atan2(B.y-A.y,B.x-A.x),cs=Math.cos(an),sn=Math.sin(an),
