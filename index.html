@@ -487,8 +487,9 @@ gc=dk?"#5eea8e":"#1f9d55";rc=dk?"#ff7b7b":"#d63030";
 n1=dk?"#ffffff":"#fffbe8";n2=dk?"#ffd54a":"#f2b92c";n3=dk?"#b88414":"#a8780f";
 aE=dk?1:.9;aN=dk?1:.9}
 theme();
+const V=()=>{const a=R(0,6.283),s=R(.04,.7);return{vx:Math.cos(a)*s,vy:Math.sin(a)*s}};
 function size(){const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;c.width=W*d;c.height=H*d;x.setTransform(d,0,0,d,0,0);
-const n=Math.round(Math.min(66,Math.max(24,W*H/24000)));while(N.length<n)N.push({x:R(0,W),y:R(0,H),vx:R(-.25,.25),vy:R(-.25,.25),r:4.5});N.length=n;E=E.filter(e=>e.a<n&&e.b<n)}
+const n=Math.round(Math.min(66,Math.max(24,W*H/24000)));while(N.length<n)N.push({x:R(0,W),y:R(0,H),...V(),r:4.5});N.length=n;E=E.filter(e=>e.a<n&&e.b<n)}
 function spawn(t){const deg=N.map(()=>0);E.forEach(e=>{deg[e.a]++;deg[e.b]++});
 const iso=[];deg.forEach((d,i)=>{if(!d)iso.push(i)});
 const a=iso.length?iso[Math.floor(R(0,iso.length))]:Math.floor(R(0,N.length));
