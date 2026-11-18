@@ -76,6 +76,14 @@ details li{margin-bottom:.25rem}
 .hero p{padding:.5rem .7rem}
 .chip svg{display:inline-block;vertical-align:-.2em}
 a.chip[data-cite=share]{padding-left:.55rem;padding-right:.55rem}
+#snd{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);opacity:.7;cursor:pointer;display:grid;place-items:center;z-index:40;box-shadow:0 2px 10px rgba(0,0,0,.18);transition:opacity .2s,right .25s}
+#snd:hover,#snd:focus-visible{opacity:1}
+#snd svg{width:22px;height:22px}#snd .on{display:none}
+#snd[aria-pressed=true] .on{display:block}#snd[aria-pressed=true] .off{display:none}
+#snd[aria-pressed=true]{opacity:1;border-color:var(--gold);animation:pls 2.4s infinite}
+@keyframes pls{0%{box-shadow:0 0 0 0 rgba(184,138,46,.5)}70%,100%{box-shadow:0 0 0 12px rgba(184,138,46,0)}}
+body.dopen #snd{display:none}
+@media(min-width:1280px){body.dopen #snd{display:grid;right:calc(var(--dw) + 16px)}}
 #drawer{position:fixed;top:0;right:0;bottom:0;width:min(46vw,640px);background:var(--card);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .25s;z-index:30;display:flex;flex-direction:column}
 body.dopen #drawer{transform:none}
 #drawer header{display:flex;justify-content:space-between;align-items:center;padding:.6rem 1rem;border-bottom:1px solid var(--line);font-weight:600}
@@ -115,6 +123,7 @@ window.addEventListener("pageshow",()=>window.scrollTo(0,0));
 <body>
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <canvas id="net" aria-hidden="true"></canvas>
+<button id="snd" type="button" aria-pressed="false" aria-label="Turn background sound on" title="Background sound"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><line x1="16" y1="9" x2="22" y2="15"/><line x1="22" y1="9" x2="16" y2="15"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
 <aside>
   <img class="photo" src="assets/Photo.jpg" alt="Vijayakumar Muni" onerror="this.removeAttribute('src');this.style.display='none'">
   <div><h1>Vijayakumar Muni</h1><div class="role">Assistant Professor of Mathematics<br>Smt. Indira Gandhi Government First Grade Women's College, Sagara (PIN: 577401), Karnataka</div></div>
@@ -479,6 +488,29 @@ b.onclick=()=>{r.dataset.theme=cur()=="dark"?"light":"dark";lab();try{localStora
 try{const j=pubs.filter(p=>!isRes(p)).map(p=>({"@type":"ScholarlyArticle","name":cl(p[1]).replace(/\$/g,""),"datePublished":p[5],"isPartOf":{"@type":"Periodical","name":cl(p[2])},"url":doi(p[6]),"author":auth(p).map(a=>({"@type":"Person","name":a[1]+" "+a[0]}))}));
 const s=document.createElement("script");s.type="application/ld+json";s.textContent=JSON.stringify({"@context":"https://schema.org","@graph":j});document.head.append(s)}catch(e){}
 document.getElementById("last-updated").textContent=new Date().toLocaleDateString("en-CA");
+window.SND=(()=>{let ac,mg,wet,on=false;const SC=[0,2,4,7,9],T={};
+const fq=i=>196*Math.pow(2,(SC[i%5]+12*(Math.floor(i/5)%3))/12);
+const lim=(k,g)=>{if(!on||!ac)return false;const t=ac.currentTime;if(t-(T[k]||-9)<g)return false;T[k]=t;return true};
+const pan=x=>{if(!ac.createStereoPanner)return null;const p=ac.createStereoPanner();p.pan.value=Math.max(-.9,Math.min(.9,x*2-1));return p};
+function ir(){const L=Math.floor(ac.sampleRate*2.6),b=ac.createBuffer(2,L,ac.sampleRate);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<L;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/L,2.6)}return b}
+function init(){const A=window.AudioContext||window.webkitAudioContext;if(!A)return false;ac=new A();
+const cp=ac.createDynamicsCompressor();mg=ac.createGain();mg.gain.value=0;mg.connect(cp);cp.connect(ac.destination);
+const cv=ac.createConvolver();cv.buffer=ir();wet=ac.createGain();wet.gain.value=.5;wet.connect(cv);cv.connect(mg);
+const dg=ac.createGain();dg.gain.value=.05;const lp=ac.createBiquadFilter();lp.type="lowpass";lp.frequency.value=420;dg.connect(lp);lp.connect(mg);lp.connect(wet);
+[[98,0],[146.8,4],[196,-5]].forEach(([f,d])=>{const o=ac.createOscillator();o.type="sine";o.frequency.value=f;o.detune.value=d;o.connect(dg);o.start()});
+const l1=ac.createOscillator(),g1=ac.createGain();l1.frequency.value=.07;g1.gain.value=.02;l1.connect(g1);g1.connect(dg.gain);l1.start();
+const l2=ac.createOscillator(),g2=ac.createGain();l2.frequency.value=.05;g2.gain.value=140;l2.connect(g2);g2.connect(lp.frequency);l2.start();
+document.addEventListener("visibilitychange",()=>{if(document.hidden)ac.suspend();else if(on)ac.resume()});return true}
+function voice(f,v,dur,px,bell){const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain(),p=pan(px),out=p||g;
+o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+o.connect(g);if(p)g.connect(p);out.connect(mg);out.connect(wet);o.start(t);o.stop(t+dur+.05);
+if(bell){const o2=ac.createOscillator(),h=ac.createGain();o2.type="sine";o2.frequency.value=f*2.76;h.gain.setValueAtTime(0,t);h.gain.linearRampToValueAtTime(v*.3,t+.008);h.gain.exponentialRampToValueAtTime(.0001,t+dur*.4);o2.connect(h);h.connect(out);o2.start(t);o2.stop(t+dur*.5)}}
+return{
+toggle(){if(!ac&&!init())return false;on=!on;if(on){ac.resume();mg.gain.setTargetAtTime(.7,ac.currentTime,.4)}else{mg.gain.setTargetAtTime(0,ac.currentTime,.15);setTimeout(()=>{if(!on)ac.suspend()},900)}return on},
+wave(i,amp,px){if(!lim("w",.09))return;const a=Math.min(1,Math.abs(amp));if(amp>0)voice(fq(i),.11*a+.02,1.8,px,true);else voice(fq(i)/2,.1*a+.02,1.6,px,false)},
+flare(i,px){if(!lim("f",.25))return;voice(fq(i)*2,.035,1.5,px,false);voice(fq(i)*2.006,.03,1.5,px,false)},
+tick(px,k){if(k==0&&Math.random()>.2)return;if(!lim("t"+k,.3))return;const t=ac.currentTime,n=Math.floor(ac.sampleRate*.04),b=ac.createBuffer(1,n,ac.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
+const s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain(),p=pan(px),out=p||g;s.buffer=b;f.type="bandpass";f.frequency.value=k?4200:1800;f.Q.value=3;g.gain.value=k?.05:.03;s.connect(f);f.connect(g);if(p)g.connect(p);out.connect(mg);s.start(t)}}})();
 try{(()=>{const c=document.getElementById("net"),x=c.getContext("2d");
 if(matchMedia("(prefers-reduced-motion:reduce)").matches){c.style.display="none";return}
 const D=260,R=(a,b)=>a+Math.random()*(b-a),WT=[.5,.7,.85,1];let W,H,N=[],E=[],last=0,sp=0,t0=-2000,gc,rc,n1,n2,n3,aE,aN;
@@ -490,7 +522,7 @@ theme();
 const V=()=>{const a=R(0,6.283),s=R(.04,.7);return{vx:Math.cos(a)*s,vy:Math.sin(a)*s}};
 const P=[];let ns=0;
 function fire(i,amp,t,from){const n=N[i];n.w=(n.w||0)+amp;
-if(t<(n.rf||0)||Math.abs(amp)<.14)return;if(n.sn&&Math.random()<.4)return;n.rf=t+1400;
+if(t<(n.rf||0)||Math.abs(amp)<.14)return;if(n.sn&&Math.random()<.4)return;n.rf=t+1400;window.SND&&SND.wave(i,amp,n.x/W);
 E.forEach(e=>{let j=-1;if(e.a==i&&e.d!=1)j=e.b;else if(e.b==i&&e.d!=0)j=e.a;if(j<0||j==from)return;if(e.st&&Math.random()<.4)return;
 const A=N[i],B=N[j],len=Math.hypot(A.x-B.x,A.y-B.y);
 P.push({e,f:i,to:j,t,dur:len/.2+150,amp:amp*e.s*(.5+.5*e.w)*.82})})}
@@ -504,7 +536,7 @@ if(!free.length)return;
 let near=free.filter(f=>f[1]<D),b;
 if(near.length)b=near[Math.floor(R(0,near.length))][0];else b=free.sort((p,q)=>p[1]-q[1])[0][0];
 const r=Math.random();
-E.push({a,b,t,l:R(3000,4000),s:Math.random()<.62?1:-1,w:WT[Math.floor(R(0,WT.length))],d:r<.35?2:(r<.68?0:1),st:Math.random()<.35,nf:t+R(500,2500)})}
+E.push({a,b,t,l:R(3000,4000),s:Math.random()<.62?1:-1,w:WT[Math.floor(R(0,WT.length))],d:r<.35?2:(r<.68?0:1),st:Math.random()<.35,nf:t+R(500,2500)});window.SND&&SND.tick((N[a].x+N[b].x)/2/W,0)}
 function head(px,py,an,hs){x.beginPath();x.moveTo(px,py);x.lineTo(px-hs*Math.cos(an-.45),py-hs*Math.sin(an-.45));x.lineTo(px-hs*Math.cos(an+.45),py-hs*Math.sin(an+.45));x.closePath();x.fill()}
 function frame(t){const dt=Math.min(t-last,50);last=t;
 if(t-t0>1000){t0=t;theme()}
@@ -517,13 +549,13 @@ if(n.x<0){n.vx=Math.abs(n.vx);n.tvx=Math.abs(n.tvx)}if(n.x>W){n.vx=-Math.abs(n.v
 if(n.y<0){n.vy=Math.abs(n.vy);n.tvy=Math.abs(n.tvy)}if(n.y>H){n.vy=-Math.abs(n.vy);n.tvy=-Math.abs(n.tvy)}
 if(n.i===undefined){n.i=n.ti=R(.4,1);n.nx=t+R(500,6000)}
 if(n.sn){if(t>n.sx){n.i=n.ti=Math.pow(Math.random(),1.4);n.sx=t+R(300,2200)}}else if(t>n.nx){if(Math.random()<.85)n.ti=Math.pow(Math.random(),1.4);n.nx=t+R(2500,7000)}
-n.i+=(n.ti-n.i)*Math.min(1,dt/1100)});
+n.i+=(n.ti-n.i)*Math.min(1,dt/1100);if(n.i>.85&&!n.hi){n.hi=1;window.SND&&SND.flare(N.indexOf(n),n.x/W)}else if(n.i<.6)n.hi=0});
 if(t-sp>50&&E.length<N.length*1.5){sp=t;spawn(t)}
 x.clearRect(0,0,W,H);
 E=E.filter(e=>{const A=N[e.a],B=N[e.b],age=t-e.t;if(age>e.l||Math.hypot(A.x-B.x,A.y-B.y)>D*2)return false;
 const an=Math.atan2(B.y-A.y,B.x-A.x),cs=Math.cos(an),sn=Math.sin(an),
 x1=A.x+cs*(A.r+1.5),y1=A.y+sn*(A.r+1.5),x2=B.x-cs*(B.r+1.5),y2=B.y-sn*(B.r+1.5);
-if(e.st&&t>e.nf){e.nf=t+R(700,2500);if(Math.random()<.6)e.fl=t+R(80,300);if(Math.random()<.3)e.s*=-1;if(Math.random()<.5)e.w=WT[Math.floor(R(0,WT.length))]}
+if(e.st&&t>e.nf){e.nf=t+R(700,2500);if(Math.random()<.6){e.fl=t+R(80,300);window.SND&&SND.tick((N[e.a].x+N[e.b].x)/2/W,1)}if(Math.random()<.3)e.s*=-1;if(Math.random()<.5)e.w=WT[Math.floor(R(0,WT.length))]}
 x.globalAlpha=aE*e.w*Math.min(age/700,1,(e.l-age)/700)*(e.fl>t?.04:1);x.strokeStyle=x.fillStyle=e.s>0?gc:rc;x.lineWidth=0.3;
 x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
 if(e.d!=1)head(x2,y2,an,6);if(e.d!=0)head(x1,y1,an+Math.PI,6);return true});
@@ -540,6 +572,8 @@ if(h>.1){x.globalAlpha=Math.min(1,h*.9);x.fillStyle="#fff";x.beginPath();x.arc(n
 requestAnimationFrame(frame)}
 size();addEventListener("resize",size);requestAnimationFrame(frame)})()}catch(e){}
 $("#vcf").onclick=e=>{e.preventDefault();const em="vijayakumarmuni0"+"@"+"gmail.com",L=["BEGIN:VCARD","VERSION:3.0","N:Muni;Vijayakumar;;;","FN:Vijayakumar Muni","TITLE:Assistant Professor of Mathematics","ORG:Smt. Indira Gandhi Government First Grade Women's College;Department of Mathematics","EMAIL;TYPE=INTERNET,WORK:"+em,"URL:https://vijayakumar-muni.github.io/","ADR;TYPE=WORK:;;Sagara;Karnataka;577401;India","END:VCARD"],b=new Blob([L.join("\r\n")+"\r\n"],{type:"text/vcard"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="Vijayakumar_Muni.vcf";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+{const b=$("#snd");if(b){if(matchMedia("(prefers-reduced-motion:reduce)").matches)b.style.display="none";
+b.onclick=()=>{const on=window.SND?SND.toggle():false;b.setAttribute("aria-pressed",on);b.setAttribute("aria-label",on?"Turn background sound off":"Turn background sound on")}}}
 </script>
 <script data-goatcounter="https://vijayakumar-muni.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
