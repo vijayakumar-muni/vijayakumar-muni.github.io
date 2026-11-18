@@ -512,7 +512,7 @@ N.forEach(n=>{
 if(n.u===undefined){n.u=Math.random()<.06;n.ta=t+R(300,3000);n.tvx=n.vx;n.tvy=n.vy;n.sn=Math.random()<.25;n.sx=t+R(300,2000)}
 if(!n.u){if(t>n.ta){const q=V();n.tvx=q.vx;n.tvy=q.vy;n.ta=t+R(1500,5000)}const k=Math.min(1,dt/900);n.vx+=(n.tvx-n.vx)*k;n.vy+=(n.tvy-n.vy)*k}
 n.x+=n.vx*dt/16;n.y+=n.vy*dt/16;
-if(n.sn){n.x+=R(-.7,.7)*dt/16;n.y+=R(-.7,.7)*dt/16}
+if(n.sn){n.x+=R(-.9,.9)*dt/16;n.y+=R(-.9,.9)*dt/16}
 if(n.x<0){n.vx=Math.abs(n.vx);n.tvx=Math.abs(n.tvx)}if(n.x>W){n.vx=-Math.abs(n.vx);n.tvx=-Math.abs(n.tvx)}
 if(n.y<0){n.vy=Math.abs(n.vy);n.tvy=Math.abs(n.tvy)}if(n.y>H){n.vy=-Math.abs(n.vy);n.tvy=-Math.abs(n.tvy)}
 if(n.i===undefined){n.i=n.ti=R(.4,1);n.nx=t+R(500,6000)}
