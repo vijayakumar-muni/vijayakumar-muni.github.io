@@ -509,7 +509,7 @@ return{
 toggle(){if(!ac&&!init())return false;on=!on;if(on){ac.resume();mg.gain.setTargetAtTime(.7,ac.currentTime,.4)}else{mg.gain.setTargetAtTime(0,ac.currentTime,.15);setTimeout(()=>{if(!on)ac.suspend()},900)}return on},
 wave(i,amp,px){if(!lim("w",.09))return;const a=Math.min(1,Math.abs(amp));if(amp>0)voice(fq(i),.11*a+.02,1.8,px,true);else voice(fq(i)/2,.1*a+.02,1.6,px,false)},
 flare(i,px){if(!lim("f",.25))return;voice(fq(i)*2,.035,1.5,px,false);voice(fq(i)*2.006,.03,1.5,px,false)},
-tick(px,k){if(k==0&&Math.random()>.2)return;if(!lim("t"+k,.3))return;const t=ac.currentTime,n=Math.floor(ac.sampleRate*.04),b=ac.createBuffer(1,n,ac.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
+tick(px,k){if(Math.random()>(k?.5:.35))return;if(!lim("t",1.8+Math.random()*2.4))return;const t=ac.currentTime,n=Math.floor(ac.sampleRate*.04),b=ac.createBuffer(1,n,ac.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
 const s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain(),p=pan(px),out=p||g;s.buffer=b;f.type="bandpass";f.frequency.value=k?4200:1800;f.Q.value=3;g.gain.value=k?.05:.03;s.connect(f);f.connect(g);if(p)g.connect(p);out.connect(mg);s.start(t)}}})();
 try{(()=>{const c=document.getElementById("net"),x=c.getContext("2d");
 if(matchMedia("(prefers-reduced-motion:reduce)").matches){c.style.display="none";return}
