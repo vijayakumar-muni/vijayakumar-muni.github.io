@@ -501,7 +501,10 @@ E.push({a,b,t,l:R(3000,4000),s:Math.random()<.62?1:-1,w:WT[Math.floor(R(0,WT.len
 function head(px,py,an,hs){x.beginPath();x.moveTo(px,py);x.lineTo(px-hs*Math.cos(an-.45),py-hs*Math.sin(an-.45));x.lineTo(px-hs*Math.cos(an+.45),py-hs*Math.sin(an+.45));x.closePath();x.fill()}
 function frame(t){const dt=Math.min(t-last,50);last=t;
 if(t-t0>1000){t0=t;theme()}
-N.forEach(n=>{n.x+=n.vx*dt/16;n.y+=n.vy*dt/16;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1});
+N.forEach(n=>{n.x+=n.vx*dt/16;n.y+=n.vy*dt/16;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1;
+if(n.i===undefined){n.i=n.ti=R(.4,1);n.nx=t+R(500,6000)}
+if(t>n.nx){if(Math.random()<.7)n.ti=R(.15,1);n.nx=t+R(2500,7000)}
+n.i+=(n.ti-n.i)*Math.min(1,dt/700)});
 if(t-sp>50&&E.length<N.length*1.5){sp=t;spawn(t)}
 x.clearRect(0,0,W,H);
 E=E.filter(e=>{const A=N[e.a],B=N[e.b],age=t-e.t;if(age>e.l||Math.hypot(A.x-B.x,A.y-B.y)>D*2)return false;
@@ -511,7 +514,7 @@ x.globalAlpha=aE*e.w*Math.min(age/700,1,(e.l-age)/700);x.strokeStyle=x.fillStyle
 x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
 if(e.d!=1)head(x2,y2,an,6);if(e.d!=0)head(x1,y1,an+Math.PI,6);return true});
 x.globalAlpha=aN;
-N.forEach(n=>{const g=x.createRadialGradient(n.x-n.r*.35,n.y-n.r*.35,n.r*.1,n.x,n.y,n.r);g.addColorStop(0,n1);g.addColorStop(.45,n2);g.addColorStop(1,n3);x.fillStyle=g;x.beginPath();x.arc(n.x,n.y,n.r,0,7);x.fill()});
+N.forEach(n=>{x.globalAlpha=aN*(.3+.7*n.i);const g=x.createRadialGradient(n.x-n.r*.35,n.y-n.r*.35,n.r*.1,n.x,n.y,n.r);g.addColorStop(0,n1);g.addColorStop(.45,n2);g.addColorStop(1,n3);x.fillStyle=g;x.beginPath();x.arc(n.x,n.y,n.r,0,7);x.fill()});
 requestAnimationFrame(frame)}
 size();addEventListener("resize",size);requestAnimationFrame(frame)})()}catch(e){}
 $("#vcf").onclick=e=>{e.preventDefault();const em="vijayakumarmuni0"+"@"+"gmail.com",L=["BEGIN:VCARD","VERSION:3.0","N:Muni;Vijayakumar;;;","FN:Vijayakumar Muni","TITLE:Assistant Professor of Mathematics","ORG:Smt. Indira Gandhi Government First Grade Women's College;Department of Mathematics","EMAIL;TYPE=INTERNET,WORK:"+em,"URL:https://vijayakumar-muni.github.io/","ADR;TYPE=WORK:;;Sagara;Karnataka;577401;India","END:VCARD"],b=new Blob([L.join("\r\n")+"\r\n"],{type:"text/vcard"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="Vijayakumar_Muni.vcf";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
