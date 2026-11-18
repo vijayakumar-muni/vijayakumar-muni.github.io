@@ -448,9 +448,18 @@ e.preventDefault();
 first.focus();}}});
 $("#yr").textContent=new Date().getFullYear();
 document.querySelectorAll('a[href^="http"]').forEach(a=>{if(!a.target){a.target="_blank";a.rel="noopener"}});
-document.addEventListener("click",e=>{const h=e.target.closest("a.home");if(h){e.preventDefault();history.replaceState(null,"",location.pathname+location.search);window.scrollTo({top:0,behavior:"smooth"})}});
-let wasTop=null;
-function homeOn(){const top=scrollY<250;document.querySelectorAll("a.home").forEach(a=>a.classList.toggle("on",top));if(top)document.querySelectorAll("#nav a:not(.home),#mnav a:not(.home)").forEach(a=>a.classList.remove("on"));if(top&&wasTop!==true)$("#mnav").scrollTo({left:0,behavior:"smooth"});wasTop=top}
+document.addEventListener("click",e=>{const h=e.target.closest("a.home");if(h){e.preventDefault();scrollTo({top:0,behavior:"smooth"});const s=document.querySelector("aside");s&&s.scrollTo({top:0,behavior:"smooth"});history.replaceState(null,"",location.pathname);wasTop=false;homeOn()}});
+let wasTop=null,lastCur=null,lastHm=false;
+function homeOn(){const top=scrollY<250;let cur=null;
+if(!top)document.querySelectorAll("main section").forEach(s=>{if(s.getBoundingClientRect().top<=innerHeight*.3)cur=s.id});
+const hm=top||!cur;
+document.querySelectorAll("#nav a,#mnav a").forEach(a=>a.classList.toggle("on",a.classList.contains("home")?hm:a.getAttribute("href")=="#"+cur));
+const m=$("#mnav");
+if(m){if(hm){if(!lastHm)m.scrollTo({left:0,behavior:"smooth"})}else if(cur!==lastCur){const a=m.querySelector('a[href="#'+cur+'"]');a&&m.scrollTo({left:a.offsetLeft-30,behavior:"smooth"})}}
+const s=document.querySelector("aside");
+if(top&&wasTop!==true&&s)s.scrollTo({top:0,behavior:"smooth"});
+if(top&&wasTop===false)history.replaceState(null,"",location.pathname);
+lastCur=cur;lastHm=hm;wasTop=top}
 addEventListener("scroll",homeOn,{passive:true});homeOn();
 $("#copymail").onclick=e=>{e.preventDefault();navigator.clipboard.writeText($("#mail").textContent);e.target.textContent="Copied"};
 document.querySelectorAll(".srch").forEach(i=>i.oninput=()=>{const q=i.value.trim().toLowerCase();if(i.closest("#publications")){QP=q;drawPubs("All")}else{QT=q;drawTalks("All")}});
