@@ -502,7 +502,12 @@ E.push({a,b,t,l:R(3000,4000),s:Math.random()<.62?1:-1,w:WT[Math.floor(R(0,WT.len
 function head(px,py,an,hs){x.beginPath();x.moveTo(px,py);x.lineTo(px-hs*Math.cos(an-.45),py-hs*Math.sin(an-.45));x.lineTo(px-hs*Math.cos(an+.45),py-hs*Math.sin(an+.45));x.closePath();x.fill()}
 function frame(t){const dt=Math.min(t-last,50);last=t;
 if(t-t0>1000){t0=t;theme()}
-N.forEach(n=>{n.x+=n.vx*dt/16;n.y+=n.vy*dt/16;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1;
+N.forEach(n=>{
+if(n.u===undefined){n.u=Math.random()<.06;n.ta=t+R(300,3000);n.tvx=n.vx;n.tvy=n.vy}
+if(!n.u){if(t>n.ta){const q=V();n.tvx=q.vx;n.tvy=q.vy;n.ta=t+R(1500,5000)}const k=Math.min(1,dt/900);n.vx+=(n.tvx-n.vx)*k;n.vy+=(n.tvy-n.vy)*k}
+n.x+=n.vx*dt/16;n.y+=n.vy*dt/16;
+if(n.x<0){n.vx=Math.abs(n.vx);n.tvx=Math.abs(n.tvx)}if(n.x>W){n.vx=-Math.abs(n.vx);n.tvx=-Math.abs(n.tvx)}
+if(n.y<0){n.vy=Math.abs(n.vy);n.tvy=Math.abs(n.tvy)}if(n.y>H){n.vy=-Math.abs(n.vy);n.tvy=-Math.abs(n.tvy)}
 if(n.i===undefined){n.i=n.ti=R(.4,1);n.nx=t+R(500,6000)}
 if(t>n.nx){if(Math.random()<.85)n.ti=Math.pow(Math.random(),1.4);n.nx=t+R(2500,7000)}
 n.i+=(n.ti-n.i)*Math.min(1,dt/1100)});
