@@ -504,12 +504,12 @@ if(!free.length)return;
 let near=free.filter(f=>f[1]<D),b;
 if(near.length)b=near[Math.floor(R(0,near.length))][0];else b=free.sort((p,q)=>p[1]-q[1])[0][0];
 const r=Math.random();
-E.push({a,b,t,l:R(3000,4000),s:Math.random()<.62?1:-1,w:WT[Math.floor(R(0,WT.length))],d:r<.35?2:(r<.68?0:1),st:Math.random()<.15,nf:t+R(500,2500)})}
+E.push({a,b,t,l:R(3000,4000),s:Math.random()<.62?1:-1,w:WT[Math.floor(R(0,WT.length))],d:r<.35?2:(r<.68?0:1),st:Math.random()<.35,nf:t+R(500,2500)})}
 function head(px,py,an,hs){x.beginPath();x.moveTo(px,py);x.lineTo(px-hs*Math.cos(an-.45),py-hs*Math.sin(an-.45));x.lineTo(px-hs*Math.cos(an+.45),py-hs*Math.sin(an+.45));x.closePath();x.fill()}
 function frame(t){const dt=Math.min(t-last,50);last=t;
 if(t-t0>1000){t0=t;theme()}
 N.forEach(n=>{
-if(n.u===undefined){n.u=Math.random()<.06;n.ta=t+R(300,3000);n.tvx=n.vx;n.tvy=n.vy;n.sn=Math.random()<.12;n.sx=t+R(300,2000)}
+if(n.u===undefined){n.u=Math.random()<.06;n.ta=t+R(300,3000);n.tvx=n.vx;n.tvy=n.vy;n.sn=Math.random()<.25;n.sx=t+R(300,2000)}
 if(!n.u){if(t>n.ta){const q=V();n.tvx=q.vx;n.tvy=q.vy;n.ta=t+R(1500,5000)}const k=Math.min(1,dt/900);n.vx+=(n.tvx-n.vx)*k;n.vy+=(n.tvy-n.vy)*k}
 n.x+=n.vx*dt/16;n.y+=n.vy*dt/16;
 if(n.sn){n.x+=R(-.7,.7)*dt/16;n.y+=R(-.7,.7)*dt/16}
