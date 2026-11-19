@@ -558,7 +558,7 @@ requestAnimationFrame(frame)}
 const RP=[];let lastTap=0;
 addEventListener("click",e=>{if(!e.target.matches("html,body,main,section,footer,.stats,.tags"))return;const now=performance.now();if(now-lastTap<300)return;lastTap=now;
 let bi=0,bd=1e9;N.forEach((n,i)=>{const d=Math.hypot(n.x-e.clientX,n.y-e.clientY);if(d<bd){bd=d;bi=i}});
-RP.push({x:e.clientX,y:e.clientY,t:now});const nd=N[bi],sv=nd.sn;nd.sn=false;nd.rf=0;fire(bi,1.4,now,-1);nd.sn=sv});
+RP.push({x:e.clientX,y:e.clientY,t:now});const nd=N[bi],sv=nd.sn;nd.sn=false;nd.rf=0;fire(bi,Math.random()<.25?-1.4:1.4,now,-1);nd.sn=sv});
 size();addEventListener("resize",size);requestAnimationFrame(frame)})()}catch(e){}
 $("#vcf").onclick=e=>{e.preventDefault();const em="vijayakumarmuni0"+"@"+"gmail.com",L=["BEGIN:VCARD","VERSION:3.0","N:Muni;Vijayakumar;;;","FN:Vijayakumar Muni","TITLE:Assistant Professor of Mathematics","ORG:Smt. Indira Gandhi Government First Grade Women's College;Department of Mathematics","EMAIL;TYPE=INTERNET,WORK:"+em,"URL:https://vijayakumar-muni.github.io/","ADR;TYPE=WORK:;;Sagara;Karnataka;577401;India","END:VCARD"],b=new Blob([L.join("\r\n")+"\r\n"],{type:"text/vcard"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="Vijayakumar_Muni.vcf";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
 {const b=$("#snd");if(b){if(matchMedia("(prefers-reduced-motion:reduce)").matches)b.style.display="none";
