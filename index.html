@@ -111,6 +111,11 @@ body.dopen #snd{display:none}
 .tl-note{grid-column:1/-1;font-size:.8rem;color:var(--mute)}
 #tmap{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.7rem;margin:.4rem 0 1rem}
 .mp-map{height:400px;border-radius:8px;background:#0d1b2a;overflow:hidden;position:relative;z-index:0}
+/* 3D spherical location markers */
+.mp-ball-icon{background:transparent;border:0}
+.mp-ball{display:block;border-radius:50%;width:100%;height:100%;box-shadow:inset -2px -3px 4px rgba(0,0,0,.35),inset 1px 1px 2px rgba(255,255,255,.35),0 1px 3px rgba(0,0,0,.35)}
+.mp-loc-ball{background:radial-gradient(circle at 30% 25%,#e5c477 0%,#b88a2e 42%,#80601e 76%,#49320e 100%)}
+.mp-move-ball{background:radial-gradient(circle at 30% 25%,#fff4ad 0%,#ffcb3d 42%,#d99b13 76%,#91600a 100%)}
 .mp-ctl{display:flex;align-items:center;gap:.5rem;margin:.6rem 0 .5rem;flex-wrap:wrap}
 .mp-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--chip);color:var(--ink);cursor:pointer;font-size:.9rem;line-height:1}
 .mp-rng{flex:1;min-width:120px;accent-color:var(--gold)}
@@ -526,13 +531,28 @@ const setBtn=()=>{pb.textContent=playing?"❚❚":"▶";pb.setAttribute("aria-la
 const go=k=>{cur=tS[Math.min(EV.length-1,Math.max(0,k))];hold=0;playing=false;setBtn()};
 const locMarkers=new Map();
 VS.forEach(v=>{
-const m=L.circleMarker([v[3],v[4]],{radius:3,color:"#fff",weight:1,fillColor:"#b88a2e",fillOpacity:.95});
+const icon=L.divIcon({
+className:"mp-ball-icon",
+html:'<span class="mp-ball mp-loc-ball"></span>',
+iconSize:[12,12],
+iconAnchor:[6,6]
+});
+const m=L.marker([v[3],v[4]],{icon:icon});
 m.bindTooltip(vn(v)+" · "+nEv.get(v)+(nEv.get(v)>1?" events":" event"));
 m.on("click",()=>go(EV.findIndex(e=>e.v===v)));
 locMarkers.set(v,m);
 });
 const glow=L.circleMarker([0,0],{radius:11,stroke:false,fillColor:"#ffd24a",fillOpacity:.3}).addTo(map);
-const dot=L.circleMarker([0,0],{radius:6,color:"#fff",weight:2,fillColor:"#ffcb3d",fillOpacity:1}).addTo(map);
+const dot=L.marker([0,0],{
+icon:L.divIcon({
+className:"mp-ball-icon",
+html:'<span class="mp-ball mp-move-ball"></span>',
+iconSize:[18,18],
+iconAnchor:[9,9]
+}),
+keyboard:false,
+zIndexOffset:1000
+}).addTo(map);
 dot.bindTooltip("",{permanent:true,direction:"top",offset:[0,-8],className:"mp-tip"});
 const card=e=>`<div class="mp-h"><span class="mp-ty">${e.ty}</span><span class="mp-dt">${e.date.replace("/","/<wbr>")}</span></div><div class="mp-ti">${e.title}</div><div class="mp-in"><b>${vn(e.v)}</b>${e.ev?"<br>"+e.ev:""}</div>`;
 function draw(){
