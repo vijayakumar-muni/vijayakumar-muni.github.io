@@ -534,21 +534,21 @@ VS.forEach(v=>{
 const icon=L.divIcon({
 className:"mp-ball-icon",
 html:'<span class="mp-ball mp-loc-ball"></span>',
-iconSize:[12,12],
-iconAnchor:[6,6]
+iconSize:[8,8],
+iconAnchor:[4,4]
 });
 const m=L.marker([v[3],v[4]],{icon:icon});
 m.bindTooltip(vn(v)+" · "+nEv.get(v)+(nEv.get(v)>1?" events":" event"));
 m.on("click",()=>go(EV.findIndex(e=>e.v===v)));
 locMarkers.set(v,m);
 });
-const glow=L.circleMarker([0,0],{radius:11,stroke:false,fillColor:"#ffd24a",fillOpacity:.3}).addTo(map);
+const glow=L.circleMarker([0,0],{radius:8,stroke:false,fillColor:"#ffd24a",fillOpacity:.3}).addTo(map);
 const dot=L.marker([0,0],{
 icon:L.divIcon({
 className:"mp-ball-icon",
 html:'<span class="mp-ball mp-move-ball"></span>',
-iconSize:[18,18],
-iconAnchor:[9,9]
+iconSize:[12,12],
+iconAnchor:[6,6]
 }),
 keyboard:false,
 zIndexOffset:1000
