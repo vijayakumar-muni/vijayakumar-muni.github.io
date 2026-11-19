@@ -544,6 +544,7 @@ x.globalAlpha=aE*e.w*Math.min(age/700,1,(e.l-age)/700)*(e.fl>t?.04:1);x.strokeSt
 x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
 if(e.d!=1)head(x2,y2,an,6);if(e.d!=0)head(x1,y1,an+Math.PI,6);return true});
 x.globalAlpha=aN;
+for(let k=RP.length-1;k>=0;k--){const r=RP[k],a=(t-r.t)/1000;if(a>=1){RP.splice(k,1);continue}x.globalAlpha=.55*(1-a);x.strokeStyle="#d9a82e";x.lineWidth=1.5;x.beginPath();x.arc(r.x,r.y,8+a*70,0,7);x.stroke()}
 if(t>ns){ns=t+R(2000,4000);fire(Math.floor(R(0,N.length)),Math.random()<.25?-1:1,t,-1)}
 for(let k=P.length-1;k>=0;k--){const p=P[k];if(!E.includes(p.e)){P.splice(k,1);continue}if(t-p.t>=p.dur){P.splice(k,1);fire(p.to,p.amp,t,p.f)}}
 N.forEach(n=>{if(n.w)n.w*=Math.exp(-dt/650)});
@@ -554,6 +555,10 @@ if(h>.04){const HR=n.r*(1+6*h),hg=x.createRadialGradient(n.x,n.y,0,n.x,n.y,HR);h
 x.globalAlpha=.1+.9*s;const g=x.createRadialGradient(n.x-n.r*.35,n.y-n.r*.35,n.r*.1,n.x,n.y,n.r);g.addColorStop(0,n1);g.addColorStop(.45,n2);g.addColorStop(1,n3);x.fillStyle=g;x.beginPath();x.arc(n.x,n.y,n.r,0,7);x.fill();
 if(h>.1){x.globalAlpha=Math.min(1,h*.9);x.fillStyle="#fff";x.beginPath();x.arc(n.x-n.r*.1,n.y-n.r*.1,n.r*.55,0,7);x.fill()}});
 requestAnimationFrame(frame)}
+const RP=[];let lastTap=0;
+addEventListener("click",e=>{if(!e.target.matches("html,body,main,section,footer,.stats,.tags"))return;const now=performance.now();if(now-lastTap<300)return;lastTap=now;
+let bi=0,bd=1e9;N.forEach((n,i)=>{const d=Math.hypot(n.x-e.clientX,n.y-e.clientY);if(d<bd){bd=d;bi=i}});
+RP.push({x:e.clientX,y:e.clientY,t:now});const nd=N[bi],sv=nd.sn;nd.sn=false;nd.rf=0;fire(bi,1.4,now,-1);nd.sn=sv});
 size();addEventListener("resize",size);requestAnimationFrame(frame)})()}catch(e){}
 $("#vcf").onclick=e=>{e.preventDefault();const em="vijayakumarmuni0"+"@"+"gmail.com",L=["BEGIN:VCARD","VERSION:3.0","N:Muni;Vijayakumar;;;","FN:Vijayakumar Muni","TITLE:Assistant Professor of Mathematics","ORG:Smt. Indira Gandhi Government First Grade Women's College;Department of Mathematics","EMAIL;TYPE=INTERNET,WORK:"+em,"URL:https://vijayakumar-muni.github.io/","ADR;TYPE=WORK:;;Sagara;Karnataka;577401;India","END:VCARD"],b=new Blob([L.join("\r\n")+"\r\n"],{type:"text/vcard"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="Vijayakumar_Muni.vcf";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
 {const b=$("#snd");if(b){if(matchMedia("(prefers-reduced-motion:reduce)").matches)b.style.display="none";
