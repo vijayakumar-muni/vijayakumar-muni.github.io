@@ -542,7 +542,7 @@ m.bindTooltip(vn(v)+" · "+nEv.get(v)+(nEv.get(v)>1?" events":" event"));
 m.on("click",()=>go(EV.findIndex(e=>e.v===v)));
 locMarkers.set(v,m);
 });
-const glow=L.circleMarker([0,0],{radius:8,stroke:false,fillColor:"#ffd24a",fillOpacity:.3}).addTo(map);
+const glow=L.circleMarker([0,0],{radius:5,stroke:false,fillColor:"#ffd24a",fillOpacity:.3}).addTo(map);
 const dot=L.marker([0,0],{
 icon:L.divIcon({
 className:"mp-ball-icon",
