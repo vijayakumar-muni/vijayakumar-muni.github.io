@@ -83,6 +83,32 @@ a.chip[data-cite=share]{padding-left:.55rem;padding-right:.55rem}
 #snd[aria-pressed=true]{opacity:1;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,138,46,.4),0 2px 10px rgba(0,0,0,.18)}
 body.dopen #snd{display:none}
 @media(min-width:1280px){body.dopen #snd{display:grid;right:calc(var(--dw) + 16px)}}
+#tl{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.8rem 1rem 1rem;margin:.4rem 0 1rem}
+.tl-bar{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.5rem}
+.tl-play{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--chip);color:var(--ink);cursor:pointer;font-size:.75rem}
+.tl-date{font:700 1.15rem 'Source Serif 4',Georgia,serif;color:var(--blue);min-width:7.5rem}
+.tl-leg{display:flex;flex-wrap:wrap;gap:.1rem .8rem;font-size:.72rem;color:var(--mute);margin-left:auto}
+.tl-leg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:.3rem}
+.tl-track{position:relative;height:118px;margin:0 12px;touch-action:pan-y;cursor:ew-resize;user-select:none;outline-offset:6px}
+.tl-axis{position:absolute;left:0;right:0;top:100px;height:2px;background:var(--line)}
+.tl-ticks{position:absolute;inset:0;pointer-events:none}
+.tl-t{position:absolute;top:98px;height:5px;border-left:1px solid var(--mute)}
+.tl-t span{position:absolute;top:7px;left:0;transform:translateX(-50%);font-size:.66rem;color:var(--mute);white-space:nowrap}
+.tl-m{position:absolute;opacity:.85;transition:opacity .2s,box-shadow .2s}
+.tl-m.b{height:8px;border-radius:4px;min-width:4px}
+.tl-m.d{width:10px;height:10px;border-radius:50%;transform:translateX(-50%)}
+.tl-m.act{opacity:1;box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--c)}
+.tl-head{position:absolute;top:0;bottom:16px;width:0;pointer-events:none;z-index:3}
+.tl-head::before{content:"";position:absolute;left:-1px;top:8px;bottom:0;width:2px;background:var(--gold)}
+.tl-head b{position:absolute;left:-9px;top:0;width:18px;height:18px;border-radius:50%;background:var(--gold);border:3px solid var(--card);box-shadow:0 0 0 1px var(--gold),0 2px 6px rgba(0,0,0,.35)}
+.tl-info{margin-top:.6rem;min-height:130px;display:grid;gap:.5rem;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));align-content:start}
+.tl-c{border:1px solid var(--line);border-left:4px solid var(--c);border-radius:8px;padding:.5rem .7rem;background:var(--bg);animation:tlf .25s}
+.tl-c.n{opacity:.75}
+@keyframes tlf{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.tl-ty{font-size:.7rem;font-weight:700;color:var(--c);text-transform:uppercase;letter-spacing:.04em}
+.tl-dt{font-size:.74rem;color:var(--mute);margin-left:.4rem}
+.tl-tt{font:600 .9rem/1.35 'Source Serif 4',Georgia,serif;margin:.1rem 0}
+.tl-note{grid-column:1/-1;font-size:.8rem;color:var(--mute)}
 #drawer{position:fixed;top:0;right:0;bottom:0;width:min(46vw,640px);background:var(--card);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .25s;z-index:30;display:flex;flex-direction:column}
 body.dopen #drawer{transform:none}
 #drawer header{display:flex;justify-content:space-between;align-items:center;padding:.6rem 1rem;border-bottom:1px solid var(--line);font-weight:600}
@@ -138,6 +164,7 @@ window.addEventListener("pageshow",()=>window.scrollTo(0,0));
 <div class="stats" id="stats"></div>
 <p>I earned my Doctor of Philosophy from the Indian Institute of Space Science and Technology (IIST), Thiruvananthapuram, Kerala, in 2019, under <a href="https://www.iist.ac.in/people-faculty-profile/raju-k-george" target="_blank" rel="noopener">Raju K. George</a>, with a thesis on <a href="http://hdl.handle.net/10603/250475" target="_blank" rel="noopener"><i>Studies on Controllability of Dynamical Systems with Impulses and Time-Delay Controls</i></a>.</p>
 <figure class="fig"><img src="assets/PhD_Award.jpg" alt="Receiving the PhD Degree" loading="lazy"><figcaption>IIST Convocation @VSSC, Thiruvananthapuram, 2019-07-05</figcaption></figure>
+<h3 class="sub">Timeline</h3><div id="tl"></div>
 </section>
 <section id="research"><h2>Research</h2><div class="tags" id="interests"></div></section>
 <section id="publications"><h2>Publications</h2><input class="srch" type="search" placeholder="Search publications…" aria-label="Search publications"><div class="bar" id="pubbar"></div><h3 class="sub" id="hpubs">Journal Articles</h3><div id="pubs"></div><h3 class="sub" id="hres">Scholarly and Educational Resources</h3><div id="res"></div></section>
@@ -381,6 +408,58 @@ document.querySelectorAll("#sbar button").forEach(x=>x.classList.toggle("on",x.d
 $("#sbar").innerHTML=syears.map(y=>`<button data-y="${y}">${y}</button>`).join("");
 $("#sbar").onclick=e=>e.target.dataset.y&&drawSvc(e.target.dataset.y);drawSvc("All");  
 rows("#edu",edu);rows("#pos",pos);rows("#teach",teach);rows("#sup",sup);rows("#hon",hon);
+try{(()=>{
+const root=$("#tl");if(!root)return;
+const TY={edu:["Education","#2a5db0"],pos:["Position","#b88a2e"],hon:["Honour","#1f9d55"],talk:["Talk","#8e5bd0"],conf:["Conference","#d6592f"],media:["Media","#16a5b8"]};
+const tok=s=>[...String(s).replace(/&[a-z]+;/g," ").matchAll(/(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?/g)].map(a=>({y:+a[1],m:a[2]?+a[2]:0,d:a[3]?+a[3]:0}));
+const ST=o=>Date.UTC(o.y,o.m?o.m-1:0,o.d||1),EN=o=>o.d?Date.UTC(o.y,o.m-1,o.d):(o.m?Date.UTC(o.y,o.m,0):Date.UTC(o.y,11,31));
+const strip=h=>String(h||"").replace(/\$\\mathbf\{([^}]*)\}\$/g,"$1").replace(/\$/g,"");
+const txt=h=>{const d=document.createElement("div");d.innerHTML=h;return d.textContent};
+const EV=[];
+const add=(ty,lane,date,title,place)=>{const k=tok(date);if(!k.length)return;const a=ST(k[0]);let b=EN(k[k.length-1]);if(k.length==1&&/present/i.test(date))b=Date.now();EV.push({id:EV.length,ty,lane,s:a,e:Math.max(a,b),date:String(date),title:strip(title),place:place||""})};
+edu.forEach(r=>add("edu",0,r[0],r[1],r[2]));
+pos.forEach(r=>add("pos",1,r[0],r[1],r[2]));
+hon.forEach(r=>add("hon",2,r[0],r[1],r[2]));
+talks.forEach(t=>add("talk",3,t[0],t[1],(t.length>3&&t[2]?t[2]+", ":"")+t[t.length-1]));
+confs.forEach(c=>add("conf",3,c[0],c[1],c[2]+", "+c[3]));
+media.forEach(m=>add("media",3,m[0],m[1],m[2]));
+if(!EV.length)return;
+const yy=ms=>new Date(ms).getUTCFullYear(),DAY=864e5,DUR=100000,LY=[30,48,66,84];
+const T0=Date.UTC(yy(Math.min(...EV.map(e=>e.s))),0,1),T1=Date.UTC(yy(Math.max(Date.now(),...EV.map(e=>e.e)))+1,0,1),SPAN=T1-T0;
+root.innerHTML=`<div class="tl-bar"><button type="button" class="tl-play" aria-label="Pause timeline">❚❚</button><span class="tl-date"></span><span class="tl-leg">${Object.values(TY).map(v=>`<span><i style="background:${v[1]}"></i>${v[0]}</span>`).join("")}</span></div><div class="tl-track" role="slider" tabindex="0" aria-label="Career timeline" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="tl-axis"></div><div class="tl-ticks"></div><div class="tl-head"><b></b></div></div><div class="tl-info"></div>`;
+const track=root.querySelector(".tl-track"),head=root.querySelector(".tl-head"),info=root.querySelector(".tl-info"),dl=root.querySelector(".tl-date"),btn=root.querySelector(".tl-play"),tk=root.querySelector(".tl-ticks");
+EV.forEach(e=>{const el=document.createElement("i"),b=e.lane<2;el.className="tl-m "+(b?"b":"d");
+el.style.cssText="--c:"+TY[e.ty][1]+";background:var(--c);top:"+(LY[e.lane]-(b?4:5))+"px;left:"+(((b?e.s:(e.s+e.e)/2)-T0)/SPAN*100)+"%"+(b?";width:"+((e.e-e.s)/SPAN*100)+"%":"");
+el.title=TY[e.ty][0]+": "+txt(e.title)+" ("+txt(e.date)+")";e.el=el;track.insertBefore(el,head)});
+function ticks(){const w=track.clientWidth||600,y0=yy(T0),y1=yy(T1),ppy=w/(y1-y0),st=ppy>=36?1:ppy>=18?2:5;let h="";for(let y=y0;y<y1;y++)if(y%st==0)h+='<i class="tl-t" style="left:'+((Date.UTC(y,0,1)-T0)/SPAN*100)+'%"><span>'+y+'</span></i>';tk.innerHTML=h}
+ticks();try{new ResizeObserver(ticks).observe(track)}catch(_){addEventListener("resize",ticks)}
+const card=(e,n)=>`<div class="tl-c${n?" n":""}" style="--c:${TY[e.ty][1]}"><span class="tl-ty">${TY[e.ty][0]}</span><span class="tl-dt">${e.date.replace("/","/<wbr>")}</span><div class="tl-tt">${e.title}</div><div class="meta">${e.place}</div></div>`;
+const reduced=matchMedia("(prefers-reduced-motion:reduce)").matches;
+let cur=reduced?Math.min(T1,Date.now()):T0,playing=!reduced,vis=true,drag=false,hold=0,last=0,key="",lm=-1,pc=0,pp=true;
+const active=t=>{const W=45*DAY;return EV.filter(e=>e.lane<2?(t>=e.s&&t<=e.e):(t>=e.s-W&&t<=e.e+W)).sort((a,b)=>a.lane-b.lane||a.s-b.s)};
+function draw(){const f=(cur-T0)/SPAN;head.style.left=f*100+"%";
+const D=new Date(cur),mi=D.getUTCFullYear()*12+D.getUTCMonth();
+if(mi!==lm){lm=mi;const L=D.toLocaleDateString("en-GB",{month:"short",year:"numeric",timeZone:"UTC"});dl.textContent=L;track.setAttribute("aria-valuetext",L)}
+track.setAttribute("aria-valuenow",Math.round(f*100));
+const A=active(cur),k=A.map(e=>e.id).join();
+if(k!==key){key=k;EV.forEach(e=>e.el.classList.toggle("act",A.includes(e)));let h;
+if(A.length)h=A.slice(0,6).map(e=>card(e)).join("")+(A.length>6?'<div class="tl-note">+'+(A.length-6)+' more at this time</div>':"");
+else{let n=null,bd=1e18;EV.forEach(e=>{const d=cur<e.s?e.s-cur:cur>e.e?cur-e.e:0;if(d<bd){bd=d;n=e}});h='<div class="tl-note">No milestone at this moment. Nearest:</div>'+card(n,1)}
+info.innerHTML=h}}
+const setBtn=()=>{btn.textContent=playing?"❚❚":"▶";btn.setAttribute("aria-label",playing?"Pause timeline":"Play timeline")};
+btn.onclick=()=>{playing=!playing;if(playing&&cur>=T1-30*DAY){cur=T0;hold=0}setBtn()};
+const setX=x=>{const r=track.getBoundingClientRect();cur=T0+Math.min(1,Math.max(0,(x-r.left)/r.width))*SPAN};
+track.addEventListener("pointerdown",e=>{if(e.button>0)return;pp=playing;pc=cur;drag=true;playing=false;hold=0;setBtn();try{track.setPointerCapture(e.pointerId)}catch(_){}setX(e.clientX)});
+track.addEventListener("pointermove",e=>{if(drag)setX(e.clientX)});
+track.addEventListener("pointerup",()=>{drag=false});
+track.addEventListener("pointercancel",()=>{if(drag){drag=false;cur=pc;playing=pp;setBtn()}});
+track.addEventListener("keydown",e=>{const m={ArrowLeft:-30*DAY,ArrowDown:-30*DAY,ArrowRight:30*DAY,ArrowUp:30*DAY}[e.key];
+if(e.key=="Home")cur=T0;else if(e.key=="End")cur=T1;else if(m)cur=Math.min(T1,Math.max(T0,cur+(e.shiftKey?12:1)*m));else return;e.preventDefault();playing=false;setBtn()});
+try{new IntersectionObserver(es=>{vis=es[0].isIntersecting}).observe(root)}catch(_){}
+function tick(ts){const dt=Math.min(ts-last,60);last=ts;
+if(playing&&vis&&!document.hidden&&!drag){if(hold){if(ts>hold){hold=0;cur=T0}}else{cur+=SPAN*dt/DUR;if(cur>=T1){cur=T1;hold=ts+2500}}}
+draw();requestAnimationFrame(tick)}
+setBtn();requestAnimationFrame(tick)})()}catch(e){console.error("[timeline]",e)}
 const secs=[...document.querySelectorAll("main section")];
 $("#nav").innerHTML=`<a href="#" class="home">Home</a>`+secs.map(s=>`<a href="#${s.id}">${s.querySelector("h2").textContent}</a>`).join("");
 $("#mnav").innerHTML=$("#nav").innerHTML;
