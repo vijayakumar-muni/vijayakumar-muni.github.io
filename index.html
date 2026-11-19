@@ -541,19 +541,28 @@ let lat=a.v[3],lng=a.v[4];
 if(w.m){
 const b=EV[w.k+1],f=w.f,e=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;
 lat+=(b.v[3]-lat)*e;
-lng+=(b.v[4]-lng)*e;}
+lng+=(b.v[4]-lng)*e;
+}
 dot.setLatLng([lat,lng]);
 glow.setLatLng([lat,lng]);
 rng.value=cur;
-EV.slice(0,w.k+1).forEach(e=>{
-const m=locMarkers.get(e.v);
-if(m&&!map.hasLayer(m))m.addTo(map);});
-const kk=w.k;
+const reached=new Set(EV.slice(0,w.k+1).map(e=>e.v));
+VS.forEach(v=>{
+const m=locMarkers.get(v);
+if(reached.has(v)){
+if(!map.hasLayer(m))m.addTo(map);
+}else{
+if(map.hasLayer(m))map.removeLayer(m);
+}
+});
+const kk=w.k+(w.m?"m":"s");
 if(kk!==key){
 key=kk;
 dot.setTooltipContent(vn(a.v));
 cd.innerHTML=(w.m?'<div class="mp-note">Travelling to the next stop…</div>':"")+card(a);
-cn.textContent="Stop "+(w.k+1)+" of "+EV.length;}}
+cn.textContent="Stop "+(w.k+1)+" of "+EV.length;
+}
+}
 root.querySelector(".mp-ctl").addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b)return;const a=b.dataset.a,w=where(cur);
 if(a=="pl"){playing=!playing;if(playing&&cur>=TOT-50){cur=0;hold=0}setBtn()}
 else if(a=="p")go(w.m?w.k:(cur-tS[w.k]<600?w.k-1:w.k));else go(w.k+1)});
