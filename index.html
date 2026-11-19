@@ -109,6 +109,22 @@ body.dopen #snd{display:none}
 .tl-dt{font-size:.74rem;color:var(--mute);margin-left:.4rem}
 .tl-tt{font:600 .9rem/1.35 'Source Serif 4',Georgia,serif;margin:.1rem 0}
 .tl-note{grid-column:1/-1;font-size:.8rem;color:var(--mute)}
+#tmap{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.7rem;margin:.4rem 0 1rem}
+.mp-map{height:400px;border-radius:8px;background:#0d1b2a;overflow:hidden;position:relative;z-index:0}
+.mp-ctl{display:flex;align-items:center;gap:.5rem;margin:.6rem 0 .5rem;flex-wrap:wrap}
+.mp-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--chip);color:var(--ink);cursor:pointer;font-size:.9rem;line-height:1}
+.mp-rng{flex:1;min-width:120px;accent-color:var(--gold)}
+.mp-cnt{font-size:.78rem;color:var(--mute);min-width:6.5rem;text-align:right}
+.mp-c{border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:.55rem .8rem;background:var(--bg);min-height:92px}
+.mp-h{display:flex;gap:.5rem;align-items:baseline;flex-wrap:wrap}
+.mp-ty{font-size:.7rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.04em}
+.mp-dt{font-size:.74rem;color:var(--mute)}
+.mp-ti{font:600 .92rem/1.35 'Source Serif 4',Georgia,serif;margin:.1rem 0}
+.mp-in{font-size:.82rem;color:var(--mute)}
+.mp-note{font-size:.78rem;color:var(--mute);margin-bottom:.25rem}
+.mp-tip{background:#14284b;color:#fff;border:0;font:600 .72rem Inter,sans-serif;padding:.2rem .5rem;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.mp-tip::before{border-top-color:#14284b!important}
+@media(max-width:600px){.mp-map{height:300px}}
 #drawer{position:fixed;top:0;right:0;bottom:0;width:min(46vw,640px);background:var(--card);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .25s;z-index:30;display:flex;flex-direction:column}
 body.dopen #drawer{transform:none}
 #drawer header{display:flex;justify-content:space-between;align-items:center;padding:.6rem 1rem;border-bottom:1px solid var(--line);font-weight:600}
@@ -168,7 +184,7 @@ window.addEventListener("pageshow",()=>window.scrollTo(0,0));
 </section>
 <section id="research"><h2>Research</h2><div class="tags" id="interests"></div></section>
 <section id="publications"><h2>Publications</h2><input class="srch" type="search" placeholder="Search publications…" aria-label="Search publications"><div class="bar" id="pubbar"></div><h3 class="sub" id="hpubs">Journal Articles</h3><div id="pubs"></div><h3 class="sub" id="hres">Scholarly and Educational Resources</h3><div id="res"></div></section>
-<section id="talks-and-media"><h2>Talks and Media</h2><input class="srch" type="search" placeholder="Search talks and media…" aria-label="Search talks and media"><div class="bar" id="tbar"></div><h3 class="sub" id="hinv">Invited Talks</h3><div id="talklist"></div><h3 class="sub" id="hconf">Conference Presentations</h3><div id="confs"></div><h3 class="sub" id="hmed">Media</h3><div id="media"></div></section>
+<section id="talks-and-media"><h2>Talks and Media</h2><h3 class="sub">Map</h3><div id="tmap"></div><input class="srch" type="search" placeholder="Search talks and media…" aria-label="Search talks and media"><div class="bar" id="tbar"></div><h3 class="sub" id="hinv">Invited Talks</h3><div id="talklist"></div><h3 class="sub" id="hconf">Conference Presentations</h3><div id="confs"></div><h3 class="sub" id="hmed">Media</h3><div id="media"></div></section>
 <section id="education-and-positions"><h2>Education and Positions</h2><h3 class="sub">Education</h3><div id="edu"></div><h3 class="sub">Positions</h3><div id="pos"></div></section>
 <section id="teaching-and-supervision"><h2>Teaching and Supervision</h2><h3 class="sub">Teaching</h3><div id="teach"></div><h3 class="sub">Supervision</h3><div id="sup"></div></section>
 <section id="honours-and-fellowships"><h2>Honours and Fellowships</h2><div id="hon"></div></section>
@@ -460,6 +476,84 @@ function tick(ts){const dt=Math.min(ts-last,60);last=ts;
 if(playing&&vis&&!document.hidden&&!drag){if(hold){if(ts>hold){hold=0;cur=T0}}else{cur+=SPAN*dt/DUR;if(cur>=T1){cur=T1;hold=ts+2500}}}
 draw();requestAnimationFrame(tick)}
 setBtn();requestAnimationFrame(tick)})()}catch(e){console.error("[timeline]",e)}
+try{(()=>{
+const root=$("#tmap");if(!root)return;
+const VN=[ // [pattern in the event text, institution, place, latitude, longitude]
+[/Rani Durgavati/,"Rani Durgavati University","Jabalpur",23.13,79.92],
+[/Jabalpur/,"Jabalpur","",23.18,79.95],
+[/Kadaganchi/,"Central University of Karnataka","Kadaganchi, Kalaburagi",17.15,76.95],
+[/Warangal/,"Kakatiya Institute of Technology & Science","Warangal",18.00,79.56],
+[/Visakhapatnam/,"Gayatri Vidya Parishad College of Engineering","Visakhapatnam",17.80,83.35],
+[/Avadi/,"Vel Tech Rangarajan Dr. Sagunthala R&D Institute","Avadi, Chennai",13.12,80.10],
+[/Vellore Institute/,"Vellore Institute of Technology","Chennai",12.84,80.15],
+[/South Asian University/,"South Asian University","New Delhi",28.50,77.19],
+[/Delhi Technological/,"Delhi Technological University","New Delhi",28.75,77.12],
+[/Raipur/,"National Institute of Technology","Raipur",21.25,81.60],
+[/Karnatak University/,"Karnatak University","Dharwad",15.44,75.00],
+[/Bhalki/,"Government First Grade College","Bhalki",18.04,77.21],
+[/Guru Nanak/,"Guru Nanak First Grade College","Bidar",17.91,77.52],
+[/Karnatak Arts/,"Karnatak Arts, Science & Commerce College","Bidar",17.92,77.51],
+[/Karaikal/,"National Institute of Technology Puducherry","Karaikal",10.93,79.84],
+[/Mohanlal Sukhadia/,"Mohanlal Sukhadia University","Udaipur",24.60,73.72],
+[/Madhuben|Vallabh Vidyanagar/,"Madhuben & Bhanubhai Patel Institute of Technology","Vallabh Vidyanagar",22.55,72.92],
+[/Tamil Nadu|Thiruvarur/,"Central University of Tamil Nadu","Thiruvarur",10.73,79.63],
+[/Madurai/,"Madurai Kamaraj University","Madurai",9.94,78.01],
+[/Integral University|Lucknow/,"Integral University","Lucknow",26.77,80.99]];
+const dd=s=>{const m=String(s).match(/(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?/);return m?Date.UTC(+m[1],m[2]?+m[2]-1:0,m[3]?+m[3]:1):null};
+const strip=h=>String(h||"").replace(/\$\\mathbf\{([^}]*)\}\$/g,"$1").replace(/\$/g,"");
+const EV=[];
+const add=(ty,date,title,ev,rest)=>{const t=dd(date);if(t==null)return;const v=VN.find(x=>x[0].test([title,ev,rest].join(" ")));if(!v){console.warn("[map] no venue for:",title);return}EV.push({ty,t,date:String(date),title:strip(title),ev:strip(ev),v})};
+talks.forEach(r=>add("Talk",r[0],r[1],r.length>3?r[2]:"",r[r.length-1]));
+confs.forEach(r=>add("Conference",r[0],r[1],r[2],r[3]));
+media.forEach(r=>add("Media",r[0],r[1],r[2],""));
+EV.sort((a,b)=>a.t-b.t);if(EV.length<2)return;
+const VS=[...new Set(EV.map(e=>e.v))],vn=v=>v[2]?v[1]+", "+v[2]:v[1];
+const DW=4200,MV=2400,mvt=k=>k<EV.length-1&&EV[k].v!==EV[k+1].v?MV:0;
+const tS=[];let acc=0;EV.forEach((e,k)=>{tS.push(acc);acc+=DW+mvt(k)});const TOT=acc;
+const where=c=>{let k=0;while(k<EV.length-1&&c>=tS[k+1])k++;const o=c-tS[k];if(o<DW||!mvt(k))return{k,m:false,f:0};return{k,m:true,f:Math.min(1,(o-DW)/mvt(k))}};
+const reduced=matchMedia("(prefers-reduced-motion:reduce)").matches;
+let cur=0,playing=!reduced,vis=false,hold=0,last=0,key="",started=false;
+root.innerHTML='<div class="mp-map" style="display:grid;place-items:center;color:#9fb3c8;font-size:.85rem">Loading map…</div>';
+function init(){const L=window.L;
+root.innerHTML=`<div class="mp-map"></div><div class="mp-ctl"><button type="button" class="mp-btn" data-a="p" aria-label="Previous stop">‹</button><button type="button" class="mp-btn" data-a="pl" aria-label="Pause">❚❚</button><button type="button" class="mp-btn" data-a="n" aria-label="Next stop">›</button><input class="mp-rng" type="range" min="0" max="${TOT}" step="20" value="0" aria-label="Position in the journey"><span class="mp-cnt"></span></div><div class="mp-c"></div>`;
+const el=root.querySelector(".mp-map"),rng=root.querySelector(".mp-rng"),cn=root.querySelector(".mp-cnt"),cd=root.querySelector(".mp-c"),pb=root.querySelector('[data-a="pl"]');
+const IN=L.latLngBounds([6.2,67.5],[36.5,98.5]);
+const map=L.map(el,{scrollWheelZoom:false,dragging:!L.Browser.mobile,maxBoundsViscosity:1,zoomSnap:.25,maxZoom:10});
+map.fitBounds(IN);map.setMinZoom(map.getZoom());map.setMaxBounds(IN.pad(.05));
+L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{attribution:"Imagery © Esri, Maxar, Earthstar Geographics, and the GIS User Community",maxZoom:12}).addTo(map);
+L.polyline(EV.map(e=>[e.v[3],e.v[4]]),{color:"#fff",weight:1.2,opacity:.35,dashArray:"4 6"}).addTo(map);
+const trail=L.polyline([],{color:"#ffcb3d",weight:2.5,opacity:.9}).addTo(map);
+const nEv=new Map();EV.forEach(e=>nEv.set(e.v,(nEv.get(e.v)||0)+1));
+const setBtn=()=>{pb.textContent=playing?"❚❚":"▶";pb.setAttribute("aria-label",playing?"Pause":"Play")};
+const go=k=>{cur=tS[Math.min(EV.length-1,Math.max(0,k))];hold=0;playing=false;setBtn()};
+VS.forEach(v=>{const m=L.circleMarker([v[3],v[4]],{radius:5,color:"#fff",weight:1.5,fillColor:"#b88a2e",fillOpacity:.95}).addTo(map);
+m.bindTooltip(vn(v)+" · "+nEv.get(v)+(nEv.get(v)>1?" events":" event"));m.on("click",()=>go(EV.findIndex(e=>e.v===v)))});
+const glow=L.circleMarker([0,0],{radius:15,stroke:false,fillColor:"#ffd24a",fillOpacity:.3}).addTo(map);
+const dot=L.circleMarker([0,0],{radius:8,color:"#fff",weight:2.5,fillColor:"#ffcb3d",fillOpacity:1}).addTo(map);
+dot.bindTooltip("",{permanent:true,direction:"top",offset:[0,-8],className:"mp-tip"});
+const card=e=>`<div class="mp-h"><span class="mp-ty">${e.ty}</span><span class="mp-dt">${e.date.replace("/","/<wbr>")}</span></div><div class="mp-ti">${e.title}</div><div class="mp-in"><b>${vn(e.v)}</b>${e.ev?"<br>"+e.ev:""}</div>`;
+function draw(){const w=where(cur),a=EV[w.k];let lat=a.v[3],lng=a.v[4];
+if(w.m){const b=EV[w.k+1],f=w.f,e=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;lat+=(b.v[3]-lat)*e;lng+=(b.v[4]-lng)*e}
+dot.setLatLng([lat,lng]);glow.setLatLng([lat,lng]);
+const p=EV.slice(0,w.k+1).map(e=>[e.v[3],e.v[4]]);p.push([lat,lng]);trail.setLatLngs(p);rng.value=cur;
+const kk=w.k+(w.m?"m":"s");
+if(kk!==key){key=kk;const s=w.m?EV[w.k+1]:a;dot.setTooltipContent(w.m?"→ "+vn(s.v):vn(a.v));cd.innerHTML=(w.m?'<div class="mp-note">Travelling to the next stop…</div>':"")+card(s);cn.textContent="Stop "+(w.m?w.k+2:w.k+1)+" of "+EV.length}}
+root.querySelector(".mp-ctl").addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b)return;const a=b.dataset.a,w=where(cur);
+if(a=="pl"){playing=!playing;if(playing&&cur>=TOT-50){cur=0;hold=0}setBtn()}
+else if(a=="p")go(w.m?w.k:(cur-tS[w.k]<600?w.k-1:w.k));else go(w.k+1)});
+rng.addEventListener("input",()=>{cur=+rng.value;hold=0;playing=false;setBtn()});
+function tick(ts){const dt=Math.min(ts-last,60);last=ts;
+if(playing&&vis&&!document.hidden){if(hold){if(ts>hold){hold=0;cur=0}}else{cur+=dt;if(cur>=TOT){cur=TOT;hold=ts+2500}}}
+draw();requestAnimationFrame(tick)}
+try{new ResizeObserver(()=>map.invalidateSize()).observe(el)}catch(_){}
+setTimeout(()=>map.invalidateSize(),200);setBtn();draw();requestAnimationFrame(tick)}
+const loadLeaflet=()=>new Promise((ok,no)=>{if(window.L)return ok();
+const c=document.createElement("link");c.rel="stylesheet";c.href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css";
+const css=new Promise(r=>{c.onload=r;c.onerror=r});document.head.append(c);
+const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js";
+s.onload=()=>css.then(ok);s.onerror=no;document.head.append(s)});
+new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis&&!started){started=true;loadLeaflet().then(init).catch(()=>{root.innerHTML='<div class="mp-note">The map could not be loaded. Please check your connection.</div>'})}},{rootMargin:"200px"}).observe(root);
+})()}catch(e){console.error("[map]",e)}
 const secs=[...document.querySelectorAll("main section")];
 $("#nav").innerHTML=`<a href="#" class="home">Home</a>`+secs.map(s=>`<a href="#${s.id}">${s.querySelector("h2").textContent}</a>`).join("");
 $("#mnav").innerHTML=$("#nav").innerHTML;
