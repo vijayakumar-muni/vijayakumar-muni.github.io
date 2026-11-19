@@ -521,23 +521,39 @@ const IN=L.latLngBounds([6.2,67.5],[36.5,98.5]);
 const map=L.map(el,{scrollWheelZoom:false,dragging:!L.Browser.mobile,maxBoundsViscosity:1,zoomSnap:.25,maxZoom:10});
 map.fitBounds(IN);map.setMinZoom(map.getZoom());map.setMaxBounds(IN.pad(.05));
 L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{attribution:"Imagery © Esri, Maxar, Earthstar Geographics, and the GIS User Community",maxZoom:12}).addTo(map);
-L.polyline(EV.map(e=>[e.v[3],e.v[4]]),{color:"#fff",weight:1.2,opacity:.35,dashArray:"4 6"}).addTo(map);
-const trail=L.polyline([],{color:"#ffcb3d",weight:2.5,opacity:.9}).addTo(map);
 const nEv=new Map();EV.forEach(e=>nEv.set(e.v,(nEv.get(e.v)||0)+1));
 const setBtn=()=>{pb.textContent=playing?"❚❚":"▶";pb.setAttribute("aria-label",playing?"Pause":"Play")};
 const go=k=>{cur=tS[Math.min(EV.length-1,Math.max(0,k))];hold=0;playing=false;setBtn()};
-VS.forEach(v=>{const m=L.circleMarker([v[3],v[4]],{radius:5,color:"#fff",weight:1.5,fillColor:"#b88a2e",fillOpacity:.95}).addTo(map);
-m.bindTooltip(vn(v)+" · "+nEv.get(v)+(nEv.get(v)>1?" events":" event"));m.on("click",()=>go(EV.findIndex(e=>e.v===v)))});
-const glow=L.circleMarker([0,0],{radius:15,stroke:false,fillColor:"#ffd24a",fillOpacity:.3}).addTo(map);
-const dot=L.circleMarker([0,0],{radius:8,color:"#fff",weight:2.5,fillColor:"#ffcb3d",fillOpacity:1}).addTo(map);
+const locMarkers=new Map();
+VS.forEach(v=>{
+const m=L.circleMarker([v[3],v[4]],{radius:3,color:"#fff",weight:1,fillColor:"#b88a2e",fillOpacity:.95});
+m.bindTooltip(vn(v)+" · "+nEv.get(v)+(nEv.get(v)>1?" events":" event"));
+m.on("click",()=>go(EV.findIndex(e=>e.v===v)));
+locMarkers.set(v,m);
+});
+const glow=L.circleMarker([0,0],{radius:11,stroke:false,fillColor:"#ffd24a",fillOpacity:.3}).addTo(map);
+const dot=L.circleMarker([0,0],{radius:6,color:"#fff",weight:2,fillColor:"#ffcb3d",fillOpacity:1}).addTo(map);
 dot.bindTooltip("",{permanent:true,direction:"top",offset:[0,-8],className:"mp-tip"});
 const card=e=>`<div class="mp-h"><span class="mp-ty">${e.ty}</span><span class="mp-dt">${e.date.replace("/","/<wbr>")}</span></div><div class="mp-ti">${e.title}</div><div class="mp-in"><b>${vn(e.v)}</b>${e.ev?"<br>"+e.ev:""}</div>`;
-function draw(){const w=where(cur),a=EV[w.k];let lat=a.v[3],lng=a.v[4];
-if(w.m){const b=EV[w.k+1],f=w.f,e=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;lat+=(b.v[3]-lat)*e;lng+=(b.v[4]-lng)*e}
-dot.setLatLng([lat,lng]);glow.setLatLng([lat,lng]);
-const p=EV.slice(0,w.k+1).map(e=>[e.v[3],e.v[4]]);p.push([lat,lng]);trail.setLatLngs(p);rng.value=cur;
-const kk=w.k+(w.m?"m":"s");
-if(kk!==key){key=kk;const s=w.m?EV[w.k+1]:a;dot.setTooltipContent(w.m?"→ "+vn(s.v):vn(a.v));cd.innerHTML=(w.m?'<div class="mp-note">Travelling to the next stop…</div>':"")+card(s);cn.textContent="Stop "+(w.m?w.k+2:w.k+1)+" of "+EV.length}}
+function draw(){
+const w=where(cur),a=EV[w.k];
+let lat=a.v[3],lng=a.v[4];
+if(w.m){
+const b=EV[w.k+1],f=w.f,e=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;
+lat+=(b.v[3]-lat)*e;
+lng+=(b.v[4]-lng)*e;}
+dot.setLatLng([lat,lng]);
+glow.setLatLng([lat,lng]);
+rng.value=cur;
+EV.slice(0,w.k+1).forEach(e=>{
+const m=locMarkers.get(e.v);
+if(m&&!map.hasLayer(m))m.addTo(map);});
+const kk=w.k;
+if(kk!==key){
+key=kk;
+dot.setTooltipContent(vn(a.v));
+cd.innerHTML=(w.m?'<div class="mp-note">Travelling to the next stop…</div>':"")+card(a);
+cn.textContent="Stop "+(w.k+1)+" of "+EV.length;}}
 root.querySelector(".mp-ctl").addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b)return;const a=b.dataset.a,w=where(cur);
 if(a=="pl"){playing=!playing;if(playing&&cur>=TOT-50){cur=0;hold=0}setBtn()}
 else if(a=="p")go(w.m?w.k:(cur-tS[w.k]<600?w.k-1:w.k));else go(w.k+1)});
