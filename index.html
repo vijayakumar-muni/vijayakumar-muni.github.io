@@ -410,7 +410,7 @@ $("#sbar").onclick=e=>e.target.dataset.y&&drawSvc(e.target.dataset.y);drawSvc("A
 rows("#edu",edu);rows("#pos",pos);rows("#teach",teach);rows("#sup",sup);rows("#hon",hon);
 try{(()=>{
 const root=$("#tl");if(!root)return;
-const TY={edu:["Education","#2a5db0"],pos:["Position","#3569a8"],hon:["Honour/Fellowship","#1f9d55"],talk:["Invited Talk","#8e5bd0"],conf:["Conference","#d6592f"],media:["Media","#16a5b8"]};
+const TY={edu:["Education","#2a5db0"],pos:["Position","#008b8b"],hon:["Honour/Fellowship","#1f9d55"],talk:["Invited Talk","#8e5bd0"],conf:["Conference","#d6592f"],media:["Media","#16a5b8"]};
 const tok=s=>[...String(s).replace(/&[a-z]+;/g," ").matchAll(/(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?/g)].map(a=>({y:+a[1],m:a[2]?+a[2]:0,d:a[3]?+a[3]:0}));
 const ST=o=>Date.UTC(o.y,o.m?o.m-1:0,o.d||1),EN=o=>o.d?Date.UTC(o.y,o.m-1,o.d):(o.m?Date.UTC(o.y,o.m,0):Date.UTC(o.y,11,31));
 const strip=h=>String(h||"").replace(/\$\\mathbf\{([^}]*)\}\$/g,"$1").replace(/\$/g,"");
