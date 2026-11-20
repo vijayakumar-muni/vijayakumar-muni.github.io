@@ -677,7 +677,7 @@ function drawRes(){hl=[];const N=nodes.length;if(!N){res.innerHTML="<p></p>";ret
  const bad=S.some(r=>r.some(v=>parseRat(v)===null)),r=solve(S),one=r.k===1;
  let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0.</p>':"";
  h+=`<p><b>N<sub>D</sub> = ${r.nd}</b>, the minimum number of driver nodes.</p>`;
- One of the possible sets of ${r.k} node${one?"":"s"} through which the MAS is controllable (click to show it):</p><div class="dm-ch">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</div>`;
+ h+=`<p>${r.good.length} of the ${r.total} possible sets of ${r.k} node${one?"":"s"} through which the MAS is controllable (click to show it):</p><div class="dm-ch">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</div>`;
  h+=r.good.length<r.total?`<p>Every other set of ${r.k} node${one?"":"s"}, and every smaller set, leaves the network uncontrollable.</p>`:`<p>Every smaller set leaves the network uncontrollable.</p>`;
  const U=[...sel].sort((a,b)=>a-b);if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>Your driver set {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?"controllable ✓":"uncontrollable ✗"}</b></p>`}
  res.innerHTML=h;res.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{hl=r.good[+b.dataset.s];drawG();res.querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",x===b))})}
