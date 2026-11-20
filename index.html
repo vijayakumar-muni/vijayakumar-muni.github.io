@@ -687,7 +687,7 @@ for(let i=0;i<N;i++)for(let j=0;j<N;j++){const v=S[i][j],p=parseRat(v);if(!p||p[
  h+=`<path d="M${sx} ${sy}Q${mx} ${my} ${ex} ${ey}" fill="none" stroke="${c}" stroke-width="2" marker-end="url(#${m})"/><text class="dm-l" x="${lx}" y="${ly-5}" fill="${c}">${lab}</text>`}
 nodes.forEach((n,i)=>{h+=`<g class="dm-n${hl.includes(i)?" hl":""}${sel.has(i)?" sel":""}${src===i?" src":""}" data-i="${i}"><circle cx="${n.x}" cy="${n.y}" r="${R}"/><text x="${n.x}" y="${n.y}">${i+1}</text></g>`});
 svg.innerHTML=h}
-function drawMat(){const N=nodes.length;mat.innerHTML=N?`<div class="dm-lab">Adjacency matrix A (row i, column j: edge from j to i).</div><div class="dm-sc"><table class="dm-t"><tr><th></th>${nodes.map((_,j)=>`<th>${j+1}</th>`).join("")}</tr>${S.map((r,i)=>`<tr><th>${i+1}</th>${r.map((v,j)=>`<td><input data-i="${i}" data-j="${j}" value="${esc(v)}" class="${parseRat(v)===null?"bad":""}" aria-label="a ${i+1},${j+1}"></td>`).join("")}</tr>`).join("")}</table></div>`:""}
+function drawMat(){const N=nodes.length;mat.innerHTML=N?`<div class="dm-lab">Adjacency matrix A (row i, column j = weight of the edge from j to i).</div><div class="dm-sc"><table class="dm-t"><tr><th></th>${nodes.map((_,j)=>`<th>${j+1}</th>`).join("")}</tr>${S.map((r,i)=>`<tr><th>${i+1}</th>${r.map((v,j)=>`<td><input data-i="${i}" data-j="${j}" value="${esc(v)}" class="${parseRat(v)===null?"bad":""}" aria-label="a ${i+1},${j+1}"></td>`).join("")}</tr>`).join("")}</table></div>`:""}
 
 /* ── results panel: prints EVERY minimum driver-node set ── */
 function drawRes(){hl=[];const N=nodes.length;if(!N){res.innerHTML="<p>Add some nodes to begin.</p>";return}
