@@ -130,6 +130,32 @@ body.dopen #snd{display:none}
 .mp-tip{background:#14284b;color:#fff;border:0;font:600 .72rem Inter,sans-serif;padding:.2rem .5rem;box-shadow:0 2px 6px rgba(0,0,0,.4)}
 .mp-tip::before{border-top-color:#14284b!important}
 @media(max-width:600px){.mp-map{height:300px}}
+#demo{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.8rem 1rem 1rem;margin:.4rem 0 1rem}
+.dm-p{font-size:.82rem;color:var(--mute);margin-bottom:.6rem}
+.dm-bar{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin-bottom:.4rem}
+.dm-bar button,.dm-ch button{font:500 .8rem Inter,sans-serif;border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:16px;padding:.25rem .75rem;cursor:pointer}
+.dm-bar button.on,.dm-ch button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.dm-bar label{font-size:.8rem;color:var(--mute);display:flex;align-items:center;gap:.3rem}
+.dm-bar input.dm-w,.dm-ex{font:400 .8rem Inter,sans-serif;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);padding:.2rem .4rem}
+.dm-hint{font-size:.78rem;color:var(--mute);margin-bottom:.4rem;min-height:1.2em}
+.dm-svg{width:100%;height:auto;display:block;background:var(--bg);border:1px solid var(--line);border-radius:10px;touch-action:none}
+.dm-n circle{fill:var(--card);stroke:var(--mute);stroke-width:2;cursor:pointer}
+.dm-n.hl circle{fill:#f2b92c;stroke:#a8780f}
+.dm-n.sel circle{stroke:var(--gold);stroke-width:5}
+.dm-n.src circle{stroke:var(--blue);stroke-width:5}
+.dm-n text{fill:var(--ink);font:700 13px Inter,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.dm-n.hl text{fill:#2a1c00}
+.dm-l{font:600 12px Inter,sans-serif;text-anchor:middle;paint-order:stroke;stroke:var(--bg);stroke-width:3px}
+.dm-ph{fill:var(--mute);font:500 14px Inter,sans-serif;text-anchor:middle}
+.dm-lab{font-size:.78rem;color:var(--mute);margin:.7rem 0 .3rem}
+.dm-sc{overflow-x:auto}
+.dm-t{border-collapse:collapse}
+.dm-t th{font-size:.72rem;color:var(--mute);padding:.1rem .3rem}
+.dm-t input{width:3.6rem;font:400 .8rem Inter,sans-serif;text-align:center;border:1px solid var(--line);border-radius:5px;background:var(--bg);color:var(--ink);padding:.15rem}
+.dm-t input.bad,.dm-w.bad{border-color:#d63030;background:rgba(214,48,48,.12)}
+.dm-res{margin-top:.7rem;font-size:.9rem}.dm-res p{margin:.35rem 0}
+.dm-ch{display:flex;flex-wrap:wrap;gap:.4rem;margin:.3rem 0}
+.dm-warn,.dm-no{color:#d63030}.dm-ok{color:#1f9d55}
 #drawer{position:fixed;top:0;right:0;bottom:0;width:min(46vw,640px);background:var(--card);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .25s;z-index:30;display:flex;flex-direction:column}
 body.dopen #drawer{transform:none}
 #drawer header{display:flex;justify-content:space-between;align-items:center;padding:.6rem 1rem;border-bottom:1px solid var(--line);font-weight:600}
@@ -187,7 +213,7 @@ window.addEventListener("pageshow",()=>window.scrollTo(0,0));
 <figure class="fig"><img src="assets/PhD_Award.jpg" alt="Receiving the PhD Degree" loading="lazy"><figcaption>IIST Convocation @VSSC, Thiruvananthapuram, 2019-07-05</figcaption></figure>
 <h3 class="sub">Timeline</h3><div id="tl"></div>
 </section>
-<section id="research"><h2>Research</h2><div class="tags" id="interests"></div></section>
+<section id="research"><h2>Research</h2><div class="tags" id="interests"></div><h3 class="sub">Try it: controllability demo</h3><div id="demo"></div></section>
 <section id="publications"><h2>Publications</h2><input class="srch" type="search" placeholder="Search publications…" aria-label="Search publications"><div class="bar" id="pubbar"></div><h3 class="sub" id="hpubs">Journal Articles</h3><div id="pubs"></div><h3 class="sub" id="hres">Scholarly and Educational Resources</h3><div id="res"></div></section>
 <section id="talks-and-media"><h2>Talks and Media</h2><h3 class="sub">Map</h3><div id="tmap"></div><input class="srch" type="search" placeholder="Search talks and media…" aria-label="Search talks and media"><div class="bar" id="tbar"></div><h3 class="sub" id="hinv">Invited Talks</h3><div id="talklist"></div><h3 class="sub" id="hconf">Conference Presentations</h3><div id="confs"></div><h3 class="sub" id="hmed">Media</h3><div id="media"></div></section>
 <section id="education-and-positions"><h2>Education and Positions</h2><h3 class="sub">Education</h3><div id="edu"></div><h3 class="sub">Positions</h3><div id="pos"></div></section>
@@ -599,6 +625,82 @@ const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/aja
 s.onload=()=>css.then(ok);s.onerror=no;document.head.append(s)});
 new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis&&!started){started=true;loadLeaflet().then(init).catch(()=>{root.innerHTML='<div class="mp-note">The map could not be loaded. Please check your connection.</div>'})}},{rootMargin:"200px"}).observe(root);
 })()}catch(e){console.error("[map]",e)}
+try{(()=>{
+const root=$("#demo");if(!root)return;
+const gcdB=(a,b)=>{a=a<0n?-a:a;b=b<0n?-b:b;while(b){[a,b]=[b,a%b]}return a};
+function parseRat(s){s=String(s).trim().replace(/\u2212/g,"-");if(s==="")return[0n,1n];
+ let m=s.match(/^([+-]?)(\d*)(?:\.(\d*))?$/);
+ if(m&&(m[2]||m[3])){const f=m[3]||"",n=BigInt((m[2]||"0")+f),d=10n**BigInt(f.length);return[m[1]=="-"?-n:n,d]}
+ m=s.match(/^([+-]?)(\d+)\/(\d+)$/);if(m&&BigInt(m[3])!==0n){const n=BigInt(m[2]);return[m[1]=="-"?-n:n,BigInt(m[3])]}
+ return null}
+function intMat(S){let D=1n;const R=S.map(r=>r.map(s=>parseRat(s)||[0n,1n]));
+ R.forEach(r=>r.forEach(([n,d])=>{D=D/gcdB(D,d)*d}));return R.map(r=>r.map(([n,d])=>n*(D/d)))}
+const mm=(X,Y)=>X.map(r=>Y[0].map((_,j)=>r.reduce((s,v,k)=>s+v*Y[k][j],0n)));
+function rankB(M){const R=M.map(r=>r.slice()),nc=R[0].length;let rk=0;
+ for(let c=0;c<nc&&rk<R.length;c++){let p=-1;for(let i=rk;i<R.length;i++)if(R[i][c]!==0n){p=i;break}
+  if(p<0)continue;[R[rk],R[p]]=[R[p],R[rk]];const pv=R[rk][c];
+  for(let i=rk+1;i<R.length;i++){const f=R[i][c];if(f===0n)continue;
+   for(let j=c;j<nc;j++)R[i][j]=R[i][j]*pv-f*R[rk][j];
+   let g=0n;for(let j=c;j<nc;j++)g=gcdB(g,R[i][j]);if(g>1n)for(let j=c;j<nc;j++)R[i][j]/=g}
+  rk++}return rk}
+const ctrl=(P,N,S)=>{const K=Array.from({length:N},(_,r)=>P.flatMap(Pj=>S.map(i=>Pj[r][i])));return rankB(K)===N};
+function maxMult(N,P){for(let m=1;m<=N;m++)for(let t=0;t<3;t++){
+ const B=Array.from({length:N},()=>Array.from({length:m},()=>BigInt(Math.floor(Math.random()*2000001)-1000000)));
+ const Q=P.map(Pj=>mm(Pj,B)),K=Array.from({length:N},(_,r)=>Q.flatMap(q=>q[r]));if(rankB(K)===N)return m}return N}
+function combos(N,k){const out=[],c=[];(function rec(s){if(c.length===k){out.push(c.slice());return}for(let i=s;i<N;i++){c.push(i);rec(i+1);c.pop()}})(0);return out}
+function solve(S){const N=S.length,A=intMat(S),P=[Array.from({length:N},(_,i)=>Array.from({length:N},(_,j)=>i===j?1n:0n))];
+ for(let j=1;j<N;j++)P.push(mm(A,P[j-1]));const nd=maxMult(N,P);
+ for(let k=nd;k<=N;k++){const all=combos(N,k),good=all.filter(s=>ctrl(P,N,s));if(good.length)return{N,nd,k,good,total:all.length,P}}}
+const MAXN=8,W=640,H=300,R=15,esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const K4=[1,2,3,4].flatMap(a=>[1,2,3,4].filter(b=>b!==a).map(b=>[a,b,1]));
+const EX={"Directed path 1→2→3→4":{n:[[110,150],[250,150],[390,150],[530,150]],e:[[1,2,1],[2,3,1],[3,4,1]]},
+"Directed cycle (4 nodes)":{n:[[250,60],[390,150],[250,240],[110,150]],e:[[1,2,1],[2,3,1],[3,4,1],[4,1,1]]},
+"Undirected star":{n:[[320,150],[320,50],[190,230],[450,230]],e:[[1,2,1],[2,1,1],[1,3,1],[3,1,1],[1,4,1],[4,1,1]]},
+"Complete graph K4":{n:[[220,70],[420,70],[420,240],[220,240]],e:K4},
+"Signed, weighted, directed":{n:[[140,150],[320,60],[500,150]],e:[[1,2,-2],[2,3,0.5],[3,1,1.5],[1,3,-1]]},
+"Two components":{n:[[160,150],[320,150],[500,150]],e:[[1,2,1],[2,1,1],[3,3,2]]}};
+const HINT={node:"Click empty space to add a node (up to 8). Drag a node to move it.",edge:"Click the source node, then the target node (the same node twice makes a self-loop). The edge gets the weight typed above; weight 0 removes it.",drv:"Click nodes to build your own driver set and test it.",del:"Click a node to delete it."};
+let nodes=[],S=[],mode="node",src=-1,sel=new Set(),hl=[],drag=null;
+root.innerHTML=`<p class="dm-p">Dynamics: <b>ẋ = (A ⊗ I<sub>3</sub>)x + (B ⊗ I<sub>3</sub>)u</b>, where x<sub>i</sub> ∈ ℝ³ is the state of node i and every driver node receives its own input. a<sub>ij</sub> is the weight of the edge from node <i>j</i> to node <i>i</i>, used exactly as typed (signs kept, no absolute values). The answer is the same for every state dimension n, and it is computed in exact arithmetic, so nothing is rounded.</p><div class="dm-bar"><button type="button" data-m="node">＋ Node</button><button type="button" data-m="edge">→ Edge</button><button type="button" data-m="drv">◎ Drivers</button><button type="button" data-m="del">✕ Delete node</button><label>weight <input class="dm-w" value="1" size="6" aria-label="Edge weight"></label><label><input type="checkbox" class="dm-bi"> both ways</label><select class="dm-ex" aria-label="Examples"><option>Examples…</option>${Object.keys(EX).map(k=>`<option>${k}</option>`).join("")}</select><button type="button" data-m="clr">Clear</button></div><div class="dm-hint"></div><svg class="dm-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg><div class="dm-mat"></div><div class="dm-res" aria-live="polite"></div>`;
+const q=s=>root.querySelector(s),svg=q(".dm-svg"),mat=q(".dm-mat"),res=q(".dm-res");
+function drawG(){const N=nodes.length;let h=`<defs>${[["g","#1f9d55"],["r","#d63030"]].map(([k,c])=>`<marker id="dm${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`).join("")}</defs>`;
+if(!N)h+=`<text class="dm-ph" x="${W/2}" y="${H/2}">Click here to add nodes</text>`;
+for(let i=0;i<N;i++)for(let j=0;j<N;j++){const v=S[i][j],p=parseRat(v);if(!p||p[0]===0n)continue;const neg=p[0]<0n,c=neg?"#d63030":"#1f9d55",m=neg?"dmr":"dmg",lab=String(v).trim();
+ if(i===j){const a=nodes[i];h+=`<path d="M${a.x-8} ${a.y-R+1}C${a.x-34} ${a.y-R*3.2} ${a.x+34} ${a.y-R*3.2} ${a.x+8} ${a.y-R+1}" fill="none" stroke="${c}" stroke-width="2" marker-end="url(#${m})"/><text class="dm-l" x="${a.x}" y="${a.y-R*2.4}" fill="${c}">${lab}</text>`;continue}
+ const a=nodes[j],b=nodes[i],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,bk=parseRat(S[j][i]),k=bk&&bk[0]!==0n?26:0,
+ mx=(a.x+b.x)/2-uy*k,my=(a.y+b.y)/2+ux*k,sx=a.x+ux*R,sy=a.y+uy*R,ex=b.x-ux*(R+2),ey=b.y-uy*(R+2),lx=.25*sx+.5*mx+.25*ex,ly=.25*sy+.5*my+.25*ey;
+ h+=`<path d="M${sx} ${sy}Q${mx} ${my} ${ex} ${ey}" fill="none" stroke="${c}" stroke-width="2" marker-end="url(#${m})"/><text class="dm-l" x="${lx}" y="${ly-5}" fill="${c}">${lab}</text>`}
+nodes.forEach((n,i)=>{h+=`<g class="dm-n${hl.includes(i)?" hl":""}${sel.has(i)?" sel":""}${src===i?" src":""}" data-i="${i}"><circle cx="${n.x}" cy="${n.y}" r="${R}"/><text x="${n.x}" y="${n.y}">${i+1}</text></g>`});
+svg.innerHTML=h}
+function drawMat(){const N=nodes.length;mat.innerHTML=N?`<div class="dm-lab">Adjacency matrix A (row i, column j: edge from j to i). You can edit the entries (2, −0.5, 1/3 …).</div><div class="dm-sc"><table class="dm-t"><tr><th></th>${nodes.map((_,j)=>`<th>${j+1}</th>`).join("")}</tr>${S.map((r,i)=>`<tr><th>${i+1}</th>${r.map((v,j)=>`<td><input data-i="${i}" data-j="${j}" value="${esc(v)}" class="${parseRat(v)===null?"bad":""}" aria-label="a ${i+1},${j+1}"></td>`).join("")}</tr>`).join("")}</table></div>`:""}
+function drawRes(){hl=[];const N=nodes.length;if(!N){res.innerHTML="<p>Add some nodes to begin.</p>";return}
+ const bad=S.some(r=>r.some(v=>parseRat(v)===null)),r=solve(S),one=r.k===1;
+ let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0.</p>':"";
+ h+=`<p><b>N<sub>D</sub> = ${r.nd}</b>, the largest geometric multiplicity among the eigenvalues of A.</p>`;
+ h+=r.k===r.nd?`<p><b>Minimum number of driver nodes: ${r.k}</b></p>`:`<p><b>Minimum number of driver nodes: ${r.k}</b>. Here N<sub>D</sub> = ${r.nd} is the fewest independent inputs when each input may be spread over several nodes. Because every input must sit on a single node, this network needs ${r.k} driver nodes.</p>`;
+ h+=`<p>${r.good.length} of the ${r.total} possible sets of ${r.k} node${one?"":"s"} make the network controllable (click one to show it):</p><div class="dm-ch">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</div>`;
+ h+=r.good.length<r.total?`<p>Every other set of ${r.k} node${one?"":"s"}, and every smaller set, leaves the network uncontrollable.</p>`:`<p>Every smaller set leaves the network uncontrollable.</p>`;
+ const U=[...sel].sort((a,b)=>a-b);if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>Your driver set {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?"controllable ✓":"uncontrollable ✗"}</b></p>`}
+ res.innerHTML=h;res.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{hl=r.good[+b.dataset.s];drawG();res.querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",x===b))})}
+const full=()=>{drawG();drawMat();drawRes()};
+function addNode(x,y){const n=nodes.length;S.forEach(r=>r.push(""));S.push(Array(n+1).fill(""));nodes.push({x,y})}
+function delNode(i){nodes.splice(i,1);S.splice(i,1);S.forEach(r=>r.splice(i,1));sel=new Set([...sel].filter(x=>x!==i).map(x=>x>i?x-1:x))}
+function link(j,i){const w=q(".dm-w").value.trim(),p=parseRat(w);if(w===""||!p){q(".dm-w").classList.add("bad");return}q(".dm-w").classList.remove("bad");const v=p[0]===0n?"":w;S[i][j]=v;if(q(".dm-bi").checked&&i!==j)S[j][i]=v}
+const pt=e=>{const r=svg.getBoundingClientRect();return[(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]};
+svg.addEventListener("pointerdown",e=>{const g=e.target.closest(".dm-n"),[x,y]=pt(e);
+ if(g){const i=+g.dataset.i;if(mode=="node"){drag=i;try{svg.setPointerCapture(e.pointerId)}catch(_){}return}
+  if(mode=="edge"){if(src<0)src=i;else{link(src,i);src=-1}}else if(mode=="drv"){sel.has(i)?sel.delete(i):sel.add(i)}else if(mode=="del")delNode(i);
+  full();return}
+ if(mode=="node"&&nodes.length<MAXN){addNode(cl(x,R,W-R),cl(y,R+14,H-R));full()}else if(mode=="edge"){src=-1;drawG()}});
+svg.addEventListener("pointermove",e=>{if(drag===null)return;const[x,y]=pt(e);nodes[drag].x=cl(x,R,W-R);nodes[drag].y=cl(y,R+14,H-R);drawG()});
+svg.addEventListener("pointerup",()=>{drag=null});svg.addEventListener("pointercancel",()=>{drag=null});
+mat.addEventListener("input",e=>{const t=e.target;if(!t.dataset.i)return;S[+t.dataset.i][+t.dataset.j]=t.value;t.classList.toggle("bad",parseRat(t.value)===null);drawG();drawRes()});
+q(".dm-bar").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const m=b.dataset.m;
+ if(m=="clr"){nodes=[];S=[];sel=new Set();src=-1;full();return}
+ mode=m;src=-1;q(".dm-bar").querySelectorAll("[data-m]").forEach(x=>x.classList.toggle("on",x.dataset.m===m));q(".dm-hint").textContent=HINT[m];drawG()});
+q(".dm-ex").addEventListener("change",e=>{const ex=EX[e.target.value];if(!ex)return;nodes=ex.n.map(([x,y])=>({x,y}));S=Array.from({length:nodes.length},()=>Array(nodes.length).fill(""));ex.e.forEach(([j,i,w])=>S[i-1][j-1]=String(w));sel=new Set();src=-1;full();e.target.selectedIndex=0});
+q('[data-m="node"]').classList.add("on");q(".dm-hint").textContent=HINT.node;full();
+})()}catch(e){console.error("[demo]",e)}
 const secs=[...document.querySelectorAll("main section")];
 $("#nav").innerHTML=`<a href="#" class="home">Home</a>`+secs.map(s=>`<a href="#${s.id}">${s.querySelector("h2").textContent}</a>`).join("");
 $("#mnav").innerHTML=$("#nav").innerHTML;
