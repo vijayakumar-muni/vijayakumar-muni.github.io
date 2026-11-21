@@ -139,12 +139,12 @@ body.dopen #snd{display:none}
 .dm-bar input.dm-w,.dm-ex{font:400 .8rem Inter,sans-serif;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);padding:.2rem .4rem}
 .dm-hint{font-size:.78rem;color:var(--mute);margin-bottom:.4rem;min-height:1.2em}
 .dm-svg{width:100%;height:auto;display:block;background:var(--bg);border:1px solid var(--line);border-radius:10px;touch-action:none}
-.dm-n circle{fill:var(--card);stroke:var(--mute);stroke-width:2;cursor:pointer}
-.dm-n.hl circle{fill:#f2b92c;stroke:#a8780f}
-.dm-n.sel circle{stroke:var(--gold);stroke-width:5}
-.dm-n.src circle{stroke:var(--blue);stroke-width:5}
-.dm-n text{fill:var(--ink);font:700 13px Inter,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none}
-.dm-n.hl text{fill:#2a1c00}
+.dm-n circle.b{fill:url(#dmBall);stroke:#8a6410;stroke-width:1;cursor:pointer}
+.dm-n.hot circle.b{fill:url(#dmBallHot);stroke:#e0a21a}
+.dm-n .core,.dm-halo{pointer-events:none}
+.dm-n.src circle.b{stroke:var(--blue);stroke-width:4}
+.dm-n text{fill:#2a1c00;font:700 15px Inter,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none;paint-order:stroke;stroke:rgba(255,246,214,.75);stroke-width:2px}
+.dm-halo{animation:dmsh 3s ease-in-out infinite}@keyframes dmsh{50%{opacity:.55}}
 .dm-l{font:600 12px Inter,sans-serif;text-anchor:middle;paint-order:stroke;stroke:var(--bg);stroke-width:3px}
 .dm-ph{fill:var(--mute);font:500 14px Inter,sans-serif;text-anchor:middle}
 .dm-lab{font-size:.78rem;color:var(--mute);margin:.7rem 0 .3rem}
@@ -664,7 +664,7 @@ if(good.length)return{N,nd,k,good,total:all.length,census,P};
 const all=combos(N,N);
 return{N,nd,k:N,good:all,total:1,census,P};
 }
-const MAXN=8,W=640,H=300,R=15,esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const MAXN=8,W=640,H=300,R=18,esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const K4=[1,2,3,4].flatMap(a=>[1,2,3,4].filter(b=>b!==a).map(b=>[a,b,1]));
 const EX={"Directed path 1→2→3→4":{n:[[110,150],[250,150],[390,150],[530,150]],e:[[1,2,1],[2,3,1],[3,4,1]]},
 "Directed cycle (4 nodes)":{n:[[250,60],[390,150],[250,240],[110,150]],e:[[1,2,1],[2,3,1],[3,4,1],[4,1,1]]},
@@ -677,14 +677,15 @@ let nodes=[],S=[],mode="node",src=-1,sel=new Set(),hl=[],drag=null;
 root.innerHTML=`<p class="dm-p">Dynamics of the MAS: $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$, where $\\boldsymbol{x}(t)=\\left[\\boldsymbol{x}_1(t)^\\intercal\\quad\\boldsymbol{x}_2(t)^\\intercal\\quad\\ldots\\quad\\boldsymbol{x}_N(t)^\\intercal\\right]^\\intercal$, $\\boldsymbol{x}_i(t)\\in\\mathbb{R}^n$.</p><div class="dm-bar"><button type="button" data-m="node">＋ Agent</button><button type="button" data-m="edge">→ Communication</button><button type="button" data-m="drv">◎ Leaders</button><button type="button" data-m="del">✕ Delete agent</button><label>weight <input class="dm-w" value="1" size="6" aria-label="Edge weight"></label><label><input type="checkbox" class="dm-bi"> both ways</label><select class="dm-ex" aria-label="Examples"><option>Examples…</option>${Object.keys(EX).map(k=>`<option>${k}</option>`).join("")}</select><button type="button" data-m="clr">Clear</button></div><div class="dm-hint"></div><svg class="dm-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg><div class="dm-mat"></div><div class="dm-res" aria-live="polite"></div>`;
 const q=s=>root.querySelector(s),svg=q(".dm-svg"),mat=q(".dm-mat"),res=q(".dm-res");
 const tex=()=>{try{window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([root]).catch(()=>{})}catch(_){}}; 
-function drawG(){const N=nodes.length;let h=`<defs>${[["g","#1f9d55"],["r","#d63030"]].map(([k,c])=>`<marker id="dm${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`).join("")}</defs>`;
+function drawG(){const N=nodes.length;let h=`<defs>${[["g","#1f9d55"],["r","#d63030"]].map(([k,c])=>`<marker id="dm${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`).join("")}<radialGradient id="dmBall" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient><radialGradient id="dmBallHot" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#ffd54a"/><stop offset="1" stop-color="#d9981a"/></radialGradient><radialGradient id="dmHalo"><stop offset="0" stop-color="#ffd24a" stop-opacity=".8"/><stop offset=".4" stop-color="#ffd24a" stop-opacity=".32"/><stop offset="1" stop-color="#ffd24a" stop-opacity="0"/></radialGradient><radialGradient id="dmCore"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>`;
 if(!N)h+=`<text class="dm-ph" x="${W/2}" y="${H/2}"></text>`;
 for(let i=0;i<N;i++)for(let j=0;j<N;j++){const v=S[i][j],p=parseRat(v);if(!p||p[0]===0n)continue;const neg=p[0]<0n,c=neg?"#d63030":"#1f9d55",m=neg?"dmr":"dmg",lab=String(v).trim();
 if(i===j){const a=nodes[i];h+=`<path d="M${a.x-8} ${a.y-R+1}C${a.x-34} ${a.y-R*3.2} ${a.x+34} ${a.y-R*3.2} ${a.x+8} ${a.y-R+1}" fill="none" stroke="${c}" stroke-width="2" marker-end="url(#${m})"/><text class="dm-l" x="${a.x}" y="${a.y-R*2.4}" fill="${c}">${lab}</text>`;continue}
 const a=nodes[j],b=nodes[i],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,bk=parseRat(S[j][i]),k=bk&&bk[0]!==0n?26:0,
 mx=(a.x+b.x)/2-uy*k,my=(a.y+b.y)/2+ux*k,sx=a.x+ux*R,sy=a.y+uy*R,ex=b.x-ux*(R+2),ey=b.y-uy*(R+2),lx=.25*sx+.5*mx+.25*ex,ly=.25*sy+.5*my+.25*ey;
 h+=`<path d="M${sx} ${sy}Q${mx} ${my} ${ex} ${ey}" fill="none" stroke="${c}" stroke-width="2" marker-end="url(#${m})"/><text class="dm-l" x="${lx}" y="${ly-5}" fill="${c}">${lab}</text>`}
-nodes.forEach((n,i)=>{h+=`<g class="dm-n${hl.includes(i)?" hl":""}${sel.has(i)?" sel":""}${src===i?" src":""}" data-i="${i}"><circle cx="${n.x}" cy="${n.y}" r="${R}"/><text x="${n.x}" y="${n.y}">${i+1}</text></g>`});
+nodes.forEach((n,i)=>{if(hl.includes(i)||sel.has(i))h+=`<circle class="dm-halo" cx="${n.x}" cy="${n.y}" r="${R*3.1}" fill="url(#dmHalo)"/>`});
+nodes.forEach((n,i)=>{const hot=hl.includes(i)||sel.has(i);h+=`<g class="dm-n${hot?" hot":""}${src===i?" src":""}" data-i="${i}"><circle class="b" cx="${n.x}" cy="${n.y}" r="${R}"/>${hot?`<circle class="core" cx="${n.x-R*.1}" cy="${n.y-R*.1}" r="${R*.85}" fill="url(#dmCore)"/>`:""}<text x="${n.x}" y="${n.y}">${i+1}</text></g>`});
 svg.innerHTML=h}
 function drawMat(){const N=nodes.length;mat.innerHTML=N?`<div class="dm-lab">Adjacency matrix $\\mathcal{A}$ (element in row $i$, column $j$ = weight of the communication from agent $j$ to agent $i$):</div><div class="dm-sc"><table class="dm-t"><tr><th></th>${nodes.map((_,j)=>`<th>${j+1}</th>`).join("")}</tr>${S.map((r,i)=>`<tr><th>${i+1}</th>${r.map((v,j)=>`<td><input data-i="${i}" data-j="${j}" value="${esc(v)}" class="${parseRat(v)===null?"bad":""}" aria-label="a ${i+1},${j+1}"></td>`).join("")}</tr>`).join("")}</table></div>`:""}
 function drawRes(){hl=[];const N=nodes.length;if(!N){res.innerHTML="<p></p>";return}
