@@ -694,7 +694,7 @@ let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated
 h+=r.k===r.nd
 ?`<p><b>N<sub>D</sub> = ${r.nd}</b>, the minimum number of leaders through which the MAS is controllable.</p>`
 :`<p><b>N<sub>D</sub> = ${r.nd}</b>, the largest geometric multiplicity of an eigenvalue of $\\mathcal{A}$. Every input must sit on a single agent, and that needs <b>${r.k}</b> driver agents here, more than N<sub>D</sub>.</p>`;
-h+=`<p><b>All ${r.good.length} minimum set of leaders ${one?"":"s"}</b> (size ${r.k}, out of ${r.total} possible ${r.k}-node set${r.total===1?"":"s"}) through which the MAS is controllable:</p>`;
+h+=`<p><b>All ${r.good.length} minimal set of leader${one?"":"s"}</b> (size ${r.k}, out of ${r.total} possible ${r.k}-node set${r.total===1?"":"s"}) through which the MAS is controllable:</p>`;
 h+=`<div class="dm-ch dm-all">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</div>`;
 const U=[...sel].sort((a,b)=>a-b);
 if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>Your driver set {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?"controllable ✓":"uncontrollable ✗"}</b></p>`}
