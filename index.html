@@ -697,7 +697,7 @@ h+=r.k===r.nd
 h+=`<p><b>${r.total===1?"The minimal set":"All minimal sets"} of ${r.k===1?"leader":"leaders"} ${r.total===1?"is":"are"}</b> (size ${r.k}, out of ${r.total} possible set${r.total===1?"":"s"}) through which the MAS is controllable:</p>`;
 h+=`<div class="dm-ch dm-all">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</div>`;
 const U=[...sel].sort((a,b)=>a-b);
-if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>Your set of leaders {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?"controllable ✓":"uncontrollable ✗"}</b></p>`}
+if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>Your set of ${U.length===1?"leader":"leaders"} {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?" MAS is controllable ✓":"MAS is uncontrollable ✗"}</b></p>`}
 const tail=[];if(r.good.length<r.total)tail.push(`Sets of size ${r.k} that are not listed above make the MAS uncontrollable.`);if(r.k>1)tail.push("Every smaller set make the MAS uncontrollable.");
 if(tail.length)h+=`<p class="dm-p" style="margin-top:.5rem">${tail.join(" ")}</p>`;
 res.innerHTML=h;
