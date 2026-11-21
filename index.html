@@ -696,7 +696,7 @@ function drawRes(){hl=[];const N=nodes.length;if(!N){res.innerHTML="<p></p>";ret
  h+=`<p><b>N<sub>D</sub> = ${r.nd}</b>, the minimum number of driver agents through which the MAS is controllable</p>`;
  h+=r.k===r.nd?`<p><b>Minimum number of driver agents: ${r.k}</b></p>`
    :`<p><b>Minimum number of driver agents: ${r.k}</b>. Here N<sub>D</sub> = ${r.nd} is the fewest independent inputs when each input may be spread over several nodes. Because every input must sit on a single node, this network needs ${r.k} driver nodes.</p>`;
- h+=`<p><b>All ${r.good.length} minimum driver-node set${one?"":"s"}</b> (size ${r.k}, out of ${r.total} possible ${r.k}-node set${r.total===1?"":"s"}) that make the network controllable — click one to highlight it in the MAS:</p>`;
+ h+=`<p><b>All ${r.good.length} minimum driver-node set${one?"":"s"}</b> (size ${r.k}, out of ${r.total} possible ${r.k}-node set${r.total===1?"":"s"}) that make the network controllable &ndash; click one to highlight it in the MAS:</p>`;
  h+=`<div class="dm-ch dm-all">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</div>`;
  h+=`<p class="dm-yours"></p>`;
  h+=`<p class="dm-p" style="margin-top:.5rem">Sets of size ${r.k} that are <i>not</i> listed, and every smaller set, leave the MAS uncontrollable.</p>`;
