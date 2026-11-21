@@ -698,7 +698,7 @@ h+=`<p><b>All minimal set of leader${one?"":"s"}</b> (size ${r.k}, out of ${r.to
 h+=`<div class="dm-ch dm-all">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</div>`;
 const U=[...sel].sort((a,b)=>a-b);
 if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>Your driver set {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?"controllable ✓":"uncontrollable ✗"}</b></p>`}
-const tail=[];if(r.good.length<r.total)tail.push(`Sets of size ${r.k} that are <i>not</i> listed leave the MAS uncontrollable.`);if(r.k>1)tail.push("Every smaller set leaves the MAS uncontrollable.");
+const tail=[];if(r.good.length<r.total)tail.push(`Sets of size ${r.k} that are not listed above make the MAS uncontrollable.`);if(r.k>1)tail.push("Every smaller set make the MAS uncontrollable.");
 if(tail.length)h+=`<p class="dm-p" style="margin-top:.5rem">${tail.join(" ")}</p>`;
 res.innerHTML=h;
 res.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{const s=r.good[+b.dataset.s],same=hl.length===s.length&&s.every(x=>hl.includes(x));hl=same?[]:s.slice();drawG();res.querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",!same&&x===b))})}
