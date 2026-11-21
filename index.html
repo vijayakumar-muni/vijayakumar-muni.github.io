@@ -630,43 +630,40 @@ try{(()=>{
 const root=$("#demo");if(!root)return;
 const gcdB=(a,b)=>{a=a<0n?-a:a;b=b<0n?-b:b;while(b){[a,b]=[b,a%b]}return a};
 function parseRat(s){s=String(s).trim().replace(/\u2212/g,"-");if(s==="")return[0n,1n];
- let m=s.match(/^([+-]?)(\d*)(?:\.(\d*))?$/);
- if(m&&(m[2]||m[3])){const f=m[3]||"",n=BigInt((m[2]||"0")+f),d=10n**BigInt(f.length);return[m[1]=="-"?-n:n,d]}
- m=s.match(/^([+-]?)(\d+)\/(\d+)$/);if(m&&BigInt(m[3])!==0n){const n=BigInt(m[2]);return[m[1]=="-"?-n:n,BigInt(m[3])]}
- return null}
+let m=s.match(/^([+-]?)(\d*)(?:\.(\d*))?$/);
+if(m&&(m[2]||m[3])){const f=m[3]||"",n=BigInt((m[2]||"0")+f),d=10n**BigInt(f.length);return[m[1]=="-"?-n:n,d]}
+m=s.match(/^([+-]?)(\d+)\/(\d+)$/);if(m&&BigInt(m[3])!==0n){const n=BigInt(m[2]);return[m[1]=="-"?-n:n,BigInt(m[3])]}
+return null}
 function intMat(S){let D=1n;const R=S.map(r=>r.map(s=>parseRat(s)||[0n,1n]));
- R.forEach(r=>r.forEach(([n,d])=>{D=D/gcdB(D,d)*d}));return R.map(r=>r.map(([n,d])=>n*(D/d)))}
+R.forEach(r=>r.forEach(([n,d])=>{D=D/gcdB(D,d)*d}));return R.map(r=>r.map(([n,d])=>n*(D/d)))}
 const mm=(X,Y)=>X.map(r=>Y[0].map((_,j)=>r.reduce((s,v,k)=>s+v*Y[k][j],0n)));
 function rankB(M){const R=M.map(r=>r.slice()),nc=R[0].length;let rk=0;
- for(let c=0;c<nc&&rk<R.length;c++){let p=-1;for(let i=rk;i<R.length;i++)if(R[i][c]!==0n){p=i;break}
-  if(p<0)continue;[R[rk],R[p]]=[R[p],R[rk]];const pv=R[rk][c];
-  for(let i=rk+1;i<R.length;i++){const f=R[i][c];if(f===0n)continue;
-   for(let j=c;j<nc;j++)R[i][j]=R[i][j]*pv-f*R[rk][j];
-   let g=0n;for(let j=c;j<nc;j++)g=gcdB(g,R[i][j]);if(g>1n)for(let j=c;j<nc;j++)R[i][j]/=g}
-  rk++}return rk}
+for(let c=0;c<nc&&rk<R.length;c++){let p=-1;for(let i=rk;i<R.length;i++)if(R[i][c]!==0n){p=i;break}
+if(p<0)continue;[R[rk],R[p]]=[R[p],R[rk]];const pv=R[rk][c];
+for(let i=rk+1;i<R.length;i++){const f=R[i][c];if(f===0n)continue;
+for(let j=c;j<nc;j++)R[i][j]=R[i][j]*pv-f*R[rk][j];
+let g=0n;for(let j=c;j<nc;j++)g=gcdB(g,R[i][j]);if(g>1n)for(let j=c;j<nc;j++)R[i][j]/=g}
+rk++}return rk}
 const ctrl=(P,N,S)=>{const K=Array.from({length:N},(_,r)=>P.flatMap(Pj=>S.map(i=>Pj[r][i])));return rankB(K)===N};
 function maxMult(N,P){for(let m=1;m<=N;m++)for(let t=0;t<3;t++){
- const B=Array.from({length:N},()=>Array.from({length:m},()=>BigInt(Math.floor(Math.random()*2000001)-1000000)));
- const Q=P.map(Pj=>mm(Pj,B)),K=Array.from({length:N},(_,r)=>Q.flatMap(q=>q[r]));if(rankB(K)===N)return m}return N}
+const B=Array.from({length:N},()=>Array.from({length:m},()=>BigInt(Math.floor(Math.random()*2000001)-1000000)));
+const Q=P.map(Pj=>mm(Pj,B)),K=Array.from({length:N},(_,r)=>Q.flatMap(q=>q[r]));if(rankB(K)===N)return m}return N}
 function combos(N,k){const out=[],c=[];(function rec(s){if(c.length===k){out.push(c.slice());return}for(let i=s;i<N;i++){c.push(i);rec(i+1);c.pop()}})(0);return out}
-
-/* ── exhaustive search: every k from N_D up, all subsets, keep EVERY minimum set ── */
 function solve(S){
- const N=S.length,
-       A=intMat(S),
-       P=[Array.from({length:N},(_,i)=>Array.from({length:N},(_,j)=>i===j?1n:0n))];
- for(let j=1;j<N;j++)P.push(mm(A,P[j-1]));
- const nd=Math.min(maxMult(N,P),N);
- const census=[];
- for(let k=nd;k<=N;k++){
-   const all=combos(N,k),good=all.filter(s=>ctrl(P,N,s));
-   census.push({k,total:all.length,good:good.length});
-   if(good.length)return{N,nd,k,good,total:all.length,census,P};
- }
- const all=combos(N,N);                 /* fallback, cannot happen */
- return{N,nd,k:N,good:all,total:1,census,P};
+const N=S.length,
+      A=intMat(S),
+      P=[Array.from({length:N},(_,i)=>Array.from({length:N},(_,j)=>i===j?1n:0n))];
+for(let j=1;j<N;j++)P.push(mm(A,P[j-1]));
+const nd=Math.min(maxMult(N,P),N);
+const census=[];
+for(let k=nd;k<=N;k++){
+const all=combos(N,k),good=all.filter(s=>ctrl(P,N,s));
+census.push({k,total:all.length,good:good.length});
+if(good.length)return{N,nd,k,good,total:all.length,census,P};
 }
-
+const all=combos(N,N);
+return{N,nd,k:N,good:all,total:1,census,P};
+}
 const MAXN=8,W=640,H=300,R=15,esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const K4=[1,2,3,4].flatMap(a=>[1,2,3,4].filter(b=>b!==a).map(b=>[a,b,1]));
 const EX={"Directed path 1→2→3→4":{n:[[110,150],[250,150],[390,150],[530,150]],e:[[1,2,1],[2,3,1],[3,4,1]]},
@@ -683,29 +680,27 @@ const tex=()=>{try{window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromis
 function drawG(){const N=nodes.length;let h=`<defs>${[["g","#1f9d55"],["r","#d63030"]].map(([k,c])=>`<marker id="dm${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`).join("")}</defs>`;
 if(!N)h+=`<text class="dm-ph" x="${W/2}" y="${H/2}"></text>`;
 for(let i=0;i<N;i++)for(let j=0;j<N;j++){const v=S[i][j],p=parseRat(v);if(!p||p[0]===0n)continue;const neg=p[0]<0n,c=neg?"#d63030":"#1f9d55",m=neg?"dmr":"dmg",lab=String(v).trim();
- if(i===j){const a=nodes[i];h+=`<path d="M${a.x-8} ${a.y-R+1}C${a.x-34} ${a.y-R*3.2} ${a.x+34} ${a.y-R*3.2} ${a.x+8} ${a.y-R+1}" fill="none" stroke="${c}" stroke-width="2" marker-end="url(#${m})"/><text class="dm-l" x="${a.x}" y="${a.y-R*2.4}" fill="${c}">${lab}</text>`;continue}
- const a=nodes[j],b=nodes[i],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,bk=parseRat(S[j][i]),k=bk&&bk[0]!==0n?26:0,
- mx=(a.x+b.x)/2-uy*k,my=(a.y+b.y)/2+ux*k,sx=a.x+ux*R,sy=a.y+uy*R,ex=b.x-ux*(R+2),ey=b.y-uy*(R+2),lx=.25*sx+.5*mx+.25*ex,ly=.25*sy+.5*my+.25*ey;
- h+=`<path d="M${sx} ${sy}Q${mx} ${my} ${ex} ${ey}" fill="none" stroke="${c}" stroke-width="2" marker-end="url(#${m})"/><text class="dm-l" x="${lx}" y="${ly-5}" fill="${c}">${lab}</text>`}
+if(i===j){const a=nodes[i];h+=`<path d="M${a.x-8} ${a.y-R+1}C${a.x-34} ${a.y-R*3.2} ${a.x+34} ${a.y-R*3.2} ${a.x+8} ${a.y-R+1}" fill="none" stroke="${c}" stroke-width="2" marker-end="url(#${m})"/><text class="dm-l" x="${a.x}" y="${a.y-R*2.4}" fill="${c}">${lab}</text>`;continue}
+const a=nodes[j],b=nodes[i],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,bk=parseRat(S[j][i]),k=bk&&bk[0]!==0n?26:0,
+mx=(a.x+b.x)/2-uy*k,my=(a.y+b.y)/2+ux*k,sx=a.x+ux*R,sy=a.y+uy*R,ex=b.x-ux*(R+2),ey=b.y-uy*(R+2),lx=.25*sx+.5*mx+.25*ex,ly=.25*sy+.5*my+.25*ey;
+h+=`<path d="M${sx} ${sy}Q${mx} ${my} ${ex} ${ey}" fill="none" stroke="${c}" stroke-width="2" marker-end="url(#${m})"/><text class="dm-l" x="${lx}" y="${ly-5}" fill="${c}">${lab}</text>`}
 nodes.forEach((n,i)=>{h+=`<g class="dm-n${hl.includes(i)?" hl":""}${sel.has(i)?" sel":""}${src===i?" src":""}" data-i="${i}"><circle cx="${n.x}" cy="${n.y}" r="${R}"/><text x="${n.x}" y="${n.y}">${i+1}</text></g>`});
 svg.innerHTML=h}
 function drawMat(){const N=nodes.length;mat.innerHTML=N?`<div class="dm-lab">Adjacency matrix $\\mathcal{A}$ (element in row $i$, column $j$ = weight of the edge from agent $j$ to agent $i$):</div><div class="dm-sc"><table class="dm-t"><tr><th></th>${nodes.map((_,j)=>`<th>${j+1}</th>`).join("")}</tr>${S.map((r,i)=>`<tr><th>${i+1}</th>${r.map((v,j)=>`<td><input data-i="${i}" data-j="${j}" value="${esc(v)}" class="${parseRat(v)===null?"bad":""}" aria-label="a ${i+1},${j+1}"></td>`).join("")}</tr>`).join("")}</table></div>`:""}
-
-/* ── results panel: prints EVERY minimum driver-node set ── */
 function drawRes(){hl=[];const N=nodes.length;if(!N){res.innerHTML="<p></p>";return}
- const bad=S.some(r=>r.some(v=>parseRat(v)===null)),r=solve(S),one=r.good.length===1;
- let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0.</p>':"";
- h+=r.k===r.nd
-  ?`<p><b>N<sub>D</sub> = ${r.nd}</b>, the minimum number of driver agents through which the MAS is controllable.</p>`
-  :`<p><b>N<sub>D</sub> = ${r.nd}</b>, the largest geometric multiplicity of an eigenvalue of $\\mathcal{A}$. Every input must sit on a single agent, and that needs <b>${r.k}</b> driver agents here, more than N<sub>D</sub>.</p>`;
- h+=`<p><b>All ${r.good.length} minimum driver-node set${one?"":"s"}</b> (size ${r.k}, out of ${r.total} possible ${r.k}-node set${r.total===1?"":"s"}) that make the MAS controllable:</p>`;
- h+=`<div class="dm-ch dm-all">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</div>`;
- const U=[...sel].sort((a,b)=>a-b);
- if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>Your driver set {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?"controllable ✓":"uncontrollable ✗"}</b></p>`}
- const tail=[];if(r.good.length<r.total)tail.push(`Sets of size ${r.k} that are <i>not</i> listed leave the MAS uncontrollable.`);if(r.k>1)tail.push("Every smaller set leaves the MAS uncontrollable.");
- if(tail.length)h+=`<p class="dm-p" style="margin-top:.5rem">${tail.join(" ")}</p>`;
- res.innerHTML=h;
- res.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{const s=r.good[+b.dataset.s],same=hl.length===s.length&&s.every(x=>hl.includes(x));hl=same?[]:s.slice();drawG();res.querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",!same&&x===b))})}
+const bad=S.some(r=>r.some(v=>parseRat(v)===null)),r=solve(S),one=r.good.length===1;
+let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0.</p>':"";
+h+=r.k===r.nd
+?`<p><b>N<sub>D</sub> = ${r.nd}</b>, the minimum number of driver agents through which the MAS is controllable.</p>`
+:`<p><b>N<sub>D</sub> = ${r.nd}</b>, the largest geometric multiplicity of an eigenvalue of $\\mathcal{A}$. Every input must sit on a single agent, and that needs <b>${r.k}</b> driver agents here, more than N<sub>D</sub>.</p>`;
+h+=`<p><b>All ${r.good.length} minimum driver-node set${one?"":"s"}</b> (size ${r.k}, out of ${r.total} possible ${r.k}-node set${r.total===1?"":"s"}) that make the MAS controllable:</p>`;
+h+=`<div class="dm-ch dm-all">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</div>`;
+const U=[...sel].sort((a,b)=>a-b);
+if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>Your driver set {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?"controllable ✓":"uncontrollable ✗"}</b></p>`}
+const tail=[];if(r.good.length<r.total)tail.push(`Sets of size ${r.k} that are <i>not</i> listed leave the MAS uncontrollable.`);if(r.k>1)tail.push("Every smaller set leaves the MAS uncontrollable.");
+if(tail.length)h+=`<p class="dm-p" style="margin-top:.5rem">${tail.join(" ")}</p>`;
+res.innerHTML=h;
+res.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{const s=r.good[+b.dataset.s],same=hl.length===s.length&&s.every(x=>hl.includes(x));hl=same?[]:s.slice();drawG();res.querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",!same&&x===b))})}
 
 const full=()=>{drawG();drawMat();drawRes();tex()};
 function addNode(x,y){const n=nodes.length;S.forEach(r=>r.push(""));S.push(Array(n+1).fill(""));nodes.push({x,y})}
@@ -713,16 +708,16 @@ function delNode(i){nodes.splice(i,1);S.splice(i,1);S.forEach(r=>r.splice(i,1));
 function link(j,i){const w=q(".dm-w").value.trim(),p=parseRat(w);if(w===""||!p){q(".dm-w").classList.add("bad");return}q(".dm-w").classList.remove("bad");const v=p[0]===0n?"":w;S[i][j]=v;if(q(".dm-bi").checked&&i!==j)S[j][i]=v}
 const pt=e=>{const r=svg.getBoundingClientRect();return[(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]};
 svg.addEventListener("pointerdown",e=>{const g=e.target.closest(".dm-n"),[x,y]=pt(e);
- if(g){const i=+g.dataset.i;if(mode=="node"){drag=i;try{svg.setPointerCapture(e.pointerId)}catch(_){}return}
-  if(mode=="edge"){if(src<0)src=i;else{link(src,i);src=-1}}else if(mode=="drv"){sel.has(i)?sel.delete(i):sel.add(i)}else if(mode=="del")delNode(i);
-  full();return}
- if(mode=="node"&&nodes.length<MAXN){addNode(cl(x,R,W-R),cl(y,R+14,H-R));full()}else if(mode=="edge"){src=-1;drawG()}});
+if(g){const i=+g.dataset.i;if(mode=="node"){drag=i;try{svg.setPointerCapture(e.pointerId)}catch(_){}return}
+if(mode=="edge"){if(src<0)src=i;else{link(src,i);src=-1}}else if(mode=="drv"){sel.has(i)?sel.delete(i):sel.add(i)}else if(mode=="del")delNode(i);
+full();return}
+if(mode=="node"&&nodes.length<MAXN){addNode(cl(x,R,W-R),cl(y,R+14,H-R));full()}else if(mode=="edge"){src=-1;drawG()}});
 svg.addEventListener("pointermove",e=>{if(drag===null)return;const[x,y]=pt(e);nodes[drag].x=cl(x,R,W-R);nodes[drag].y=cl(y,R+14,H-R);drawG()});
 svg.addEventListener("pointerup",()=>{drag=null});svg.addEventListener("pointercancel",()=>{drag=null});
 mat.addEventListener("input",e=>{const t=e.target;if(!t.dataset.i)return;S[+t.dataset.i][+t.dataset.j]=t.value;t.classList.toggle("bad",parseRat(t.value)===null);drawG();drawRes();tex()});
 q(".dm-bar").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const m=b.dataset.m;
- if(m=="clr"){nodes=[];S=[];sel=new Set();src=-1;full();return}
- mode=m;src=-1;q(".dm-bar").querySelectorAll("[data-m]").forEach(x=>x.classList.toggle("on",x.dataset.m===m));q(".dm-hint").textContent=HINT[m];drawG()});
+if(m=="clr"){nodes=[];S=[];sel=new Set();src=-1;full();return}
+mode=m;src=-1;q(".dm-bar").querySelectorAll("[data-m]").forEach(x=>x.classList.toggle("on",x.dataset.m===m));q(".dm-hint").textContent=HINT[m];drawG()});
 q(".dm-ex").addEventListener("change",e=>{const ex=EX[e.target.value];if(!ex)return;nodes=ex.n.map(([x,y])=>({x,y}));S=Array.from({length:nodes.length},()=>Array(nodes.length).fill(""));ex.e.forEach(([j,i,w])=>S[i-1][j-1]=String(w));sel=new Set();src=-1;full();e.target.selectedIndex=0});
 q('[data-m="node"]').classList.add("on");q(".dm-hint").textContent=HINT.node;full();
 })()}catch(e){console.error("[demo]",e)}
