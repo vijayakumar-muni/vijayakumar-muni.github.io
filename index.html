@@ -679,7 +679,7 @@ let nodes=[],S=[],mode="node",src=-1,sel=new Set(),hl=[],drag=null;
 root.innerHTML=`<p class="dm-p">Dynamics: <b>ẋ = (A ⊗ I<sub>3</sub>)x</b>, x<sub>i</sub> ∈ ℝ³ is the state of agent i.</p><div class="dm-bar"><button type="button" data-m="node">＋ Node</button><button type="button" data-m="edge">→ Edge</button><button type="button" data-m="drv">◎ Drivers</button><button type="button" data-m="del">✕ Delete node</button><label>weight <input class="dm-w" value="1" size="6" aria-label="Edge weight"></label><label><input type="checkbox" class="dm-bi"> both ways</label><select class="dm-ex" aria-label="Examples"><option>Examples…</option>${Object.keys(EX).map(k=>`<option>${k}</option>`).join("")}</select><button type="button" data-m="clr">Clear</button></div><div class="dm-hint"></div><svg class="dm-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg><div class="dm-mat"></div><div class="dm-res" aria-live="polite"></div>`;
 const q=s=>root.querySelector(s),svg=q(".dm-svg"),mat=q(".dm-mat"),res=q(".dm-res");
 function drawG(){const N=nodes.length;let h=`<defs>${[["g","#1f9d55"],["r","#d63030"]].map(([k,c])=>`<marker id="dm${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`).join("")}</defs>`;
-if(!N)h+=`<text class="dm-ph" x="${W/2}" y="${H/2}">Click here to add nodes</text>`;
+if(!N)h+=`<text class="dm-ph" x="${W/2}" y="${H/2}"></text>`;
 for(let i=0;i<N;i++)for(let j=0;j<N;j++){const v=S[i][j],p=parseRat(v);if(!p||p[0]===0n)continue;const neg=p[0]<0n,c=neg?"#d63030":"#1f9d55",m=neg?"dmr":"dmg",lab=String(v).trim();
  if(i===j){const a=nodes[i];h+=`<path d="M${a.x-8} ${a.y-R+1}C${a.x-34} ${a.y-R*3.2} ${a.x+34} ${a.y-R*3.2} ${a.x+8} ${a.y-R+1}" fill="none" stroke="${c}" stroke-width="2" marker-end="url(#${m})"/><text class="dm-l" x="${a.x}" y="${a.y-R*2.4}" fill="${c}">${lab}</text>`;continue}
  const a=nodes[j],b=nodes[i],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,bk=parseRat(S[j][i]),k=bk&&bk[0]!==0n?26:0,
@@ -690,7 +690,7 @@ svg.innerHTML=h}
 function drawMat(){const N=nodes.length;mat.innerHTML=N?`<div class="dm-lab">Adjacency matrix A (element in row <i>i</i>, column <i>j</i> = weight of the edge from agent <i>j</i> to agent <i>i</i>):</div><div class="dm-sc"><table class="dm-t"><tr><th></th>${nodes.map((_,j)=>`<th>${j+1}</th>`).join("")}</tr>${S.map((r,i)=>`<tr><th>${i+1}</th>${r.map((v,j)=>`<td><input data-i="${i}" data-j="${j}" value="${esc(v)}" class="${parseRat(v)===null?"bad":""}" aria-label="a ${i+1},${j+1}"></td>`).join("")}</tr>`).join("")}</table></div>`:""}
 
 /* ── results panel: prints EVERY minimum driver-node set ── */
-function drawRes(){hl=[];const N=nodes.length;if(!N){res.innerHTML="<p>Add some nodes to begin.</p>";return}
+function drawRes(){hl=[];const N=nodes.length;if(!N){res.innerHTML="<p></p>";return}
  const bad=S.some(r=>r.some(v=>parseRat(v)===null)),r=solve(S),one=r.k===1;
  let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0.</p>':"";
  h+=`<p><b>N<sub>D</sub> = ${r.nd}</b>, the minimum number of driver nodes of the MAS</p>`;
