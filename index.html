@@ -936,9 +936,9 @@ b.onclick=()=>{const on=window.SND?SND.toggle():false;b.setAttribute("aria-press
 {const U="https://vijayakumar-muni.github.io/",Y=()=>new Date().getFullYear(),
 DT=()=>new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}),
 TT="Vijayakumar Muni – Assistant Professor of Mathematics",
-siteTxt=()=>`V. Muni, ${TT}, personal academic website, ${Y()}, ${U} (accessed ${DT()}).`,
-siteHtml=()=>`V. Muni, <i>${TT}</i>, personal academic website, ${Y()}, ${U} (accessed ${DT()}).`,
-siteBib=()=>`@misc{muni${Y()}website,\n  author = {Muni, Vijayakumar},\n  title = {Vijayakumar Muni -- Assistant Professor of Mathematics},\n  year = {${Y()}},\n  howpublished = {\\url{${U}}},\n  note = {Personal academic website. Accessed: ${DT()}}\n}`,
+siteTxt=()=>`V. S. Muni, ${TT}, Personal Academic Website, ${Y()}, ${U} (accessed ${DT()}).`,
+siteHtml=()=>`V. S. Muni, <i>${TT}</i>, Personal Academic Website, ${Y()}, ${U} (accessed ${DT()}).`,
+siteBib=()=>`@misc{muni${Y()}website,\n  author = {Muni, Vijayakumar S.},\n  title = {Vijayakumar Muni -- Assistant Professor of Mathematics},\n  year = {${Y()}},\n  howpublished = {\\url{${U}}},\n  note = {Personal Academic Website. Accessed: ${DT()}}\n}`,
 flash=(el,ok)=>{const o=el.textContent;el.textContent=ok?"Copied":"Failed";setTimeout(()=>el.textContent=o,1500)};
 const a=$("#citesite"),b=$("#citebib");
 if(a)a.onclick=e=>{e.preventDefault();copyRich(siteHtml(),siteTxt()).then(()=>flash(a,true),()=>{window.prompt("Copy this citation:",siteTxt())})};
