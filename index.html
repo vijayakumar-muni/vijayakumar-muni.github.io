@@ -700,12 +700,12 @@ nodes.forEach((n,i)=>{const hot=hl.includes(i)||sel.has(i);h+=`<g class="dm-n${h
 svg.innerHTML=h}
 function drawMat(){const N=nodes.length;mat.innerHTML=N?`<div class="dm-lab">Adjacency matrix $\\mathcal{A}$ (element in row $i$, column $j$ = weight of the communication from agent $j$ to $i$):</div><div class="dm-sc"><table class="dm-t"><tr><th></th>${nodes.map((_,j)=>`<th>${j+1}</th>`).join("")}</tr>${S.map((r,i)=>`<tr><th>${i+1}</th>${r.map((v,j)=>`<td><input data-i="${i}" data-j="${j}" value="${esc(v)}" class="${parseRat(v)===null?"bad":""}" aria-label="a ${i+1},${j+1}"></td>`).join("")}</tr>`).join("")}</table></div>`:""}
 function drawRes(){hl=[];const N=nodes.length;if(!N){res.innerHTML="<p></p>";return}
-const T=obs?{ag:"sensor agents",who:"sensors",ok:"observable",no:"unobservable",ys:"Your set of sensors is"}:{ag:"leader agents",who:"leaders",ok:"controllable",no:"uncontrollable",ys:"Your set of leaders is"};
+const T=obs?{nn:"S",ag:"sensor agents",who:"sensors",ok:"observable",no:"unobservable",ys:"Your set of sensors is"}:{nn:"L",ag:"leader agents",who:"leaders",ok:"controllable",no:"uncontrollable",ys:"Your set of leaders is"};
 const bad=S.some(r=>r.some(v=>parseRat(v)===null)),r=solve(obs?S[0].map((_,j)=>S.map(x=>x[j])):S),one=r.good.length===1;
 let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0.</p>':"";
 h+=r.k===r.nd
-?`<p><b>N<sub>D</sub> = ${r.nd}</b>, the minimum number of ${T.who} through which the MAS is ${T.ok}.</p>`
-:`<p><b>N<sub>D</sub> = ${r.nd}</b>, the largest geometric multiplicity of an eigenvalue of $\\mathcal{A}$. Every ${obs?"output":"input"} must sit on a single agent, and that needs <b>${r.k}</b> ${T.ag} here, more than N<sub>D</sub>.</p>`;
+?`<p><b>N<sub>${T.nn}</sub> = ${r.nd}</b>, the minimum number of ${T.who} through which the MAS is ${T.ok}.</p>`
+:`<p><b>N<sub>${T.nn}</sub> = ${r.nd}</b>, the largest geometric multiplicity of an eigenvalue of $\\mathcal{A}$. Every ${obs?"output":"input"} must sit on a single agent, and that needs <b>${r.k}</b> ${T.ag} here, more than N<sub>${T.nn}</sub>.</p>`;
 h+=`<p>${one?`The only minimal set of ${T.who}`:`All minimal sets of ${T.who}`} (size ${r.k}, out of ${r.total} possible set${r.total===1?"":"s"}) through which the MAS is ${T.ok}:</p>`;
 h+=`<div class="dm-ch dm-all">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</div>`;
 const U=[...sel].sort((a,b)=>a-b);
