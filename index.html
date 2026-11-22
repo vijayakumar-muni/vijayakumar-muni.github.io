@@ -707,7 +707,7 @@ let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated
 h+=r.k===r.nd
 ?`<p><b>N<sub>D</sub> = ${r.nd}</b>, the minimum number of ${T.who} through which the MAS is ${T.ok}.</p>`
 :`<p><b>N<sub>D</sub> = ${r.nd}</b>, the largest geometric multiplicity of an eigenvalue of $\\mathcal{A}$. Every ${obs?"output":"input"} must sit on a single agent, and that needs <b>${r.k}</b> ${T.ag} here, more than N<sub>D</sub>.</p>`;
-h+=`<p>${one?`The only minimal set of ${T.who} is`:`All minimal sets of ${T.who} are`} (size ${r.k}, out of ${r.total} possible set${r.total===1?"":"s"}) through which the MAS is ${T.ok}:</p>`;
+h+=`<p>${one?`The only minimal set of ${T.who}`:`All minimal sets of ${T.who}`} (size ${r.k}, out of ${r.total} possible set${r.total===1?"":"s"}) through which the MAS is ${T.ok}:</p>`;
 h+=`<div class="dm-ch dm-all">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</div>`;
 const U=[...sel].sort((a,b)=>a-b);
 if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>${T.ys} {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?T.ok+" ✓":T.no+" ✗"}</b></p>`}
@@ -735,7 +735,7 @@ q(".dm-ex").addEventListener("change",e=>{const ex=EX[e.target.value];if(!ex)ret
 const OQ=`Output: $\\boldsymbol{y}(t)=(\\mathcal{C}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$, where $\\mathcal{C}$ has one row for each sensor agent and selects its state, so $\\boldsymbol{y}(t)$ stacks the states of the sensor agents.`;
 q(".dm-tab").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||!b.dataset.t)return;obs=b.dataset.t=="o";
 q(".dm-tab").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
-q(".dm-lt").textContent=obs?"Sensors":"Leaders";q(".dm-oq").innerHTML=obs?OQ:"";
+q(".dm-lt").textContent=obs?"Sensor":"Leader";q(".dm-oq").innerHTML=obs?OQ:"";
 HINT.drv=obs?"Click agents to build your own set of sensors and test it.":"Click agents to build your own set of leaders and test it.";
 if(mode=="drv")q(".dm-hint").textContent=HINT.drv;
 sel=new Set();full()});
