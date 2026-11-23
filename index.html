@@ -668,25 +668,10 @@ for(let j=c;j<nc;j++)R[i][j]=R[i][j]*pv-f*R[rk][j];
 let g=0n;for(let j=c;j<nc;j++)g=gcdB(g,R[i][j]);if(g>1n)for(let j=c;j<nc;j++)R[i][j]/=g}
 rk++}return rk}
 const ctrl=(P,N,S)=>{const K=Array.from({length:N},(_,r)=>P.flatMap(Pj=>S.map(i=>Pj[r][i])));return rankB(K)===N};
-function maxMult(N,P){for(let m=1;m<=N;m++)for(let t=0;t<3;t++){
-const B=Array.from({length:N},()=>Array.from({length:m},()=>BigInt(Math.floor(Math.random()*2000001)-1000000)));
-const Q=P.map(Pj=>mm(Pj,B)),K=Array.from({length:N},(_,r)=>Q.flatMap(q=>q[r]));if(rankB(K)===N)return m}return N}
 function combos(N,k){const out=[],c=[];(function rec(s){if(c.length===k){out.push(c.slice());return}for(let i=s;i<N;i++){c.push(i);rec(i+1);c.pop()}})(0);return out}
-function solve(S){
-const N=S.length,
-      A=intMat(S),
-      P=[Array.from({length:N},(_,i)=>Array.from({length:N},(_,j)=>i===j?1n:0n))];
+function solve(S){const N=S.length,A=intMat(S),P=[Array.from({length:N},(_,i)=>Array.from({length:N},(_,j)=>i===j?1n:0n))];
 for(let j=1;j<N;j++)P.push(mm(A,P[j-1]));
-const nd=Math.min(maxMult(N,P),N);
-const census=[];
-for(let k=nd;k<=N;k++){
-const all=combos(N,k),good=all.filter(s=>ctrl(P,N,s));
-census.push({k,total:all.length,good:good.length});
-if(good.length)return{N,nd,k,good,total:all.length,census,P};
-}
-const all=combos(N,N);
-return{N,nd,k:N,good:all,total:1,census,P};
-}
+for(let k=1;k<=N;k++){const all=combos(N,k),good=all.filter(s=>ctrl(P,N,s));if(good.length)return{N,k,good,total:all.length,P}}}
 const MAXN=8,W=640,H=300,R=13,esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const K4=[1,2,3,4].flatMap(a=>[1,2,3,4].filter(b=>b!==a).map(b=>[a,b,1]));
 const EX={"Directed path 1→2→3→4":{n:[[110,150],[250,150],[390,150],[530,150]],e:[[1,2,1],[2,3,1],[3,4,1]]},
@@ -715,10 +700,8 @@ function drawRes(){hl=[];const N=nodes.length;if(!N){res.innerHTML="<p></p>";ret
 const T=obs?{nn:"S",ag:"sensor agents",who:"sensors",ok:"observable",no:"unobservable",ys:"Your set of sensors is"}:{nn:"L",ag:"leader agents",who:"leaders",ok:"controllable",no:"uncontrollable",ys:"Your set of leaders is"};
 const bad=S.some(r=>r.some(v=>parseRat(v)===null)),r=solve(obs?S[0].map((_,j)=>S.map(x=>x[j])):S),one=r.good.length===1;
 let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0.</p>':"";
-h+=r.k===r.nd
-?`<p><b>N<sub>${T.nn}</sub> = ${r.nd}</b>, the minimum number of ${T.who} through which the MAS is ${T.ok}.</p>`
-:`<p><b>N<sub>${T.nn}</sub> = ${r.nd}</b>, the largest geometric multiplicity of an eigenvalue of $\\mathcal{A}$. Every ${obs?"output":"input"} must sit on a single agent, and that needs <b>${r.k}</b> ${T.ag} here, more than N<sub>${T.nn}</sub>.</p>`;
-h+=`<p>${one?`The only minimal set of ${T.who}`:`All minimal sets of ${T.who}`} (size ${r.k}, out of ${r.total} possible set${r.total===1?"":"s"}) through which the MAS is ${T.ok}:</p>`;
+h+=`<p><b>N<sub>${T.nn}</sub> = ${r.k}</b>, the minimum number of ${T.who} through which the MAS is ${T.ok}.</p>`;
+h+=`<p>${one?`The only minimum set of ${T.who}`:`All minimum sets of ${T.who}`} (size ${r.k}, out of ${r.total} possible set${r.total===1?"":"s"}) through which the MAS is ${T.ok}:</p>`;
 h+=`<div class="dm-ch dm-all">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</div>`;
 const U=[...sel].sort((a,b)=>a-b);
 if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>${T.ys} {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?T.ok+" ✓":T.no+" ✗"}</b></p>`}
