@@ -710,8 +710,8 @@ function drawMat(){const N=nodes.length;mat.innerHTML=N?`<div class="dm-lab">The
 function drawRes(){hl=[];const N=nodes.length;if(!N){res.innerHTML="<p></p>";return}
 const bad=S.some(r=>r.some(v=>parseRat(v)===null)),r=solve(obs?S[0].map((_,j)=>S.map(x=>x[j])):S),m=maxMult(N,r.P),one=r.good.length===1;
 const W=obs
-?{noun:"observability",sys:`$\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$, $\\boldsymbol{y}(t)=(\\mathcal{C}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$`,M:"$\\mathcal{C}$",nm:"output matrix",thing:"distinct outputs",line:"rows",nz:"columns",who:"sensors",whoS:"sensors",ok:"observable",no:"unobservable",sym:"N<sub>S</sub>",ach:"measure every agent",basis:"canonical basis vectors of $\\mathbb{R}^N$",ys:"Your set of sensors is"}
-:{noun:"controllability",sys:`$\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)+(\\mathcal{B}\\otimes\\mathbf{I}_n)\\boldsymbol{u}(t)$`,M:"$\\mathcal{B}$",nm:"input matrix",thing:"distinct control inputs",line:"columns",nz:"rows",who:"leaders/drivers",whoS:"leaders",ok:"controllable",no:"uncontrollable",sym:"N<sub>L</sub>",ach:"give every agent its own input",basis:"canonical basis vectors of $\\mathbb{R}^N$",ys:"Your set of leaders is"};
+?{noun:"observability",sys:`$\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$, $\\boldsymbol{y}(t)=(\\mathcal{C}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$`,M:"$\\mathcal{C}$",nm:"output matrix",thing:"outputs",line:"rows",nz:"columns",who:"sensors",whoS:"sensors",ok:"observable",no:"unobservable",sym:"N<sub>S</sub>",ach:"measure every agent",basis:"canonical basis vectors of $\\mathbb{R}^N$",ys:"Your set of sensors is"}
+:{noun:"controllability",sys:`$\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)+(\\mathcal{B}\\otimes\\mathbf{I}_n)\\boldsymbol{u}(t)$`,M:"$\\mathcal{B}$",nm:"input matrix",thing:"control inputs",line:"columns",nz:"rows",who:"leaders/drivers",whoS:"leaders",ok:"controllable",no:"uncontrollable",sym:"N<sub>L</sub>",ach:"give every agent its own input",basis:"canonical basis vectors of $\\mathbb{R}^N$",ys:"Your set of leaders is"};
 const chips=`<span class="dm-ch dm-ci dm-all">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</span>`;
 const SETS=`${one?`the only minimum set of ${W.whoS}`:`all minimum sets of ${W.whoS}`} (size ${r.k}, out of ${r.total} possible set${r.total===1?"":"s"}) through which the MAS is ${W.ok} ${one?"is":"are"} ${chips}.${r.k>1?` Every smaller set leaves the MAS ${W.no}.`:""}`;
 const GM=`$\\max_{\\lambda}\\mathrm{GM}(\\lambda)$`;
@@ -728,7 +728,7 @@ res.innerHTML=h;
 res.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{const i=+b.dataset.s,s=r.good[i],same=hl.length===s.length&&s.every(x=>hl.includes(x));hl=same?[]:s.slice();drawG();res.querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",!same&&+x.dataset.s===i))})}
 function fillEx(){const sl=q(".dm-ex");sl.innerHTML="<option>Examples…</option>"+Object.keys(EX).map(k=>{const ex=EX[k],n=ex.n.length,S0=Array.from({length:n},()=>Array(n).fill(""));ex.e.forEach(([j,i,w])=>S0[i-1][j-1]=String(w));
 const r=solve(obs?S0[0].map((_,j)=>S0.map(x=>x[j])):S0),m=maxMult(n,r.P);
-const note=m<r.k?` (${obs?"minimum number of distinct outputs < minimum number of sensors":"minimum number of distinct control inputs < minimum number of leaders"})`:"";
+const note=m<r.k?` (${obs?"minimum number of outputs < minimum number of sensors":"minimum number of control inputs < minimum number of leaders"})`:"";
 return `<option value="${k}">${k}${note}</option>`}).join("")}
 const full=()=>{drawG();drawMat();drawRes();tex()};
 function addNode(x,y){const n=nodes.length;S.forEach(r=>r.push(""));S.push(Array(n+1).fill(""));nodes.push({x,y})}
