@@ -728,8 +728,8 @@ res.innerHTML=h;
 res.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{const i=+b.dataset.s,s=r.good[i],same=hl.length===s.length&&s.every(x=>hl.includes(x));hl=same?[]:s.slice();drawG();res.querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",!same&&+x.dataset.s===i))})}
 function fillEx(){const sl=q(".dm-ex");sl.innerHTML="<option>Examples…</option>"+Object.keys(EX).map(k=>{const ex=EX[k],n=ex.n.length,S0=Array.from({length:n},()=>Array(n).fill(""));ex.e.forEach(([j,i,w])=>S0[i-1][j-1]=String(w));
 const r=solve(obs?S0[0].map((_,j)=>S0.map(x=>x[j])):S0),m=maxMult(n,r.P);
-const note=m<r.k&&ex.note?` (${obs?"minimum number of outputs < minimum number of sensors":"minimum number of control inputs < minimum number of leaders"})`:"";
-return `<option value="${k}">${k}${note}</option>`}).join("")}
+const lab=m<r.k&&ex.note?(obs?"Minimum number of outputs < minimum number of sensors":"Minimum number of control inputs < minimum number of leaders/drivers"):k;
+return `<option value="${k}">${lab}</option>`}).join("")}
 const full=()=>{drawG();drawMat();drawRes();tex()};
 function addNode(x,y){const n=nodes.length;S.forEach(r=>r.push(""));S.push(Array(n+1).fill(""));nodes.push({x,y})}
 function delNode(i){nodes.splice(i,1);S.splice(i,1);S.forEach(r=>r.splice(i,1));sel=new Set([...sel].filter(x=>x!==i).map(x=>x>i?x-1:x))}
