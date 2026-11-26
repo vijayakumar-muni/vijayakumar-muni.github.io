@@ -733,7 +733,7 @@ function ioLayer(){if(!io)return"";const out=io.out,col=out?"#8b5cf6":"#3b82f6",
 const des=io.groups.map(g=>g.reduce((s,[a])=>s+nodes[a].x,0)/g.length),ord=des.map((_,k)=>k).sort((a,b)=>des[a]-des[b]),xs=[];let prev=-1e9;
 ord.forEach(k=>{xs[k]=Math.max(des[k],prev+68,32);prev=xs[k]});const over=Math.max(...xs)-(W-34);if(over>0)xs.forEach((_,k)=>xs[k]-=over);
 let s="";io.groups.forEach((g,k)=>{const sx=xs[k];
-s+=out?`<rect x="${sx-16}" y="${sy-12}" width="32" height="24" rx="5" fill="var(--card)" stroke="${col}" stroke-width="1.6"/>`:`<circle cx="${sx}" cy="${sy}" r="15" fill="var(--card)" stroke="${col}" stroke-width="1.6"/>`;
+s+=`<circle cx="${sx}" cy="${sy}" r="15" fill="var(--card)" stroke="${col}" stroke-width="1.6"/>`;
 s+=`<text class="dm-iol" x="${sx}" y="${sy-1}">${out?"y":"u"}<tspan class="dm-iot" dy="4">${k+1}</tspan></text>`;
 g.forEach(([a])=>{const n=nodes[a],dx=n.x-sx,dy=n.y-sy,Ld=Math.hypot(dx,dy)||1,
 hit=(px,py)=>nodes.some((o,j)=>j!==a&&Math.hypot(o.x-px,o.y-py)<R+7),
