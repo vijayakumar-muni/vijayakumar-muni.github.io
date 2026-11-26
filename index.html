@@ -192,7 +192,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .dm-nv.on{background:var(--gold);color:#1a1405}
 .dm-hn{font-size:.76rem}
 .dm-cap{font-size:.78rem;color:var(--mute);margin:.35rem 0 .2rem}.dm-cap:empty{display:none}
-.dm-iol{font:italic 12px Inter,sans-serif;fill:var(--ink)}
+.dm-iol{font:italic 16px 'Latin Modern Math','STIX Two Text','Cambria Math','Times New Roman',Georgia,serif;fill:var(--ink);text-anchor:middle;dominant-baseline:central}.dm-iot{font-style:normal;font-size:11px}
 .dm-eq{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:.2rem .5rem;margin:.2rem 0}
 .dm-eqm{max-width:100%;overflow-x:auto;overflow-y:hidden;padding:.15rem 0}
 .dm-eq mjx-container{margin:0!important}
@@ -733,7 +733,7 @@ const des=io.groups.map(g=>g.reduce((s,[a])=>s+nodes[a].x,0)/g.length),ord=des.m
 ord.forEach(k=>{xs[k]=Math.max(des[k],prev+68,32);prev=xs[k]});const over=Math.max(...xs)-(W-34);if(over>0)xs.forEach((_,k)=>xs[k]-=over);
 let s="";io.groups.forEach((g,k)=>{const sx=xs[k];
 s+=out?`<rect x="${sx-16}" y="${sy-12}" width="32" height="24" rx="5" fill="var(--card)" stroke="${col}" stroke-width="1.6"/>`:`<circle cx="${sx}" cy="${sy}" r="15" fill="var(--card)" stroke="${col}" stroke-width="1.6"/>`;
-s+=`<path d="M${sx-10} ${sy}C${sx-7} ${sy-10} ${sx-3} ${sy-10} ${sx} ${sy}S${sx+7} ${sy+10} ${sx+10} ${sy}" fill="none" stroke="${col}" stroke-width="1.6"/><text class="dm-iol" x="${sx+21}" y="${sy+4}">${out?"y":"u"}<tspan dy="3" font-size="9">${k+1}</tspan></text>`;
+s+=`<text class="dm-iol" x="${sx}" y="${sy-1}">${out?"y":"u"}<tspan class="dm-iot" dy="4">${k+1}</tspan></text>`;
 g.forEach(([a])=>{const n=nodes[a],dx=n.x-sx,dy=n.y-sy,Ld=Math.hypot(dx,dy)||1,
 hit=(px,py)=>nodes.some((o,j)=>j!==a&&Math.hypot(o.x-px,o.y-py)<R+7),
 bent=c=>{for(let t=.05;t<.97;t+=.04){const u=1-t;if(hit(u*u*sx+2*u*t*c[0]+t*t*n.x,u*u*sy+2*u*t*c[1]+t*t*n.y))return true}return false};
