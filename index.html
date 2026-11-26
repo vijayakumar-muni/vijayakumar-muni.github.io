@@ -188,6 +188,13 @@ footer{margin-left:280px;padding:1.5rem 1.5rem;color:var(--mute);font-size:.82re
 .skip-link:focus{top:8px;}
 a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #e0a526!important;outline-offset:3px;border-radius:4px;}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important;}}  
+.dm-nv{font:600 .82rem Inter,sans-serif;color:var(--ink);background:var(--chip);border:1px solid var(--gold);border-radius:12px;padding:0 .5rem;cursor:pointer}
+.dm-nv.on{background:var(--gold);color:#1a1405}
+.dm-hn{font-size:.76rem}
+.dm-cap{font-size:.78rem;color:var(--mute);margin:.35rem 0 .2rem}.dm-cap:empty{display:none}
+.dm-iol{font:italic 12px Inter,sans-serif;fill:var(--ink)}
+.dm-sig{stroke-dasharray:5 4;animation:dmflow 1.1s linear infinite}@keyframes dmflow{to{stroke-dashoffset:-9}}
+@media(prefers-reduced-motion:reduce){.dm-sig{animation:none}}
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -660,100 +667,142 @@ try{(()=>{
 const root=$("#demo");if(!root)return;
 const gcdB=(a,b)=>{a=a<0n?-a:a;b=b<0n?-b:b;while(b){[a,b]=[b,a%b]}return a};
 function parseRat(s){s=String(s).trim().replace(/\u2212/g,"-");if(s==="")return[0n,1n];
-let m=s.match(/^([+-]?)(\d*)(?:\.(\d*))?$/);
-if(m&&(m[2]||m[3])){const f=m[3]||"",n=BigInt((m[2]||"0")+f),d=10n**BigInt(f.length);return[m[1]=="-"?-n:n,d]}
-m=s.match(/^([+-]?)(\d+)\/(\d+)$/);if(m&&BigInt(m[3])!==0n){const n=BigInt(m[2]);return[m[1]=="-"?-n:n,BigInt(m[3])]}
-return null}
+ let m=s.match(/^([+-]?)(\d*)(?:\.(\d*))?$/);
+ if(m&&(m[2]||m[3])){const f=m[3]||"",n=BigInt((m[2]||"0")+f),d=10n**BigInt(f.length);return[m[1]=="-"?-n:n,d]}
+ m=s.match(/^([+-]?)(\d+)\/(\d+)$/);if(m&&BigInt(m[3])!==0n){const n=BigInt(m[2]);return[m[1]=="-"?-n:n,BigInt(m[3])]}
+ return null}
 function intMat(S){let D=1n;const R=S.map(r=>r.map(s=>parseRat(s)||[0n,1n]));
-R.forEach(r=>r.forEach(([n,d])=>{D=D/gcdB(D,d)*d}));return R.map(r=>r.map(([n,d])=>n*(D/d)))}
+ R.forEach(r=>r.forEach(([n,d])=>{D=D/gcdB(D,d)*d}));return R.map(r=>r.map(([n,d])=>n*(D/d)))}
 const mm=(X,Y)=>X.map(r=>Y[0].map((_,j)=>r.reduce((s,v,k)=>s+v*Y[k][j],0n)));
 function rankB(M){const R=M.map(r=>r.slice()),nc=R[0].length;let rk=0;
-for(let c=0;c<nc&&rk<R.length;c++){let p=-1;for(let i=rk;i<R.length;i++)if(R[i][c]!==0n){p=i;break}
-if(p<0)continue;[R[rk],R[p]]=[R[p],R[rk]];const pv=R[rk][c];
-for(let i=rk+1;i<R.length;i++){const f=R[i][c];if(f===0n)continue;
-for(let j=c;j<nc;j++)R[i][j]=R[i][j]*pv-f*R[rk][j];
-let g=0n;for(let j=c;j<nc;j++)g=gcdB(g,R[i][j]);if(g>1n)for(let j=c;j<nc;j++)R[i][j]/=g}
-rk++}return rk}
+ for(let c=0;c<nc&&rk<R.length;c++){let p=-1;for(let i=rk;i<R.length;i++)if(R[i][c]!==0n){p=i;break}
+  if(p<0)continue;[R[rk],R[p]]=[R[p],R[rk]];const pv=R[rk][c];
+  for(let i=rk+1;i<R.length;i++){const f=R[i][c];if(f===0n)continue;
+   for(let j=c;j<nc;j++)R[i][j]=R[i][j]*pv-f*R[rk][j];
+   let g=0n;for(let j=c;j<nc;j++)g=gcdB(g,R[i][j]);if(g>1n)for(let j=c;j<nc;j++)R[i][j]/=g}
+  rk++}return rk}
 const ctrl=(P,N,S)=>{const K=Array.from({length:N},(_,r)=>P.flatMap(Pj=>S.map(i=>Pj[r][i])));return rankB(K)===N};
 function maxMult(N,P){for(let m=1;m<=N;m++)for(let t=0;t<3;t++){
 const B=Array.from({length:N},()=>Array.from({length:m},()=>BigInt(Math.floor(Math.random()*2000000001)-1000000000)));
-const Q=P.map(Pj=>mm(Pj,B)),K=Array.from({length:N},(_,r)=>Q.flatMap(q=>q[r]));if(rankB(K)===N)return m}return N}  
+const Q=P.map(Pj=>mm(Pj,B)),K=Array.from({length:N},(_,r)=>Q.flatMap(q=>q[r]));if(rankB(K)===N)return m}return N}
 function combos(N,k){const out=[],c=[];(function rec(s){if(c.length===k){out.push(c.slice());return}for(let i=s;i<N;i++){c.push(i);rec(i+1);c.pop()}})(0);return out}
 function solve(S){const N=S.length,A=intMat(S),P=[Array.from({length:N},(_,i)=>Array.from({length:N},(_,j)=>i===j?1n:0n))];
 for(let j=1;j<N;j++)P.push(mm(A,P[j-1]));
 for(let k=1;k<=N;k++){const all=combos(N,k),good=all.filter(s=>ctrl(P,N,s));if(good.length)return{N,k,good,total:all.length,P}}}
-const MAXN=8,W=640,H=300,R=13,esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const MAXN=8,W=640,H=300,BAND=54,R=18,esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const K4=[1,2,3,4].flatMap(a=>[1,2,3,4].filter(b=>b!==a).map(b=>[a,b,1]));
 const EX={"Directed path 1→2→3→4":{n:[[110,150],[250,150],[390,150],[530,150]],e:[[1,2,1],[2,3,1],[3,4,1]]},
-"Directed cycle (four agents)":{n:[[250,60],[390,150],[250,240],[110,150]],e:[[1,2,1],[2,3,1],[3,4,1],[4,1,1]]},
-"Undirected star (four agents)":{n:[[320,150],[320,50],[190,230],[450,230]],e:[[1,2,1],[2,1,1],[1,3,1],[3,1,1],[1,4,1],[4,1,1]]},
-"Complete network (four agents)":{n:[[220,70],[420,70],[420,240],[220,240]],e:K4},
-"Directed&ndash;weighted&ndash;signed network":{n:[[140,150],[320,60],[500,150]],e:[[1,2,-2],[2,3,0.5],[3,1,1.5],[1,3,-1]]},
+"Directed cycle (4 nodes)":{n:[[250,60],[390,150],[250,240],[110,150]],e:[[1,2,1],[2,3,1],[3,4,1],[4,1,1]]},
+"Undirected star":{n:[[320,150],[320,50],[190,230],[450,230]],e:[[1,2,1],[2,1,1],[1,3,1],[3,1,1],[1,4,1],[4,1,1]]},
+"Complete graph K4":{n:[[220,70],[420,70],[420,240],[220,240]],e:K4},
+"Signed, weighted, directed":{n:[[140,150],[320,60],[500,150]],e:[[1,2,-2],[2,3,0.5],[3,1,1.5],[1,3,-1]]},
 "Isolated agents":{note:true,n:[[160,150],[320,150],[480,150]],e:[[1,1,1],[2,2,2],[3,3,3]]},
 "Leaders and sensors differ":{n:[[170,150],[360,70],[360,230]],e:[[2,1,-0.25],[3,1,2],[3,3,3]]},
 "Two components":{n:[[160,150],[320,150],[500,150]],e:[[1,2,1],[2,1,1],[3,3,2]]}};
-const HINT={node:"Click the empty space to add an agent (up to 8). Drag an agent to move it.",edge:"Click the source agent, then the target agent (the same agent twice makes a self-communication). The communication gets the weight typed above; weight 0 removes it.",drv:"Click agents to build your own set of leaders and test it.",del:"Click an agent to delete it."};
-let obs=false,nodes=[],S=[],mode="node",src=-1,sel=new Set(),hl=[],drag=null;
-root.innerHTML=`<div class="dm-tab"><button type="button" data-t="c" class="on">Controllability</button><button type="button" data-t="o">Observability</button></div><p class="dm-p">$N$: The total number of agents in the MAS; $\\boldsymbol{x}_i(t)\\in\\mathbb{R}^n$: The state of the agent $i$ at time $t$; $\\boldsymbol{x}(t)\\triangleq\\left[\\boldsymbol{x}_1(t)^\\intercal\\quad\\boldsymbol{x}_2(t)^\\intercal\\quad\\ldots\\quad\\boldsymbol{x}_N(t)^\\intercal\\right]^\\intercal$: The state of the MAS at time $t$; Communication topology: Time-invariant</p><div class="dm-bar"><button type="button" data-m="node"><svg class="dm-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bBall" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs><circle cx="12" cy="12" r="7" fill="url(#bBall)" stroke="#8a6410" stroke-width=".8"/></svg> Agent</button><button type="button" data-m="edge">→ Communication</button><button type="button" data-m="drv"><svg class="dm-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bHot" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#ffd54a"/><stop offset="1" stop-color="#d9981a"/></radialGradient><radialGradient id="bHalo"><stop offset="0" stop-color="#ffd24a" stop-opacity="1"/><stop offset=".55" stop-color="#ffd24a" stop-opacity=".7"/><stop offset="1" stop-color="#ffd24a" stop-opacity="0"/></radialGradient><radialGradient id="bCore"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle class="dm-halo" cx="12" cy="12" r="12" fill="url(#bHalo)"/><circle cx="12" cy="12" r="7" fill="url(#bHot)" stroke="#e0a21a" stroke-width=".8"/><circle cx="11.3" cy="11.3" r="6" fill="url(#bCore)"/></svg><span class="dm-lt">Leader</span></button><button type="button" data-m="del">✕ Delete agent</button><label>weight <input class="dm-w" value="1" size="6" aria-label="Edge weight"></label><label><input type="checkbox" class="dm-bi"> both ways</label><select class="dm-ex" aria-label="Examples"><option>Examples…</option>${Object.keys(EX).map(k=>`<option>${k}</option>`).join("")}</select><button type="button" data-m="clr">Clear</button></div><div class="dm-hint"></div><svg class="dm-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg><div class="dm-mat"></div><div class="dm-res" aria-live="polite"></div>`;
-const q=s=>root.querySelector(s),svg=q(".dm-svg"),mat=q(".dm-mat"),res=q(".dm-res");
-const tex=()=>{try{window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([root]).catch(()=>{})}catch(_){}}; 
-function drawG(){const N=nodes.length;let h=`<defs>${[["g","#1f9d55"],["r","#d63030"]].map(([k,c])=>`<marker id="dm${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`).join("")}<radialGradient id="dmBall" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient><radialGradient id="dmBallHot" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#ffd54a"/><stop offset="1" stop-color="#d9981a"/></radialGradient><radialGradient id="dmHalo"><stop offset="0" stop-color="#ffd24a" stop-opacity=".8"/><stop offset=".4" stop-color="#ffd24a" stop-opacity=".32"/><stop offset="1" stop-color="#ffd24a" stop-opacity="0"/></radialGradient><radialGradient id="dmCore"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>`;
-if(!N)h+=`<text class="dm-ph" x="${W/2}" y="${H/2}"></text>`;
+const HINT={node:"Click empty space to add a node (up to 8). Drag a node to move it.",edge:"Click the source node, then the target node (the same node twice makes a self-loop). The edge gets the weight typed above; weight 0 removes it.",drv:"Click nodes to build your own driver set and test it.",del:"Click a node to delete it."};
+let io=null,VY=0,VH=300,obs=false,nodes=[],S=[],mode="node",src=-1,sel=new Set(),hl=[],drag=null;
+root.innerHTML=`<div class="dm-tab"><button type="button" data-t="c" class="on">Controllability</button><button type="button" data-t="o">Observability</button></div><p class="dm-p">Dynamics: $\\dot{\\boldsymbol{x}}(t)=\\mathcal{A}\\boldsymbol{x}(t)$, $\\boldsymbol{x}_i\\in\\mathbb{R}^n$ is the state of the agent $i$.</p><div class="dm-bar"><button type="button" data-m="node"><svg class="dm-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bBall" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs><circle class="ib" cx="12" cy="12" r="7" fill="url(#bBall)" stroke="#8a6410" stroke-width=".8"/></svg> Agent</button><button type="button" data-m="edge">→ Edge</button><button type="button" data-m="drv"><svg class="dm-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bHot" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#ffd54a"/><stop offset="1" stop-color="#d9981a"/></radialGradient><radialGradient id="bHalo"><stop offset="0" stop-color="#ffd24a" stop-opacity="1"/><stop offset=".55" stop-color="#ffd24a" stop-opacity=".7"/><stop offset="1" stop-color="#ffd24a" stop-opacity="0"/></radialGradient><radialGradient id="bCore"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle cx="12" cy="12" r="12" fill="url(#bHalo)"/><circle class="ib" cx="12" cy="12" r="7" fill="url(#bHot)" stroke="#e0a21a" stroke-width=".8"/><circle cx="11.3" cy="11.3" r="6" fill="url(#bCore)"/></svg><span class="dm-lt">Leaders</span></button><button type="button" data-m="del">✕ Delete node</button><label>weight <input class="dm-w" value="1" size="6" aria-label="Edge weight"></label><label><input type="checkbox" class="dm-bi"> both ways</label><select class="dm-ex" aria-label="Examples"><option>Examples…</option>${Object.keys(EX).map(k=>`<option>${k}</option>`).join("")}</select><button type="button" data-m="clr">Clear</button></div><div class="dm-hint"></div><svg class="dm-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg><div class="dm-cap"></div><div class="dm-mat"></div><div class="dm-res" aria-live="polite"></div>`;
+const q=s=>root.querySelector(s),svg=q(".dm-svg"),mat=q(".dm-mat"),res=q(".dm-res"),cap=q(".dm-cap");
+const tex=()=>{try{window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([root]).catch(()=>{})}catch(_){}};
+function designIO(P,N,set,m){const L=set.length;if(m>L)return null;
+ const kal=B=>{const Q=P.map(Pj=>mm(Pj,B));return rankB(Array.from({length:N},(_,r)=>Q.flatMap(q=>q[r])))===N},
+ build=cols=>{const B=Array.from({length:N},()=>Array(m).fill(0n));cols.forEach((g,k)=>g.forEach(([a,w])=>{B[a][k]=BigInt(w)}));return B};
+ const parts=[];(function rec(i,v,u){if(i===L){if(u===m)parts.push(v.slice());return}if(u+(L-i)<m)return;for(let b=0;b<=Math.min(u,m-1);b++){v.push(b);rec(i+1,v,Math.max(u,b+1));v.pop()}})(0,[],0);
+ const big=v=>Math.max(...Array.from({length:m},(_,k)=>v.filter(x=>x===k).length));
+ parts.sort((a,b)=>big(a)-big(b)||(a.join("")<b.join("")?-1:1));
+ for(const v of parts){const cols=Array.from({length:m},(_,k)=>set.map((a,i)=>[a,i+1]).filter((_,i)=>v[i]===k));if(kal(build(cols)))return cols}
+ for(let t=0;t<600;t++){const cols=Array.from({length:m},()=>set.map(a=>[a,(Math.random()<.5?-1:1)*(1+Math.floor(Math.random()*4))]));if(kal(build(cols)))return cols}
+ return null}
+function ioLayer(){if(!io)return"";const out=io.out,col=out?"#8b5cf6":"#3b82f6",mk=out?"dmP":"dmB",sy=-30;
+ const des=io.groups.map(g=>g.reduce((s,[a])=>s+nodes[a].x,0)/g.length),ord=des.map((_,k)=>k).sort((a,b)=>des[a]-des[b]),xs=[];let prev=-1e9;
+ ord.forEach(k=>{xs[k]=Math.max(des[k],prev+68,32);prev=xs[k]});const over=Math.max(...xs)-(W-34);if(over>0)xs.forEach((_,k)=>xs[k]-=over);
+ let s="";io.groups.forEach((g,k)=>{const sx=xs[k];
+  s+=out?`<rect x="${sx-16}" y="${sy-12}" width="32" height="24" rx="5" fill="var(--card)" stroke="${col}" stroke-width="1.6"/>`:`<circle cx="${sx}" cy="${sy}" r="15" fill="var(--card)" stroke="${col}" stroke-width="1.6"/>`;
+  s+=`<path d="M${sx-10} ${sy}C${sx-7} ${sy-10} ${sx-3} ${sy-10} ${sx} ${sy}S${sx+7} ${sy+10} ${sx+10} ${sy}" fill="none" stroke="${col}" stroke-width="1.6"/><text class="dm-iol" x="${sx+21}" y="${sy+4}">${out?"y":"u"}<tspan dy="3" font-size="9">${k+1}</tspan></text>`;
+  g.forEach(([a])=>{const n=nodes[a],dx=n.x-sx,dy=n.y-sy,Ld=Math.hypot(dx,dy)||1,
+   hit=(px,py)=>nodes.some((o,j)=>j!==a&&Math.hypot(o.x-px,o.y-py)<R+7),
+   bent=c=>{for(let t=.05;t<.97;t+=.04){const u=1-t;if(hit(u*u*sx+2*u*t*c[0]+t*t*n.x,u*u*sy+2*u*t*c[1]+t*t*n.y))return true}return false};
+   let c=null;
+   if(bent([(sx+n.x)/2,(sy+n.y)/2])){const px=-dy/Ld,py=dx/Ld;
+    for(const k of[55,-55,95,-95,140,-140]){const t=[(sx+n.x)/2+px*k,(sy+n.y)/2+py*k];if(!bent(t)){c=t;break}}}
+   const cx=c?c[0]:(sx+n.x)/2,cy=c?c[1]:(sy+n.y)/2,
+    e1=Math.hypot(n.x-cx,n.y-cy)||1,ex=(n.x-cx)/e1,ey=(n.y-cy)/e1,
+    s1=Math.hypot(cx-sx,cy-sy)||1,fx=(cx-sx)/s1,fy=(cy-sy)/s1;
+   const P=out?[n.x-ex*(R+1),n.y-ey*(R+1)]:[sx+fx*17,sy+fy*17],Q=out?[sx+fx*19,sy+fy*19]:[n.x-ex*(R+2),n.y-ey*(R+2)];
+   const d=c?`M${P[0]} ${P[1]}Q${cx} ${cy} ${Q[0]} ${Q[1]}`:`M${P[0]} ${P[1]}L${Q[0]} ${Q[1]}`;
+   s+=`<path class="dm-sig" d="${d}" fill="none" stroke="${col}" stroke-width="1.4" marker-end="url(#${mk})"/>`})});
+ return s}
+function drawG(){const N=nodes.length;VY=io?-BAND:0;VH=io?H+BAND:H;svg.setAttribute("viewBox",`0 ${VY} ${W} ${VH}`);let h=`<defs>${[["g","#1f9d55"],["r","#d63030"]].map(([k,c])=>`<marker id="dm${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`).join("")}<radialGradient id="dmBall" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient><radialGradient id="dmBallHot" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#ffd54a"/><stop offset="1" stop-color="#d9981a"/></radialGradient><radialGradient id="dmHalo"><stop offset="0" stop-color="#ffd24a" stop-opacity=".8"/><stop offset=".4" stop-color="#ffd24a" stop-opacity=".32"/><stop offset="1" stop-color="#ffd24a" stop-opacity="0"/></radialGradient><radialGradient id="dmCore"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><marker id="dmB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3b82f6"/></marker><marker id="dmP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8b5cf6"/></marker></defs>`;
+if(!N)h+=`<text class="dm-ph" x="${W/2}" y="${H/2}">Click here to add nodes</text>`;
 for(let i=0;i<N;i++)for(let j=0;j<N;j++){const v=S[i][j],p=parseRat(v);if(!p||p[0]===0n)continue;const neg=p[0]<0n,c=neg?"#d63030":"#1f9d55",m=neg?"dmr":"dmg",lab=String(v).trim();
-if(i===j){const a=nodes[i];h+=`<path d="M${a.x-8} ${a.y-R+1}C${a.x-34} ${a.y-R*3.2} ${a.x+34} ${a.y-R*3.2} ${a.x+8} ${a.y-R+1}" fill="none" stroke="${c}" stroke-width="0.5" marker-end="url(#${m})"/><text class="dm-l" x="${a.x}" y="${a.y-R*2.4}" fill="${c}">${lab}</text>`;continue}
-const a=nodes[j],b=nodes[i],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,bk=parseRat(S[j][i]),k=bk&&bk[0]!==0n?26:0,
-mx=(a.x+b.x)/2-uy*k,my=(a.y+b.y)/2+ux*k,sx=a.x+ux*R,sy=a.y+uy*R,ex=b.x-ux*(R+2),ey=b.y-uy*(R+2),lx=.25*sx+.5*mx+.25*ex,ly=.25*sy+.5*my+.25*ey;
-h+=`<path d="M${sx} ${sy}Q${mx} ${my} ${ex} ${ey}" fill="none" stroke="${c}" stroke-width="0.5" marker-end="url(#${m})"/><text class="dm-l" x="${lx}" y="${ly-5}" fill="${c}">${lab}</text>`}
+ if(i===j){const a=nodes[i];h+=`<path d="M${a.x-8} ${a.y-R+1}C${a.x-34} ${a.y-R*3.2} ${a.x+34} ${a.y-R*3.2} ${a.x+8} ${a.y-R+1}" fill="none" stroke="${c}" stroke-width="1.2" marker-end="url(#${m})"/><text class="dm-l" x="${a.x}" y="${a.y-R*2.4}" fill="${c}">${lab}</text>`;continue}
+ const a=nodes[j],b=nodes[i],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,bk=parseRat(S[j][i]),k=bk&&bk[0]!==0n?26:0,
+ mx=(a.x+b.x)/2-uy*k,my=(a.y+b.y)/2+ux*k,sx=a.x+ux*R,sy=a.y+uy*R,ex=b.x-ux*(R+2),ey=b.y-uy*(R+2),lx=.25*sx+.5*mx+.25*ex,ly=.25*sy+.5*my+.25*ey;
+ h+=`<path d="M${sx} ${sy}Q${mx} ${my} ${ex} ${ey}" fill="none" stroke="${c}" stroke-width="1.2" marker-end="url(#${m})"/><text class="dm-l" x="${lx}" y="${ly-5}" fill="${c}">${lab}</text>`}
+h+=ioLayer();
 nodes.forEach((n,i)=>{if(hl.includes(i)||sel.has(i))h+=`<circle class="dm-halo" cx="${n.x}" cy="${n.y}" r="${R*3.1}" fill="url(#dmHalo)"/>`});
 nodes.forEach((n,i)=>{const hot=hl.includes(i)||sel.has(i);h+=`<g class="dm-n${hot?" hot":""}${src===i?" src":""}" data-i="${i}"><circle class="b" cx="${n.x}" cy="${n.y}" r="${R}"/>${hot?`<circle class="core" cx="${n.x-R*.1}" cy="${n.y-R*.1}" r="${R*.85}" fill="url(#dmCore)"/>`:""}<text x="${n.x}" y="${n.y}">${i+1}</text></g>`});
 svg.innerHTML=h}
-function drawMat(){const N=nodes.length;mat.innerHTML=N?`<div class="dm-lab">The adjacency matrix ($\\mathcal{A}$: element in row $i$, column $j$ = weight of the communication from agent $j$ to $i$) of the MAS:</div><div class="dm-sc"><table class="dm-t"><tr><th></th>${nodes.map((_,j)=>`<th>${j+1}</th>`).join("")}</tr>${S.map((r,i)=>`<tr><th>${i+1}</th>${r.map((v,j)=>`<td><input data-i="${i}" data-j="${j}" value="${esc(v)}" class="${parseRat(v)===null?"bad":""}" aria-label="a ${i+1},${j+1}"></td>`).join("")}</tr>`).join("")}</table></div>`:""}
-function drawRes(){hl=[];const N=nodes.length;if(!N){res.innerHTML="<p></p>";return}
-const bad=S.some(r=>r.some(v=>parseRat(v)===null)),r=solve(obs?S[0].map((_,j)=>S.map(x=>x[j])):S),m=maxMult(N,r.P),one=r.good.length===1;
-const W=obs
-?{noun:"observability",sys:`$\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$, $\\boldsymbol{y}(t)=(\\mathcal{C}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$`,M:"$\\mathcal{C}$",nm:"output matrix",thing:"outputs",line:"rows",nz:"columns",who:"sensors",whoS:"sensors",ok:"observable",no:"unobservable",sym:"N<sub>S</sub>",ach:"measure every agent",basis:"canonical basis vectors of $\\mathbb{R}^N$",ys:"Your set of sensors is"}
-:{noun:"controllability",sys:`$\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)+(\\mathcal{B}\\otimes\\mathbf{I}_n)\\boldsymbol{u}(t)$`,M:"$\\mathcal{B}$",nm:"input matrix",thing:"control inputs",line:"columns",nz:"rows",who:"leaders/drivers",whoS:"leaders",ok:"controllable",no:"uncontrollable",sym:"N<sub>L</sub>",ach:"give every agent its own input",basis:"canonical basis vectors of $\\mathbb{R}^N$",ys:"Your set of leaders is"};
-const chips=`<span class="dm-ch dm-ci dm-all">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</span>`;
-const SETS=`${one?`the only minimum set of ${W.whoS}`:`all minimum sets of ${W.whoS}`} (size ${r.k}, out of ${r.total} possible set${r.total===1?"":"s"}) through which the MAS is ${W.ok} ${one?"is":"are"} ${chips}.${r.k>1?` Every smaller set leaves the MAS ${W.no}.`:""}`;
-const GM=`$\\max_{\\lambda}\\mathrm{GM}(\\lambda)$`;
-let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0.</p>':"";
-h+=`<p class="dm-th-h">Dynamics of the MAS: $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$, a first-order LTI. No matter what, the ${W.noun} of the MAS is always achievable (for example, ${W.ach}). The questions are: what is the minimum number of ${W.thing} and what is the minimum number of ${W.who} required to achieve it?</p>`;
-h+=`<p><b>Case 1:</b> In the system ${W.sys}, suppose the ${W.nm} ${W.M} is allowed to design arbitrarily:</p><ul>
-<li>The minimum number of ${W.thing} (equivalently, the minimum number of ${W.line} of ${W.M}) required to make the MAS ${W.ok} is ${GM} = <b>${m}</b>, where $\\lambda$ runs over all eigenvalues of $\\mathcal{A}$.</li>
+function drawMat(){const N=nodes.length;mat.innerHTML=N?`<div class="dm-lab">Adjacency matrix $\\mathcal{A}$ (element in row $i$, column $j$ = weight of the edge from agent $j$ to agent $i$):</div><div class="dm-sc"><table class="dm-t"><tr><th></th>${nodes.map((_,j)=>`<th>${j+1}</th>`).join("")}</tr>${S.map((r,i)=>`<tr><th>${i+1}</th>${r.map((v,j)=>`<td><input data-i="${i}" data-j="${j}" value="${esc(v)}" class="${parseRat(v)===null?"bad":""}" aria-label="a ${i+1},${j+1}"></td>`).join("")}</tr>`).join("")}</table></div>`:""}
+function drawRes(){hl=[];io=null;cap.innerHTML="";const N=nodes.length;if(!N){res.innerHTML="<p></p>";return}
+ const bad=S.some(r=>r.some(v=>parseRat(v)===null)),r=solve(obs?S[0].map((_,j)=>S.map(x=>x[j])):S),m=maxMult(N,r.P),one=r.good.length===1;
+ const W=obs
+  ?{noun:"observability",sys:`$\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$, $\\boldsymbol{y}(t)=(\\mathcal{C}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$`,M:"$\\mathcal{C}$",nm:"output matrix",thing:"distinct outputs",line:"rows",nz:"columns",who:"sensor agents",whoS:"sensors",ok:"observable",no:"unobservable",sym:"N<sub>S</sub>",si:"N<sub>O</sub>",kind:"outputs",ach:"measure every agent",basis:"canonical basis row vectors $\\boldsymbol{e}_i^{\\intercal}$",ys:"Your set of sensors is"}
+  :{noun:"controllability",sys:`$\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)+(\\mathcal{B}\\otimes\\mathbf{I}_n)\\boldsymbol{u}(t)$`,M:"$\\mathcal{B}$",nm:"input matrix",thing:"distinct control inputs",line:"columns",nz:"rows",who:"leaders (driver agents)",whoS:"leaders",ok:"controllable",no:"uncontrollable",sym:"N<sub>L</sub>",si:"N<sub>I</sub>",kind:"inputs",ach:"give every agent its own input",basis:"canonical basis vectors of $\\mathbb{R}^N$",ys:"Your set of leaders is"};
+ const chips=`<span class="dm-ch dm-ci dm-all">${r.good.map((s,i)=>`<button type="button" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</span>`;
+ const SETS=`${one?`the only minimum set of ${W.whoS}`:`all minimum sets of ${W.whoS}`} (size ${r.k}, out of ${r.total} possible set${r.total===1?"":"s"}) through which the MAS is ${W.ok} ${one?"is":"are"} ${chips}.${r.k>1?` Every smaller set leaves the MAS ${W.no}.`:""}`;
+ const GM=`$\\max_{\\lambda}\\mathrm{GM}(\\lambda)$`;
+ let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0.</p>':"";
+ h+=`<p class="dm-th-h">No matter what, the ${W.noun} of this MAS is always achievable (for example, ${W.ach}). The questions are: what is the minimum number of ${W.thing}, and what is the minimum number of ${W.who} required to achieve it?</p>`;
+ h+=`<p><b>1.</b> In the system ${W.sys}, the ${W.nm} ${W.M} may be designed arbitrarily:</p><ul>
+<li>The minimum number of ${W.thing} (equivalently, the minimum number of ${W.line} of ${W.M}) required to make the MAS ${W.ok} is <b>${W.si}</b> = ${GM} = <button type="button" class="dm-nv" data-io aria-pressed="false" title="Show the ${W.kind} in the drawing">${m}</button>, where $\\lambda$ runs over all eigenvalues of $\\mathcal{A}$ and $\\mathrm{GM}(\\lambda)=N-\\mathrm{rank}(\\mathcal{A}-\\lambda I)$. <span class="dm-hn">(Click the value to see the ${W.kind} in the drawing.)</span></li>
 <li>The minimum number of ${W.who} (equivalently, the minimum number of nonzero ${W.nz} of ${W.M}) required to make the MAS ${W.ok} is <b>${W.sym} = ${r.k}</b>. Furthermore, ${SETS}</li></ul>`;
-h+=`<p><b>Case 2:</b> In the system ${W.sys}, suppose the ${W.nm} ${W.M} is restricted to have its ${W.line} chosen only from the ${W.basis}:</p><ul>
-<li>The minimum number of ${W.thing} (equivalently, the minimum number of ${W.line} of ${W.M}) required to make the MAS ${W.ok} is <b>${r.k}</b>, which equals the minimum number of ${W.who} (equivalently, the minimum number of nonzero ${W.nz} of ${W.M}). Surprisingly, this value is $\\geq$ ${GM}. Furthermore, ${SETS}</li></ul>`;
-const U=[...sel].sort((a,b)=>a-b);
-if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>${W.ys} {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?W.ok+" ✓":W.no+" ✗"}</b></p>`}
-res.innerHTML=h;
-res.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{const i=+b.dataset.s,s=r.good[i],same=hl.length===s.length&&s.every(x=>hl.includes(x));hl=same?[]:s.slice();drawG();res.querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",!same&&+x.dataset.s===i))})}
+ h+=`<p><b>2.</b> In the same system, the ${W.nm} ${W.M} is restricted to have its ${W.line} chosen only from the ${W.basis}:</p><ul>
+<li>The minimum number of ${W.thing} (equivalently, the minimum number of ${W.line} of ${W.M}) required to make the MAS ${W.ok} is <b>${r.k}</b>, which equals the minimum number of ${W.who} (the minimum number of nonzero ${W.nz} of ${W.M}). Surprisingly, this value is $\\geq$ ${GM}. Furthermore, ${SETS}</li></ul>`;
+ const U=[...sel].sort((a,b)=>a-b);
+ if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>${W.ys} {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?W.ok+" ✓":W.no+" ✗"}</b></p>`}
+ res.innerHTML=h;
+ const offIO=()=>{io=null;cap.innerHTML="";res.querySelectorAll("[data-io]").forEach(x=>{x.classList.remove("on");x.setAttribute("aria-pressed","false")})};
+ const mark=s=>res.querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",!!s&&r.good[+x.dataset.s].join()===s.join()));
+ const showIO=set=>{const cols=designIO(r.P,N,set,m);if(!cols){offIO();drawG();return false}
+  io={out:obs,set:set.slice(),groups:cols};hl=set.slice();const L=set.length;
+  cap.innerHTML=obs?`<b>N<sub>O</sub> = ${m}</b> distinct output signal${m>1?"s":""} (purple meters) read from the <b>N<sub>S</sub> = ${L}</b> sensor agents (glowing agents). An output is a measured signal; a sensor is an agent whose state enters at least one output. ${m<L?"Here each output combines the states of several sensors.":"Here each sensor gives its own output."} Every arrow has a nonzero gain, chosen so that the MAS is observable.`
+   :`<b>N<sub>I</sub> = ${m}</b> distinct control input${m>1?"s":""} (blue signals) acting on the <b>N<sub>L</sub> = ${L}</b> leaders (glowing agents). An input is an external signal; a leader is an agent that receives at least one input. ${m<L?"Here one input acts on several leaders.":"Here each leader receives its own input."} Every arrow has a nonzero gain, chosen so that the MAS is controllable.`;
+  drawG();return true};
+ res.querySelectorAll("[data-io]").forEach(b=>b.onclick=()=>{if(io){hl=[];offIO();mark(null);drawG();return}
+  const cur=hl.length&&r.good.some(s=>s.length===hl.length&&s.every(x=>hl.includes(x)))?hl.slice().sort((a,b)=>a-b):r.good[0];
+  if(showIO(cur)){res.querySelectorAll("[data-io]").forEach(x=>{x.classList.add("on");x.setAttribute("aria-pressed","true")});mark(cur)}});
+ res.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{const s=r.good[+b.dataset.s],same=hl.length===s.length&&s.every(x=>hl.includes(x));
+  if(same){hl=[];offIO();mark(null);drawG();return}
+  if(io){showIO(s)}else{hl=s.slice();drawG()}
+  mark(s)})}
 function fillEx(){const sl=q(".dm-ex");sl.innerHTML="<option>Examples…</option>"+Object.keys(EX).map(k=>{const ex=EX[k],n=ex.n.length,S0=Array.from({length:n},()=>Array(n).fill(""));ex.e.forEach(([j,i,w])=>S0[i-1][j-1]=String(w));
-const r=solve(obs?S0[0].map((_,j)=>S0.map(x=>x[j])):S0),m=maxMult(n,r.P);
-const lab=m<r.k&&ex.note?(obs?"Minimum number of outputs < minimum number of sensors":"Minimum number of control inputs < minimum number of leaders/drivers"):k;
-return `<option value="${k}">${lab}</option>`}).join("")}
-const full=()=>{drawG();drawMat();drawRes();tex()};
+ const r=solve(obs?S0[0].map((_,j)=>S0.map(x=>x[j])):S0),m=maxMult(n,r.P);
+ const lab=m<r.k&&ex.note?(obs?"Minimum number of outputs < minimum number of sensors":"Minimum number of control inputs < minimum number of leaders"):k;
+ return `<option value="${k}">${lab}</option>`}).join("")}
+const full=()=>{hl=[];io=null;drawG();drawMat();drawRes();tex()};
 function addNode(x,y){const n=nodes.length;S.forEach(r=>r.push(""));S.push(Array(n+1).fill(""));nodes.push({x,y})}
 function delNode(i){nodes.splice(i,1);S.splice(i,1);S.forEach(r=>r.splice(i,1));sel=new Set([...sel].filter(x=>x!==i).map(x=>x>i?x-1:x))}
 function link(j,i){const w=q(".dm-w").value.trim(),p=parseRat(w);if(w===""||!p){q(".dm-w").classList.add("bad");return}q(".dm-w").classList.remove("bad");const v=p[0]===0n?"":w;S[i][j]=v;if(q(".dm-bi").checked&&i!==j)S[j][i]=v}
-const pt=e=>{const r=svg.getBoundingClientRect();return[(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]};
-svg.addEventListener("pointerdown",e=>{const g=e.target.closest(".dm-n"),[x,y]=pt(e);
-if(g){const i=+g.dataset.i;if(mode=="node"){drag=i;try{svg.setPointerCapture(e.pointerId)}catch(_){}return}
-if(mode=="edge"){if(src<0)src=i;else{link(src,i);src=-1}}else if(mode=="drv"){sel.has(i)?sel.delete(i):sel.add(i)}else if(mode=="del")delNode(i);
-full();return}
-if(mode=="node"&&nodes.length<MAXN){addNode(cl(x,R,W-R),cl(y,R+14,H-R));full()}else if(mode=="edge"){src=-1;drawG()}});
+const pt=e=>{const r=svg.getBoundingClientRect();return[(e.clientX-r.left)*W/r.width,VY+(e.clientY-r.top)*VH/r.height]};
+svg.addEventListener("pointerdown",e=>{const g=e.target.closest(".dm-n"),[x,y]=pt(e);if(y<0)return;
+ if(g){const i=+g.dataset.i;if(mode=="node"){drag=i;try{svg.setPointerCapture(e.pointerId)}catch(_){}return}
+  if(mode=="edge"){if(src<0)src=i;else{link(src,i);src=-1}}else if(mode=="drv"){sel.has(i)?sel.delete(i):sel.add(i)}else if(mode=="del")delNode(i);
+  full();return}
+ if(mode=="node"&&nodes.length<MAXN){addNode(cl(x,R,W-R),cl(y,R+14,H-R));full()}else if(mode=="edge"){src=-1;drawG()}});
 svg.addEventListener("pointermove",e=>{if(drag===null)return;const[x,y]=pt(e);nodes[drag].x=cl(x,R,W-R);nodes[drag].y=cl(y,R+14,H-R);drawG()});
 svg.addEventListener("pointerup",()=>{drag=null});svg.addEventListener("pointercancel",()=>{drag=null});
-mat.addEventListener("input",e=>{const t=e.target;if(!t.dataset.i)return;S[+t.dataset.i][+t.dataset.j]=t.value;t.classList.toggle("bad",parseRat(t.value)===null);drawG();drawRes();tex()});
+mat.addEventListener("input",e=>{const t=e.target;if(!t.dataset.i)return;S[+t.dataset.i][+t.dataset.j]=t.value;t.classList.toggle("bad",parseRat(t.value)===null);hl=[];io=null;drawG();drawRes();tex()});
 q(".dm-bar").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const m=b.dataset.m;
-if(m=="clr"){nodes=[];S=[];sel=new Set();src=-1;full();return}
-mode=m;src=-1;q(".dm-bar").querySelectorAll("[data-m]").forEach(x=>x.classList.toggle("on",x.dataset.m===m));q(".dm-hint").textContent=HINT[m];drawG()});
+ if(m=="clr"){nodes=[];S=[];sel=new Set();src=-1;full();return}
+ mode=m;src=-1;q(".dm-bar").querySelectorAll("[data-m]").forEach(x=>x.classList.toggle("on",x.dataset.m===m));q(".dm-hint").textContent=HINT[m];drawG()});
 q(".dm-ex").addEventListener("change",e=>{const ex=EX[e.target.value];if(!ex)return;nodes=ex.n.map(([x,y])=>({x,y}));S=Array.from({length:nodes.length},()=>Array(nodes.length).fill(""));ex.e.forEach(([j,i,w])=>S[i-1][j-1]=String(w));sel=new Set();src=-1;full();e.target.selectedIndex=0});
 q(".dm-tab").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||!b.dataset.t)return;obs=b.dataset.t=="o";
-q(".dm-tab").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
-q(".dm-lt").textContent=obs?"Sensor":"Leader";
-HINT.drv=obs?"Click agents to build your own set of sensors and test it.":"Click agents to build your own set of leaders and test it.";
-if(mode=="drv")q(".dm-hint").textContent=HINT.drv;
-sel=new Set();fillEx();full()});
+ q(".dm-tab").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
+ q(".dm-lt").textContent=obs?"Sensors":"Leaders";
+ HINT.drv=obs?"Click agents to build your own set of sensors and test it.":"Click agents to build your own set of leaders and test it.";
+ if(mode=="drv")q(".dm-hint").textContent=HINT.drv;
+ sel=new Set();fillEx();full()});
 fillEx();
 q('[data-m="node"]').classList.add("on");q(".dm-hint").textContent=HINT.node;full();
 })()}catch(e){console.error("[demo]",e)}
