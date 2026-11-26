@@ -193,8 +193,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .dm-hn{font-size:.76rem}
 .dm-cap{font-size:.78rem;color:var(--mute);margin:.35rem 0 .2rem}.dm-cap:empty{display:none}
 .dm-iol{font:italic 12px Inter,sans-serif;fill:var(--ink)}
-.dm-sig{stroke-dasharray:5 4;animation:dmflow 1.1s linear infinite}@keyframes dmflow{to{stroke-dashoffset:-9}}
-@media(prefers-reduced-motion:reduce){.dm-sig{animation:none}}
 .dm-eq{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:.2rem .5rem;margin:.2rem 0}
 .dm-eqm{max-width:100%;overflow-x:auto;overflow-y:hidden;padding:.15rem 0}
 .dm-eq mjx-container{margin:0!important}
@@ -723,6 +721,13 @@ parts.sort((a,b)=>big(a)-big(b)||(a.join("")<b.join("")?-1:1));
 for(const v of parts){const cols=Array.from({length:m},(_,k)=>set.map((a,i)=>[a,i+1]).filter((_,i)=>v[i]===k));if(kal(build(cols)))return cols}
 for(let t=0;t<600;t++){const cols=Array.from({length:m},()=>set.map(a=>[a,(Math.random()<.5?-1:1)*(1+Math.floor(Math.random()*4))]));if(kal(build(cols)))return cols}
 return null}
+function waveD(g,t){const a=g.split(",").map(v=>v===""?null:+v),P=[a[0],a[1]],Q=[a[4],a[5]],C=a[2]===null?[(P[0]+Q[0])/2,(P[1]+Q[1])/2]:[a[2],a[3]],n=Math.min(500,Math.max(24,Math.ceil((Math.hypot(P[0]-C[0],P[1]-C[1])+Math.hypot(C[0]-Q[0],C[1]-Q[1]))/1.2))),pts=[];
+for(let i=0;i<=n;i++){const u=i/n,v=1-u;pts.push([v*v*P[0]+2*v*u*C[0]+u*u*Q[0],v*v*P[1]+2*v*u*C[1]+u*u*Q[1]])}
+const cum=[0];for(let i=1;i<=n;i++)cum.push(cum[i-1]+Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]));const len=cum[n]||1,A=3,LW=15,SP=38,ramp=10;
+let d="";for(let i=0;i<=n;i++){const p0=pts[Math.max(i-1,0)],p1=pts[Math.min(i+1,n)],tx=p1[0]-p0[0],ty=p1[1]-p0[1],tl=Math.hypot(tx,ty)||1,s=cum[i],env=Math.min(1,s/ramp,(len-s)/ramp),o=A*env*Math.sin(2*Math.PI*(s-SP*t)/LW);
+d+=(i?"L":"M")+(pts[i][0]-ty/tl*o).toFixed(1)+" "+(pts[i][1]+tx/tl*o).toFixed(1)}return d}
+let raf=0;function sigTick(ts){raf=0;if(!io)return;const t=ts/1000;svg.querySelectorAll(".dm-sig").forEach(p=>p.setAttribute("d",waveD(p.dataset.w,t)));raf=requestAnimationFrame(sigTick)}
+function sigStart(){try{if(matchMedia("(prefers-reduced-motion:reduce)").matches)return}catch(_){}if(!raf)raf=requestAnimationFrame(sigTick)}
 function ioLayer(){if(!io)return"";const out=io.out,col=out?"#8b5cf6":"#3b82f6",mk=out?"dmP":"dmB",sy=-30;
 const des=io.groups.map(g=>g.reduce((s,[a])=>s+nodes[a].x,0)/g.length),ord=des.map((_,k)=>k).sort((a,b)=>des[a]-des[b]),xs=[];let prev=-1e9;
 ord.forEach(k=>{xs[k]=Math.max(des[k],prev+68,32);prev=xs[k]});const over=Math.max(...xs)-(W-34);if(over>0)xs.forEach((_,k)=>xs[k]-=over);
@@ -740,7 +745,7 @@ e1=Math.hypot(n.x-cx,n.y-cy)||1,ex=(n.x-cx)/e1,ey=(n.y-cy)/e1,
 s1=Math.hypot(cx-sx,cy-sy)||1,fx=(cx-sx)/s1,fy=(cy-sy)/s1;
 const P=out?[n.x-ex*(R+1),n.y-ey*(R+1)]:[sx+fx*17,sy+fy*17],Q=out?[sx+fx*19,sy+fy*19]:[n.x-ex*(R+2),n.y-ey*(R+2)];
 const d=c?`M${P[0]} ${P[1]}Q${cx} ${cy} ${Q[0]} ${Q[1]}`:`M${P[0]} ${P[1]}L${Q[0]} ${Q[1]}`;
-s+=`<path class="dm-sig" d="${d}" fill="none" stroke="${col}" stroke-width="1.4" marker-end="url(#${mk})"/>`})});
+const gw=[P[0],P[1],c?cx:"",c?cy:"",Q[0],Q[1]].join();s+=`<path class="dm-sig" data-w="${gw}" d="${waveD(gw,0)}" fill="none" stroke="${col}" stroke-width="1.1" marker-end="url(#${mk})"/>`})});
 return s}
 function drawG(){const N=nodes.length;VY=io?-BAND:0;VH=io?H+BAND:H;svg.setAttribute("viewBox",`0 ${VY} ${W} ${VH}`);let h=`<defs>${[["g","#1f9d55"],["r","#d63030"]].map(([k,c])=>`<marker id="dm${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`).join("")}<radialGradient id="dmBall" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient><radialGradient id="dmBallHot" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#ffd54a"/><stop offset="1" stop-color="#d9981a"/></radialGradient><radialGradient id="dmHalo"><stop offset="0" stop-color="#ffd24a" stop-opacity=".8"/><stop offset=".4" stop-color="#ffd24a" stop-opacity=".32"/><stop offset="1" stop-color="#ffd24a" stop-opacity="0"/></radialGradient><radialGradient id="dmCore"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><marker id="dmB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3b82f6"/></marker><marker id="dmP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8b5cf6"/></marker></defs>`;
 if(!N)h+=`<text class="dm-ph" x="${W/2}" y="${H/2}">Click here to add nodes</text>`;
@@ -752,7 +757,7 @@ h+=`<path d="M${sx} ${sy}Q${mx} ${my} ${ex} ${ey}" fill="none" stroke="${c}" str
 h+=ioLayer();
 nodes.forEach((n,i)=>{if(hl.includes(i)||sel.has(i))h+=`<circle class="dm-halo" cx="${n.x}" cy="${n.y}" r="${R*3.1}" fill="url(#dmHalo)"/>`});
 nodes.forEach((n,i)=>{const hot=hl.includes(i)||sel.has(i);h+=`<g class="dm-n${hot?" hot":""}${src===i?" src":""}" data-i="${i}"><circle class="b" cx="${n.x}" cy="${n.y}" r="${R}"/>${hot?`<circle class="core" cx="${n.x-R*.1}" cy="${n.y-R*.1}" r="${R*.85}" fill="url(#dmCore)"/>`:""}<text x="${n.x}" y="${n.y}">${i+1}</text></g>`});
-svg.innerHTML=h}
+svg.innerHTML=h;if(io)sigStart()}
 function drawMat(){const N=nodes.length;mat.innerHTML=N?`<div class="dm-lab">Adjacency matrix ($\\mathcal{A}$: element in row $i$, column $j$ = weight of the communication from agent $j$ to $i$) of the MAS:</div><div class="dm-sc"><table class="dm-t"><tr><th></th>${nodes.map((_,j)=>`<th>${j+1}</th>`).join("")}</tr>${S.map((r,i)=>`<tr><th>${i+1}</th>${r.map((v,j)=>`<td><input data-i="${i}" data-j="${j}" value="${esc(v)}" class="${parseRat(v)===null?"bad":""}" aria-label="a ${i+1},${j+1}"></td>`).join("")}</tr>`).join("")}</table></div>`:""}
 function drawRes(){hl=[];io=null;cap.innerHTML="";const N=nodes.length;if(!N){res.innerHTML="<p></p>";return}
 const bad=S.some(r=>r.some(v=>parseRat(v)===null)),r=solve(obs?S[0].map((_,j)=>S.map(x=>x[j])):S),m=maxMult(N,r.P),one=r.good.length===1;
@@ -768,7 +773,7 @@ h+=`<p><b class="dm-cs">Case 1:</b> In the system ${W.sys}, suppose the ${W.nm} 
 <li>The minimum number of ${W.thing} (equivalently, the minimum number of nonzero ${W.line} of ${W.M}) required to make the MAS ${W.ok} is<div class="dm-eq"><span class="dm-eqs"><b>${W.si}</b></span><span class="dm-eqm">\\[=${MX}=\\]</span><span class="dm-ch dm-ci"><button type="button" data-io aria-pressed="false" title="Show the ${W.kind} in the drawing">${m}</button></span></div></li>
 <li>The minimum number of ${W.who} (equivalently, the minimum number of nonzero ${W.nz} of ${W.M}) required to make the MAS ${W.ok} is <b>${W.sym} = ${r.k}</b>. Furthermore, ${SETS}</li></ul>`;
 h+=`<p><b class="dm-cs">Case 2:</b> In the system ${W.sys}, suppose the ${W.nm} ${W.M} is restricted to have its ${W.line} chosen only from the ${W.basis}:</p><ul>
-<li>The minimum number of ${W.thing} (equivalently, the minimum number of ${W.line} of ${W.M}) required to make the MAS ${W.ok} is <b>${r.k}</b>, which equals the minimum number of ${W.who} (the minimum number of nonzero ${W.nz} of ${W.M}). Surprisingly, this value is<div class="dm-eq"><span class="dm-eqm">\\[\\geq\\ ${MX}\\]</span></div>Furthermore, ${SETS}</li></ul>`;
+<li>The minimum number of ${W.thing} (equivalently, the minimum number of nonzero ${W.line} of ${W.M}) required to make the MAS ${W.ok} is <b>${r.k}</b>, which equals the minimum number of ${W.who} (equivalently, the minimum number of nonzero ${W.nz} of ${W.M}). Surprisingly, this value is<div class="dm-eq"><span class="dm-eqm">\\[\\geq\\ ${MX}\\]</span></div>Furthermore, ${SETS}</li></ul>`;
 const U=[...sel].sort((a,b)=>a-b);
 if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>${W.ys} {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?W.ok+" ✓":W.no+" ✗"}</b></p>`}
 res.innerHTML=h;
