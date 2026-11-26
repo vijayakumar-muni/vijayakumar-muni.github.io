@@ -157,7 +157,7 @@ body.dopen #snd{display:none}
 .dm-res p{margin:.35rem 0}
 .dm-ch{display:flex;flex-wrap:wrap;gap:.4rem;margin:.3rem 0}
 .dm-warn,.dm-no{color:#d63030}.dm-ok{color:#1f9d55}
-.dm-svg .dm-n text{fill:#2a1c00;font:400 15px Inter,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none;paint-order:stroke;stroke:rgba(255,246,214,.75);stroke-width:2px}
+.dm-svg .dm-n text{fill:#2a1c00;font:400 12px Inter,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none;paint-order:stroke;stroke:rgba(255,246,214,.75);stroke-width:2px}
 .dm-svg .dm-l{font:400 10px Inter,sans-serif;text-anchor:middle;paint-order:stroke;stroke:var(--bg);stroke-width:2.5px}
 .dm-halo{animation:dmsh 1.8s ease-in-out infinite}@keyframes dmsh{50%{opacity:.55}}
 .dm-halo:nth-of-type(even){animation-delay:-.9s}
@@ -693,7 +693,7 @@ function combos(N,k){const out=[],c=[];(function rec(s){if(c.length===k){out.pus
 function solve(S){const N=S.length,A=intMat(S),P=[Array.from({length:N},(_,i)=>Array.from({length:N},(_,j)=>i===j?1n:0n))];
 for(let j=1;j<N;j++)P.push(mm(A,P[j-1]));
 for(let k=1;k<=N;k++){const all=combos(N,k),good=all.filter(s=>ctrl(P,N,s));if(good.length)return{N,k,good,total:all.length,P}}}
-const MAXN=8,W=640,H=300,BAND=54,R=18,esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const MAXN=8,W=640,H=300,BAND=54,R=14,esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const K4=[1,2,3,4].flatMap(a=>[1,2,3,4].filter(b=>b!==a).map(b=>[a,b,1]));
 const EX={"Directed path 1→2→3→4":{n:[[110,150],[250,150],[390,150],[530,150]],e:[[1,2,1],[2,3,1],[3,4,1]]},
 "Directed cycle (four nodes)":{n:[[250,60],[390,150],[250,240],[110,150]],e:[[1,2,1],[2,3,1],[3,4,1],[4,1,1]]},
