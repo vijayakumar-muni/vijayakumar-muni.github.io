@@ -200,6 +200,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .dm-eq mjx-container{margin:0!important}
 .dm-eqs{white-space:nowrap}
 .dm-ci.dm-all{vertical-align:baseline;position:relative;top:-1px}
+.dm-cs{display:inline-block;width:3.8em}
+.dm-res ul{margin-left:0;padding-left:4.08em}
+@media(min-width:700px){
+main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:none;-webkit-hyphens:none;overflow-wrap:break-word}
+}
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -759,10 +764,10 @@ const SETS=`${one?`the only minimum set of ${W.whoS}`:`all minimum sets of ${W.w
 const MX=`\\max_{\\lambda}\\left\\{\\text{geometric multiplicity}(\\lambda):\\lambda\\text{ running over all eigenvalues of }\\mathcal{A}\\right\\}`;
 let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0.</p>':"";
 h+=`<p class="dm-th-h">Dynamics of the MAS: $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$. No matter what, the ${W.noun} of this MAS is always achievable (for example, ${W.ach}). The questions are: what is the minimum number of ${W.thing} and what is the minimum number of ${W.who} required to achieve it?</p>`;
-h+=`<p><b>Case 1:</b> In the system ${W.sys}, suppose the ${W.nm} ${W.M} is allowed to design arbitrarily:</p><ul>
+h+=`<p><b class="dm-cs">Case 1:</b> In the system ${W.sys}, suppose the ${W.nm} ${W.M} is allowed to design arbitrarily:</p><ul>
 <li>The minimum number of ${W.thing} (equivalently, the minimum number of nonzero ${W.line} of ${W.M}) required to make the MAS ${W.ok} is<div class="dm-eq"><span class="dm-eqs"><b>${W.si}</b></span><span class="dm-eqm">\\[=${MX}=\\]</span><span class="dm-ch dm-ci"><button type="button" data-io aria-pressed="false" title="Show the ${W.kind} in the drawing">${m}</button></span></div></li>
 <li>The minimum number of ${W.who} (equivalently, the minimum number of nonzero ${W.nz} of ${W.M}) required to make the MAS ${W.ok} is <b>${W.sym} = ${r.k}</b>. Furthermore, ${SETS}</li></ul>`;
-h+=`<p><b>Case 2:</b> In the system ${W.sys}, suppose the ${W.nm} ${W.M} is restricted to have its ${W.line} chosen only from the ${W.basis}:</p><ul>
+h+=`<p><b class="dm-cs">Case 2:</b> In the system ${W.sys}, suppose the ${W.nm} ${W.M} is restricted to have its ${W.line} chosen only from the ${W.basis}:</p><ul>
 <li>The minimum number of ${W.thing} (equivalently, the minimum number of ${W.line} of ${W.M}) required to make the MAS ${W.ok} is <b>${r.k}</b>, which equals the minimum number of ${W.who} (the minimum number of nonzero ${W.nz} of ${W.M}). Surprisingly, this value is<div class="dm-eq"><span class="dm-eqm">\\[\\geq\\ ${MX}\\]</span></div>Furthermore, ${SETS}</li></ul>`;
 const U=[...sel].sort((a,b)=>a-b);
 if(U.length){const ok=ctrl(r.P,N,U);h+=`<p>${W.ys} {${U.map(x=>x+1).join(", ")}}: <b class="${ok?"dm-ok":"dm-no"}">${ok?W.ok+" ✓":W.no+" ✗"}</b></p>`}
