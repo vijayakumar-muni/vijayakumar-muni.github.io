@@ -268,6 +268,13 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .bc-ra mjx-container,.bc-ta mjx-container,.bc-tr mjx-container{margin:0!important}
 .bc-pl{fill:#1e88e5}
 .bc-sb circle{stroke:none}  
+.bc-init{display:flex;flex-wrap:wrap;gap:.35rem 1rem;align-items:center;font-size:.8rem;color:var(--mute);margin-bottom:.45rem}
+.bc-init[hidden]{display:none}
+.bc-init label{display:inline-flex;align-items:center;gap:.3rem;white-space:nowrap}
+.bc-init input{width:4.2em;background:var(--chip);color:var(--mute);border:1px solid var(--line);border-radius:6px;padding:.15rem .4rem;font-size:.8rem}
+.bc-init input.bad{border-color:#d63030;outline:1px solid #d63030}
+.bc-init mjx-container{margin:0!important}
+.bc-ih{flex-basis:100%}
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -1119,7 +1126,7 @@ root.innerHTML=`<div class="bc-p">
 <div class="bc-bar"><button type="button" data-m="node" class="on"><svg class="bc-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bcBI" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs><circle cx="12" cy="12" r="7" fill="url(#bcBI)" stroke="#8a6410" stroke-width=".8"/></svg> Agent</button><button type="button" data-m="edge">&rarr; Communication</button><button type="button" data-m="del">&#10005; Delete agent</button><label>weight <input class="bc-w" value="1" size="6" aria-label="Communication weight"></label><label><input type="checkbox" class="bc-b"> both ways</label><select class="bc-ex" aria-label="Examples"></select><button type="button" data-a="clr">Clear</button></div>
 <svg class="bc-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg>
 <div class="bc-hint"></div>
-</div><div class="bc-right"><div class="bc-bar"><span class="bc-lab">Each agent's state dimension $n$:</span><button type="button" data-n="1" class="on">1</button><button type="button" data-n="2">2</button><button type="button" data-n="3">3</button><button type="button" data-s="rnd">Random initial states</button></div><div class="bc-spw"><svg class="bc-sp" viewBox="0 0 480 140" role="img" aria-label="State space"></svg><div class="bc-ov"></div><span class="bc-ra">$\\mathbb{R}$</span></div><div class="bc-tlw"><svg class="bc-tl" viewBox="0 0 480 58" role="img" aria-label="Time axis"></svg><span class="bc-ta">$t$</span><span class="bc-tr"><span>$t$</span><span class="bc-tv"></span></span></div><div class="bc-bar"><button type="button" data-p="play">&#9654; Play</button><button type="button" data-p="rst">&#8634; Reset</button></div><div class="bc-h2"></div></div></div>
+</div><div class="bc-right"><div class="bc-bar"><span class="bc-lab">Each agent's state dimension $n$:</span><button type="button" data-n="1" class="on">1</button><button type="button" data-n="2">2</button><button type="button" data-n="3">3</button><button type="button" data-s="rnd">Random initial states</button><button type="button" data-s="own">Enter initial states</button></div><div class="bc-init" hidden></div><div class="bc-spw"><svg class="bc-sp" viewBox="0 0 480 140" role="img" aria-label="State space"></svg><div class="bc-ov"></div><span class="bc-ra">$\\mathbb{R}$</span></div><div class="bc-tlw"><svg class="bc-tl" viewBox="0 0 480 58" role="img" aria-label="Time axis"></svg><span class="bc-ta">$t$</span><span class="bc-tr"><span>$t$</span><span class="bc-tv"></span></span></div><div class="bc-bar"><button type="button" data-p="play">&#9654; Play</button><button type="button" data-p="rst">&#8634; Reset</button></div><div class="bc-h2"></div></div></div>
 <div class="bc-res" aria-live="polite"></div></div>`;
 const q=s=>root.querySelector(s),svg=q(".bc-svg"),hintEl=q(".bc-hint"),resEl=q(".bc-res"),wIn=q(".bc-w"),bIn=q(".bc-b"),exSel=q(".bc-ex");
 exSel.innerHTML="<option>Examples…</option>"+EX.map((a,k)=>`<option value="${k}">${a[0]}</option>`).join("");
@@ -1320,7 +1327,23 @@ for(let k=0;k*step<=T*1.0001;k++){const x=x0+k*step/T*w;h+=`<line class="bc-tk" 
 h+=`<circle class="bc-pl" cx="${tx}" cy="28" r="3.5"/>`;{const R_=q(".bc-tr");R_.style.left=(Math.min(440,Math.max(50,tx))/480*100)+"%";R_.style.top=(16/58*100)+"%";q(".bc-tv").textContent=" = "+tf(SIM.t)}
 TL.innerHTML=h;
 }
-function drawAll(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play"}
+const INIT=q(".bc-init"),OWN=q('[data-s="own"]');
+let initKey="";
+function syncInit(){
+if(INIT.hidden)return;
+const N=nodes.length,key=N+"-"+SIM.n;
+if(key!==initKey){initKey=key;
+INIT.innerHTML=N?nodes.map((nd,i)=>`<label><span>$\\boldsymbol{x}_{${i+1}}(0)=$</span> ${[0,1,2].slice(0,SIM.n).map(c=>`<input data-i="${i}" data-c="${c}" size="4" aria-label="Initial state of agent ${i+1}, component ${c+1}">`).join(" ")}</label>`).join("")+`<div class="bc-ih">Values between &minus;5 and 5; decimals or fractions such as 1/2</div>`:"Add agents first";
+window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([INIT])}
+INIT.querySelectorAll("input").forEach(inp=>{if(inp===document.activeElement)return;const v=st(nodes[+inp.dataset.i])[+inp.dataset.c];inp.value=String(+v.toFixed(3));inp.classList.remove("bad")})}
+INIT.addEventListener("input",e=>{const inp=e.target;if(inp.tagName!=="INPUT")return;const v=parseW(inp.value);
+if(v===null||Math.abs(v)>RNG){inp.classList.add("bad");return}
+inp.classList.remove("bad");st(nodes[+inp.dataset.i])[+inp.dataset.c]=v;SIM.play=false;SIM.t=0;drawAll()});
+OWN.onclick=()=>{INIT.hidden=!INIT.hidden;OWN.classList.toggle("on",!INIT.hidden);initKey="";syncInit()};
+root.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("[data-n]"))syncInit()});
+root.addEventListener("pointermove",()=>{if(SIM.hd>=0)syncInit()});
+function drawAll(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play";syncInit()}
+function drawAll_old(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play"}
 function simRefresh(){SIM.play=false;SIM.t=0;simTopo();drawAll()}
 function tick(ts){SIM.raf=0;if(!SIM.play)return;const d=SIM.last?(ts-SIM.last)/1000:0;SIM.last=ts;SIM.t+=d*SIM.T/DUR;if(SIM.t>=SIM.T){SIM.t=SIM.T;SIM.play=false}drawAll();if(SIM.play)SIM.raf=requestAnimationFrame(tick)}
 const vpt=(el,e)=>{const r=el.getBoundingClientRect(),v=el.viewBox.baseVal;return[(e.clientX-r.left)*v.width/r.width,(e.clientY-r.top)*v.height/r.height]};
