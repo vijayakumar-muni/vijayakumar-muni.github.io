@@ -235,6 +235,8 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 @media(max-width:820px){.bc-grid{grid-template-columns:minmax(0,1fr)}.bc-right{min-height:140px}}
 .bc-d{overflow-x:auto;overflow-y:hidden}
 .bc-bar label,.bc-bar select{color:var(--mute);font-size:.8rem}
+.bc-res{font-size:.82rem;color:var(--mute)}
+.bc-bar input:not([type=checkbox]),.bc-bar select{background:var(--chip);color:var(--mute);border:1px solid var(--line);border-radius:6px;padding:.15rem .4rem;font-size:.8rem}
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -1084,12 +1086,11 @@ root.innerHTML=`<div class="bc-p">
 <p class="bc-d">$N$: The total number of agents in the MAS; $\\boldsymbol{x}_i(t)\\in\\mathbb{R}^n$: The state of agent $i$ at time $t$; $\\boldsymbol{x}(t)\\triangleq\\left[\\boldsymbol{x}_1(t)^\\intercal\\quad\\boldsymbol{x}_2(t)^\\intercal\\quad\\ldots\\quad\\boldsymbol{x}_N(t)^\\intercal\\right]^\\intercal$: The state of the MAS at time $t$; Communication topology: Time-invariant and is $\\mathcal{A}$ (element in row $i$, column $j$ = weight of the communication from agent $j$ to $i$, denoted by $\\mathsf{w}_{ij}$)</p>
 <p class="bc-d">Dynamics of the MAS: $\\dot{\\boldsymbol{x}}(t)=-(\\mathcal{L}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$, where $\\mathcal{L}\\triangleq\\mathcal{D}-\\mathcal{A}$, $\\mathcal{D}\\triangleq\\mathrm{diag}\\!\\left(\\sum_{j\\in\\mathcal{N}_1}|\\mathsf{w}_{1j}|,\\quad\\sum_{j\\in\\mathcal{N}_2}|\\mathsf{w}_{2j}|,\\quad\\ldots,\\quad\\sum_{j\\in\\mathcal{N}_N}|\\mathsf{w}_{Nj}|\\right)$, and $\\mathcal{N}_i\\triangleq\\{j:\\,\\mathsf{w}_{ij}\\neq 0\\}$</p>
 <div class="bc-grid"><div>
-<div class="bc-bar"><button type="button" data-m="node" class="on"><svg class="bc-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bcBI" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs><circle cx="12" cy="12" r="7" fill="url(#bcBI)" stroke="#8a6410" stroke-width=".8"/></svg> Agent</button><button type="button" data-m="edge">&rarr; Communication</button><button type="button" data-m="del">&#10005; Delete node</button><label>weight <input class="bc-w" value="1" size="6" aria-label="Communication weight"></label><label><input type="checkbox" class="bc-b"> both ways</label><select class="bc-ex" aria-label="Examples"></select><button type="button" data-a="clr">Clear</button></div>
+<div class="bc-bar"><button type="button" data-m="node" class="on"><svg class="bc-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bcBI" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs><circle cx="12" cy="12" r="7" fill="url(#bcBI)" stroke="#8a6410" stroke-width=".8"/></svg> Agent</button><button type="button" data-m="edge">&rarr; Communication</button><button type="button" data-m="del">&#10005; Delete agent</button><label>weight <input class="bc-w" value="1" size="6" aria-label="Communication weight"></label><label><input type="checkbox" class="bc-b"> both ways</label><select class="bc-ex" aria-label="Examples"></select><button type="button" data-a="clr">Clear</button></div>
 <svg class="bc-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg>
 <div class="bc-hint"></div>
 </div><div class="bc-right">State space and time axis will appear here (next step).</div></div>
-<div class="bc-res" aria-live="polite"></div>
-<p class="bc-ref">Reference: C. Altafini, &ldquo;Consensus problems on networks with antagonistic interactions,&rdquo; <i>IEEE Trans. Automatic Control</i>, vol. 58, no. 4, pp. 935&ndash;946, Apr. 2013. <a href="https://doi.org/10.1109/TAC.2012.2224251" target="_blank" rel="noopener">https://doi.org/10.1109/TAC.2012.2224251</a></p></div>`;
+<div class="bc-res" aria-live="polite"></div></div>`;
 const q=s=>root.querySelector(s),svg=q(".bc-svg"),hintEl=q(".bc-hint"),resEl=q(".bc-res"),wIn=q(".bc-w"),bIn=q(".bc-b"),exSel=q(".bc-ex");
 exSel.innerHTML="<option>Examples…</option>"+EX.map((a,k)=>`<option value="${k}">${a[0]}</option>`).join("");
 const fmt=w=>String(+w.toFixed(3));
@@ -1138,7 +1139,7 @@ lab+=`<text class="bc-l" x="${mx+nx*(curved?9:10)}" y="${my+ny*(curved?9:10)}" f
 });
 h+=lab;
 const colored=an&&an.N>=2&&an.balanced;
-nodes.forEach((n,k)=>{const b=colored&&an.col[k]<0;
+nodes.forEach((n,k)=>{const b=false;
 h+=`<g class="bc-n${k==sel&&mode=="edge"?" src":""}${b?" cb":""}"><circle class="b" cx="${n.x}" cy="${n.y}" r="${R}" fill="url(#${b?"bcBB":"bcBA"})" stroke="${b?"#1d4f96":"#8a6410"}"/><text x="${n.x}" y="${n.y}">${k+1}</text></g>`});
 svg.innerHTML=h;
 hintEl.textContent=hint||HINT[mode];
