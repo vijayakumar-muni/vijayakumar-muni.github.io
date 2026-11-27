@@ -239,6 +239,19 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .bc-bar input:not([type=checkbox]),.bc-bar select{background:var(--chip);color:var(--mute);border:1px solid var(--line);border-radius:6px;padding:.15rem .4rem;font-size:.8rem}
 .bc-bar select option{color:var(--ink)}
 .bc-ph{font:400 14px Inter,sans-serif;text-anchor:middle;fill:var(--mute);pointer-events:none}
+.bc-right{display:block;border:0;padding:0;min-height:0;text-align:left;font-size:inherit;color:inherit}
+.bc-sp,.bc-tl{width:100%;height:auto;display:block;background:var(--bg);border:1px solid var(--line);border-radius:10px;touch-action:none;user-select:none;-webkit-user-select:none;margin-bottom:.4rem}
+.bc-lab{font-size:.8rem;color:var(--mute)}
+.bc-ax{stroke:var(--mute);stroke-width:1.2;fill:none}
+.bc-tk{stroke:var(--mute);stroke-width:1}
+.bc-tt{font:400 11px Inter,sans-serif;fill:var(--mute);text-anchor:middle;pointer-events:none}
+.bc-cn{stroke:var(--mute);stroke-width:.8;stroke-dasharray:2 3;opacity:.7}
+.bc-dot,.bc-pl{fill:var(--navy)}
+.bc-i0{fill:none;stroke:#a8780f;stroke-width:1.2}
+.bc-sb circle{stroke:#8a6410;stroke-width:1}
+.bc-sb.dg circle{cursor:grab}
+.bc-sb text{fill:#2a1c00;font:400 12px Inter,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none;paint-order:stroke;stroke:rgba(255,246,214,.75);stroke-width:2px}
+.bc-h2{font-size:.82rem;color:var(--mute);margin-top:.35rem}
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -1072,14 +1085,13 @@ try{(()=>{
 const root=document.getElementById("bcdemo");if(!root)return;
 const W=480,H=300,R=18,MAXN=10;
 let nodes=[],edges=[],mode="node",sel=-1,hint="",pend=null,an=null;
-/* edge convention: [j,i,w] = communication from agent j to agent i, weight w (A[i][j]=w) */
 const EX=[
 ["Two antagonistic camps (structurally balanced)",[[90,70],[270,70],[270,230],[90,230]],[[1,2,1],[2,1,1],[3,4,1],[4,3,1],[2,3,-1],[3,2,-1],[4,1,-1],[1,4,-1]]],
 ["Triangle with one antagonistic link (structurally unbalanced)",[[180,60],[80,220],[280,220]],[[1,2,1],[2,1,1],[2,3,1],[3,2,1],[3,1,-1],[1,3,-1]]],
 ["All cooperative (ordinary consensus)",[[90,70],[270,70],[270,230],[90,230]],[[1,2,1],[2,1,1],[2,3,1],[3,2,1],[3,4,1],[4,3,1],[4,1,1],[1,4,1],[1,3,1],[3,1,1],[2,4,1],[4,2,1]]],
 ["Directed, different weights (structurally balanced)",[[90,70],[270,70],[270,230],[90,230]],[[1,2,2],[2,1,0.5],[2,3,-1.5],[3,2,-1],[3,4,1],[4,1,-0.5]]],
 ["Directed, different weights (structurally unbalanced)",[[90,70],[270,70],[270,230],[90,230]],[[1,2,2],[2,1,0.5],[2,3,-1.5],[3,2,-1],[3,4,1],[4,1,0.5]]],
-["Leader&ndash;follower chain (not strongly connected)",[[60,150],[180,150],[300,150]],[[1,2,1],[2,3,-1]]],
+["Leader&ndash;follower path (not strongly connected)",[[60,150],[180,150],[300,150]],[[1,2,1],[2,3,-1]]],
 ["Opposite signs on a two-way communication (not covered)",[[180,60],[80,220],[280,220]],[[1,2,1],[2,1,-1],[2,3,1],[3,2,1],[3,1,1],[1,3,1]]]
 ];
 const HINT={node:"Click empty space to add an agent (up to 10). Drag an agent to move it",edge:"Click the source agent, then the target agent. The communication gets the weight typed above; weight 0 removes it",del:"Click an agent to delete it"};
@@ -1091,7 +1103,7 @@ root.innerHTML=`<div class="bc-p">
 <div class="bc-bar"><button type="button" data-m="node" class="on"><svg class="bc-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bcBI" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs><circle cx="12" cy="12" r="7" fill="url(#bcBI)" stroke="#8a6410" stroke-width=".8"/></svg> Agent</button><button type="button" data-m="edge">&rarr; Communication</button><button type="button" data-m="del">&#10005; Delete agent</button><label>weight <input class="bc-w" value="1" size="6" aria-label="Communication weight"></label><label><input type="checkbox" class="bc-b"> both ways</label><select class="bc-ex" aria-label="Examples"></select><button type="button" data-a="clr">Clear</button></div>
 <svg class="bc-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg>
 <div class="bc-hint"></div>
-</div><div class="bc-right">State space and time axis will appear here (next step).</div></div>
+</div><div class="bc-right"><div class="bc-bar"><span class="bc-lab">State dimension <i>n</i>:</span><button type="button" data-n="1" class="on">1</button><button type="button" data-n="2">2</button><button type="button" data-n="3">3</button><button type="button" data-s="rnd">Random initial states</button></div><svg class="bc-sp" viewBox="0 0 480 140" role="img" aria-label="State space"></svg><svg class="bc-tl" viewBox="0 0 480 58" role="img" aria-label="Time axis"></svg><div class="bc-bar"><button type="button" data-p="play">&#9654; Play</button><button type="button" data-p="rst">&#8634; Reset</button></div><div class="bc-h2"></div></div></div>
 <div class="bc-res" aria-live="polite"></div></div>`;
 const q=s=>root.querySelector(s),svg=q(".bc-svg"),hintEl=q(".bc-hint"),resEl=q(".bc-res"),wIn=q(".bc-w"),bIn=q(".bc-b"),exSel=q(".bc-ex");
 exSel.innerHTML="<option>Examples…</option>"+EX.map((a,k)=>`<option value="${k}">${a[0]}</option>`).join("");
@@ -1146,7 +1158,7 @@ h+=`<g class="bc-n${k==sel&&mode=="edge"?" src":""}${b?" cb":""}"><circle class=
 if(!nodes.length)h+=`<text class="bc-ph" x="${W/2}" y="${H/2}">Click here to construct a MAS</text>`;svg.innerHTML=h;
 hintEl.textContent=hint||HINT[mode];
 }
-function update(){an=analyse();draw();verdict()}
+function update(){an=analyse();draw();verdict();if(window.__bcSim)window.__bcSim()}
 const pt=e=>{const r=svg.getBoundingClientRect();return[(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]};
 const hit=(x,y)=>{for(let k=nodes.length-1;k>=0;k--)if(Math.hypot(nodes[k].x-x,nodes[k].y-y)<=R+3)return k;return -1};
 const setEdge=(j,i,w)=>{edges=edges.filter(e=>!(e[0]==j&&e[1]==i));if(w!==0)edges.push([j,i,w])};
@@ -1181,7 +1193,70 @@ root.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{mode=b.dataset.m;sel
 root.querySelector('[data-a="clr"]').onclick=()=>{nodes=[];edges=[];sel=-1;hint="";update()};
 exSel.onchange=()=>{if(exSel.value===""||isNaN(+exSel.value))return;ex(EX[+exSel.value]);exSel.selectedIndex=0;update()};
 update();
-window.__bc={analyse:()=>analyse(),get nodes(){return nodes},get edges(){return edges}};
+/* ===== Step 2: exact simulation (matrix exponential), real-line view, time axis ===== */
+const SIM={n:1,t:0,T:2,M:null,play:false,last:0,raf:0,hd:-1,td:false,lay:[]};
+const RNG=5,DUR=10,PX=v=>240+v*36,SP=q(".bc-sp"),TL=q(".bc-tl"),H2=q(".bc-h2"),PB=q('[data-p="play"]');
+const rnd=()=>Math.round((Math.random()*2*RNG-RNG)*10)/10;
+const st=nd=>nd.s||(nd.s=[rnd(),rnd(),rnd()]);
+function matmul(A,B){const N=A.length,C=Array.from({length:N},()=>new Array(N).fill(0));for(let i=0;i<N;i++)for(let k=0;k<N;k++){const a=A[i][k];if(a!==0)for(let j=0;j<N;j++)C[i][j]+=a*B[k][j]}return C}
+function expm(M,t){
+const N=M.length;let nr=0;for(let i=0;i<N;i++){let s=0;for(let j=0;j<N;j++)s+=Math.abs(M[i][j]);nr=Math.max(nr,s)}nr*=t;
+const sq=nr>0.5?Math.ceil(Math.log2(nr/0.5)):0,f=t/Math.pow(2,sq),B=M.map(r=>r.map(v=>v*f));
+let E=Array.from({length:N},(_,i)=>Array.from({length:N},(_,j)=>i==j?1:0)),T=E.map(r=>r.slice());
+for(let k=1;k<=18;k++){T=matmul(T,B).map(r=>r.map(v=>v/k));E=E.map((r,i)=>r.map((v,j)=>v+T[i][j]))}
+for(let k=0;k<sq;k++)E=matmul(E,E);return E}
+function negL(){const N=nodes.length,M=Array.from({length:N},()=>new Array(N).fill(0));edges.forEach(([j,i,w])=>{M[i][j]+=w;M[i][i]-=Math.abs(w)});return M}
+const dn=(A,B)=>{let m=0;for(let i=0;i<A.length;i++){let s=0;for(let j=0;j<A.length;j++)s+=Math.abs(A[i][j]-B[i][j]);m=Math.max(m,s)}return m};
+function horizon(M,dm){let T=0.25/dm;for(let k=0;k<70;k++){if(dn(expm(M,T),expm(M,8*T))<1e-3)return T*1.2;T*=1.25;if(T>5000)return 5000}return T}
+function simTopo(){const N=nodes.length;SIM.M=N?negL():null;if(!N){SIM.T=2;return}
+let dm=0;for(let i=0;i<N;i++)dm=Math.max(dm,-SIM.M[i][i]);SIM.T=dm>0?horizon(SIM.M,dm):2}
+function pos(t){const N=nodes.length,P=expm(SIM.M,t),X0=nodes.map(nd=>st(nd));return X0.map((_,i)=>{const r=[0,0,0];for(let j=0;j<N;j++){const e=P[i][j];r[0]+=e*X0[j][0];r[1]+=e*X0[j][1];r[2]+=e*X0[j][2]}return r})}
+const tf=v=>SIM.T<10?v.toFixed(2):SIM.T<100?v.toFixed(1):v.toFixed(0);
+function drawSP(){
+const N=nodes.length;SIM.lay=[];
+if(SIM.n!==1){SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">The view for n = ${SIM.n} comes in the next step</text>`;H2.textContent="The time axis below already runs the simulation for any n.";return}
+if(!N){SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">Add agents on the left</text>`;H2.textContent="";return}
+const y0=34+N*22;SP.setAttribute("viewBox",`0 0 480 ${y0+32}`);
+const X=pos(SIM.t).map(r=>PX(r[0])),lane=[];
+for(let i=0;i<N;i++){let l=0;for(;;l++){let ok=true;for(let j=0;j<i;j++)if(lane[j]==l&&Math.abs(X[i]-X[j])<21){ok=false;break}if(ok)break}lane[i]=l}
+let h=`<defs><radialGradient id="bcBS" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs>`;
+h+=`<line class="bc-ax" x1="24" y1="${y0}" x2="456" y2="${y0}"/><path class="bc-ax" d="M30 ${y0-4}L24 ${y0}L30 ${y0+4}M450 ${y0-4}L456 ${y0}L450 ${y0+4}"/>`;
+for(let v=-6;v<=6;v++){h+=`<line class="bc-tk" x1="${PX(v)}" y1="${y0-4}" x2="${PX(v)}" y2="${y0+4}"/>`;if(v%2==0)h+=`<text class="bc-tt" x="${PX(v)}" y="${y0+18}">${v}</text>`}
+h+=`<text class="bc-tt" x="470" y="${y0+4}" style="font-style:italic">x</text>`;
+if(SIM.t>0)nodes.forEach(nd=>{h+=`<circle class="bc-i0" cx="${PX(st(nd)[0])}" cy="${y0}" r="4"/>`});
+const Y=lane.map(l=>y0-22-l*22);
+for(let i=0;i<N;i++)h+=`<line class="bc-cn" x1="${X[i]}" y1="${y0}" x2="${X[i]}" y2="${Y[i]}"/><circle class="bc-dot" cx="${X[i]}" cy="${y0}" r="2.5"/>`;
+const can=SIM.t==0&&!SIM.play;
+for(let i=0;i<N;i++){SIM.lay[i]={x:X[i],y:Y[i]};h+=`<g class="bc-sb${can?" dg":""}"><circle cx="${X[i]}" cy="${Y[i]}" r="10" fill="url(#bcBS)"/><text x="${X[i]}" y="${Y[i]}">${i+1}</text></g>`}
+SP.innerHTML=h;
+H2.textContent=can?"Drag an agent along the line to set its initial state, then press Play.":"Press Reset (or drag the time marker back to 0) to edit the initial states.";
+}
+function drawTL(){
+const T=SIM.T,x0=24,w=408,tx=x0+SIM.t/T*w;
+let step=Math.pow(10,Math.floor(Math.log10(T/8)));for(const m of [1,2,5,10])if(step*m>=T/8){step*=m;break}
+let h=`<line class="bc-ax" x1="${x0}" y1="28" x2="456" y2="28"/><path class="bc-ax" d="M450 24L456 28L450 32"/>`;
+for(let k=0;k*step<=T*1.0001;k++){const x=x0+k*step/T*w;h+=`<line class="bc-tk" x1="${x}" y1="24" x2="${x}" y2="32"/><text class="bc-tt" x="${x}" y="46">${+(k*step).toPrecision(6)}</text>`}
+h+=`<text class="bc-tt" x="470" y="32" style="font-style:italic">t</text>`;
+h+=`<circle class="bc-pl" cx="${tx}" cy="28" r="6"/><text class="bc-tt" x="${Math.min(440,Math.max(50,tx))}" y="14" style="fill:var(--ink)">t = ${tf(SIM.t)}</text>`;
+TL.innerHTML=h;
+}
+function drawAll(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play"}
+function simRefresh(){SIM.play=false;SIM.t=0;simTopo();drawAll()}
+function tick(ts){SIM.raf=0;if(!SIM.play)return;const d=SIM.last?(ts-SIM.last)/1000:0;SIM.last=ts;SIM.t+=d*SIM.T/DUR;if(SIM.t>=SIM.T){SIM.t=SIM.T;SIM.play=false}drawAll();if(SIM.play)SIM.raf=requestAnimationFrame(tick)}
+const vpt=(el,e)=>{const r=el.getBoundingClientRect(),v=el.viewBox.baseVal;return[(e.clientX-r.left)*v.width/r.width,(e.clientY-r.top)*v.height/r.height]};
+SP.addEventListener("pointerdown",e=>{if(SIM.n!==1||SIM.t>0||SIM.play)return;const[x,y]=vpt(SP,e);for(let i=SIM.lay.length-1;i>=0;i--)if(Math.hypot(SIM.lay[i].x-x,SIM.lay[i].y-y)<=12){SIM.hd=i;try{SP.setPointerCapture(e.pointerId)}catch(_){}break}});
+SP.addEventListener("pointermove",e=>{if(SIM.hd<0)return;const x=vpt(SP,e)[0];st(nodes[SIM.hd])[0]=Math.max(-RNG,Math.min(RNG,Math.round((x-240)/36*10)/10));drawSP()});
+SP.addEventListener("pointerup",()=>{SIM.hd=-1});SP.addEventListener("pointercancel",()=>{SIM.hd=-1});
+const setT=e=>{SIM.t=Math.max(0,Math.min(1,(vpt(TL,e)[0]-24)/408))*SIM.T;drawAll()};
+TL.addEventListener("pointerdown",e=>{if(!nodes.length)return;SIM.td=true;SIM.play=false;try{TL.setPointerCapture(e.pointerId)}catch(_){}setT(e)});
+TL.addEventListener("pointermove",e=>{if(SIM.td)setT(e)});
+TL.addEventListener("pointerup",()=>{SIM.td=false});TL.addEventListener("pointercancel",()=>{SIM.td=false});
+root.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{SIM.n=+b.dataset.n;root.querySelectorAll("[data-n]").forEach(c=>c.classList.toggle("on",c===b));drawSP()});
+q('[data-s="rnd"]').onclick=()=>{nodes.forEach(nd=>{nd.s=[rnd(),rnd(),rnd()]});SIM.play=false;SIM.t=0;drawAll()};
+PB.onclick=()=>{if(!nodes.length)return;if(SIM.play)SIM.play=false;else{if(SIM.t>=SIM.T)SIM.t=0;SIM.play=true;SIM.last=0;if(!SIM.raf)SIM.raf=requestAnimationFrame(tick)}drawAll()};
+q('[data-p="rst"]').onclick=()=>{SIM.play=false;SIM.t=0;drawAll()};
+window.__bcSim=simRefresh;simRefresh();
+window.__bc={analyse:()=>analyse(),get nodes(){return nodes},get edges(){return edges},sim:SIM,pos:pos};
 })()}catch(e){console.error("[bcdemo]",e)}
 </script>
 <script data-goatcounter="https://vijayakumar-muni.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
