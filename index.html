@@ -1169,7 +1169,7 @@ const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</s
 let h=ck(a.strong,"Strongly connected")+ck(a.symm,"$\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$ for each existing communications $(j,\\,i)$ and $(i,\\,j)$"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")))
 +ck(a.balanced,"Structurally balanced"+(a.balanced?" &mdash; camp A = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"}, camp B = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""));
 let v;
-if(a.strong&&a.symm&&a.balanced)v="<b>Conclusion:</b> MAS achieves a bipartite asymptotic consensus, $\\lim_{t\\to+\\infty}\\boldsymbol{x}_i(t)=\\sigma_i\\boldsymbol{\\alpha}$ for every agent $i$, where $\\sigma_i=1$ if agent $i$ is in camp A, $\\sigma_i=-1$ if agent $i$ is in camp B, $\\boldsymbol{\\alpha}\\triangleq\\sum_{j=1}^{N}w_j\\sigma_j\\boldsymbol{x}_j(0),$ and $\\boldsymbol{w}=\\left[w_1\\quad w_2\\quad\\ldots\\quad w_N\\right]^\\intercal$ is the positive vector with $\\boldsymbol{w}^\\intercal(\\mathcal{D}-|\\mathcal{A}|)=\\mathbf{O}$ and $\\sum_{j=1}^Nw_j=1$ (all $w_j=1/N$ when $|\\mathsf{w}_{ij}|=|\\mathsf{w}_{ji}|$). <span class='bc-al'></span>";
+if(a.strong&&a.symm&&a.balanced)v="<b>Conclusion:</b> MAS achieves a (bipartite) asymptotic consensus, $\\lim_{t\\to+\\infty}\\boldsymbol{x}_i(t)=\\sigma_i\\boldsymbol{\\alpha}$ for every agent $i$, where $\\sigma_i=1$ if agent $i$ is in camp A, $\\sigma_i=-1$ if agent $i$ is in camp B, $\\boldsymbol{\\alpha}\\triangleq\\sum_{j=1}^{N}w_j\\sigma_j\\boldsymbol{x}_j(0),$ and $\\boldsymbol{w}=\\left[w_1\\quad w_2\\quad\\ldots\\quad w_N\\right]^\\intercal$ is the positive vector with $\\boldsymbol{w}^\\intercal(\\mathcal{D}-|\\mathcal{A}|)=\\mathbf{O}$ and $\\sum_{j=1}^Nw_j=1$ (all $w_j=1/N$ when $|\\mathsf{w}_{ij}|=|\\mathsf{w}_{ji}|$). <span class='bc-al'></span>";
 else if(a.strong&&a.symm)v="<b>Conclusion:</b> MAS achieves $\\lim_{t\\to+\\infty}\\boldsymbol{x}_i(t)=\\boldsymbol{0}$ for every agent $i$, whatever the initial states $\\boldsymbol{x}_i(0)$ are!";
 else v="<b>Inconclusive. Further investigation is needed.</b>";
 resEl.innerHTML=h+(v?'<div class="bc-v">'+v+"</div>":"");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([resEl]);
@@ -1432,37 +1432,54 @@ if(SIM.lblN!==N){SIM.lblN=N;OV.innerHTML=nodes.map((_,i)=>`<span class="bc-xm">$
 [...OV.children].forEach((s,i)=>{s.style.left=(LX[i]/480*100)+"%";s.style.top=(LY[i]/HV*100)+"%"});
 H2.dataset.k="";H2.textContent=can?(SIM.n===1?"Drag a yellow point along the line to set the initial state of that agent, then press Play.":"Drag a yellow point in the plane to set the initial state of that agent, then press Play."):"Press Reset (or drag the time marker back to 0) to edit the initial states.";
 }
-const V3={a:-0.62,e:0.38,on:false,px:0,py:0};
+const V3={a:-0.7,e:0.42,on:false,px:0,py:0};
 let OV3=null;
 function draw3D(){
 const N=nodes.length,OV=q(".bc-ov");
 if(!OV3){OV3=document.createElement("div");OV3.className="bc-ov";OV.parentNode.appendChild(OV3)}
 const VR=vr(),P=pos(SIM.t),tr=trajGet(),kk=Math.min(TS,Math.floor(SIM.t/(SIM.T/TS))),can=SIM.t==0&&!SIM.play,tk=tickList(VR);
-const cx=240,cy=200,HV=400,s=112/VR,ca=Math.cos(V3.a),sa=Math.sin(V3.a),ce=Math.cos(V3.e),se=Math.sin(V3.e);
-const pj=p=>{const x1=p[0]*ca-p[1]*sa,y1=p[0]*sa+p[1]*ca;return[cx+s*x1,cy-s*(p[2]*ce+y1*se),y1*ce-p[2]*se]};
+const cx=240,cy=200,HV=400,s=100/VR,DC=6*VR,R=VR,ca=Math.cos(V3.a),sa=Math.sin(V3.a),ce=Math.cos(V3.e),se=Math.sin(V3.e);
+const pj=p=>{const x1=p[0]*ca-p[1]*sa,y1=p[0]*sa+p[1]*ca,d=y1*ce-p[2]*se,k=DC/(DC+d);return[cx+s*x1*k,cy-s*(p[2]*ce+y1*se)*k,d,k]};
+const pt=p=>{const a=pj(p);return f1(a[0])+","+f1(a[1])};
+const ln=(p,q3,st)=>{const a=pj(p),b=pj(q3);return`<line x1="${f1(a[0])}" y1="${f1(a[1])}" x2="${f1(b[0])}" y2="${f1(b[1])}" style="${st}"/>`};
 SP.setAttribute("viewBox","0 0 480 "+HV);SP.style.cursor="grab";
-let h="";const R=VR,cs=[[-R,-R,-R],[R,-R,-R],[R,R,-R],[-R,R,-R],[-R,-R,R],[R,-R,R],[R,R,R],[-R,R,R]].map(pj);
-[[[-R,-R,0],[R,-R,0],[R,R,0],[-R,R,0]],[[0,-R,-R],[0,R,-R],[0,R,R],[0,-R,R]],[[-R,0,-R],[R,0,-R],[R,0,R],[-R,0,R]]].forEach(q4=>{h+=`<polygon points="${q4.map(p=>pj(p).slice(0,2).map(f1).join(",")).join(" ")}" style="fill:var(--mute);fill-opacity:.07;stroke:var(--mute);stroke-opacity:.35;stroke-width:.8"/>`});
-[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]].forEach(([a,b])=>{const A=cs[a],B=cs[b],bk=(A[2]+B[2])/2>0;h+=`<line x1="${f1(A[0])}" y1="${f1(A[1])}" x2="${f1(B[0])}" y2="${f1(B[1])}" style="stroke:var(--mute);stroke-width:.8;stroke-opacity:${bk?.35:.6};stroke-dasharray:${bk?"3 3":"none"}"/>`});
-const AX=[[1,0,0],[0,1,0],[0,0,1]],lab=[];
-AX.forEach((u,k)=>{const a=pj(u.map(c=>-c*VR)),b=pj(u.map(c=>c*VR)),dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L;
-h+=`<line class="bc-ax" x1="${f1(a[0])}" y1="${f1(a[1])}" x2="${f1(b[0])}" y2="${f1(b[1])}"/><path class="bc-ax" d="M${f1(b[0]-8*ux-4*uy)} ${f1(b[1]-8*uy+4*ux)}L${f1(b[0])} ${f1(b[1])}L${f1(b[0]-8*ux+4*uy)} ${f1(b[1]-8*uy-4*ux)}"/>`;
-tk.forEach(t=>{const q3=pj(u.map(c=>c*t.v));h+=`<line class="bc-tk" x1="${f1(q3[0]-4*uy)}" y1="${f1(q3[1]+4*ux)}" x2="${f1(q3[0]+4*uy)}" y2="${f1(q3[1]-4*ux)}"/>`;if(t.major&&t.v!==0)h+=`<text class="bc-tt" x="${f1(q3[0]-9*uy)}" y="${f1(q3[1]+9*ux+3.5)}">${nf(t.v)}</text>`});
-lab.push([b[0]+12*ux,b[1]+12*uy])});
-if(SIM.t>0)for(let i=0;i<N;i++){let d="";for(let k=0;k<=kk;k++){const q3=pj(tr[k][i]);d+=(k?"L":"M")+f1(q3[0])+" "+f1(q3[1])}const e3=pj(P[i]);d+="L"+f1(e3[0])+" "+f1(e3[1]);h+=`<path class="bc-trl" d="${d}"/>`}
-const Q=P.map(pj),ord=Q.map((_,i)=>i).sort((i,j)=>Q[j][2]-Q[i][2]),LX=[],LY=[];
-ord.forEach(i=>{const g0=pj([P[i][0],P[i][1],0]);h+=`<line x1="${f1(Q[i][0])}" y1="${f1(Q[i][1])}" x2="${f1(g0[0])}" y2="${f1(g0[1])}" style="stroke:var(--mute);stroke-width:.8;stroke-dasharray:2 2;stroke-opacity:.6"/><circle cx="${f1(g0[0])}" cy="${f1(g0[1])}" r="1.6" style="fill:var(--mute);fill-opacity:.7"/>`;h+=`<g class="bc-sb"><circle cx="${f1(Q[i][0])}" cy="${f1(Q[i][1])}" r="3" fill="#ffd400"/></g>`});
-for(let i=0;i<N;i++){let l=0;for(;;l++){let ok=true;const yy=Q[i][1]-7-l*17;for(let j=0;j<i;j++)if(Math.abs(Q[i][0]-LX[j])<46&&Math.abs(yy-LY[j])<16){ok=false;break}if(ok){LX[i]=Q[i][0];LY[i]=yy;break}}}
+let h=`<defs><radialGradient id="bc3S" cx=".5" cy=".5" r=".5" fx=".34" fy=".3"><stop offset="0" stop-color="#fffbe0"/><stop offset=".5" stop-color="#ffcf1f"/><stop offset="1" stop-color="#e09500"/></radialGradient></defs>`;
+const dpt=(a,w)=>{const p=[0,0,0];p[a]=w;return pj(p)[2]},sg=a=>dpt(a,R)>dpt(a,-R)?R:-R;
+const gl=tk.filter(t=>t.major&&Math.abs(t.v)<VR*0.999);
+const wall=(w,a,b,c)=>{const mk=(u,v)=>{const p=[0,0,0];p[a]=w;p[b]=u;p[c]=v;return p};
+let o=`<polygon points="${[[-R,-R],[R,-R],[R,R],[-R,R]].map(([u,v])=>pt(mk(u,v))).join(" ")}" style="fill:var(--mute);fill-opacity:.04;stroke:var(--mute);stroke-opacity:.3;stroke-width:.7"/>`;
+gl.forEach(t=>{o+=ln(mk(t.v,-R),mk(t.v,R),"stroke:var(--mute);stroke-width:.6;stroke-opacity:.2")+ln(mk(-R,t.v),mk(R,t.v),"stroke:var(--mute);stroke-width:.6;stroke-opacity:.2")});return o};
+h+=wall(sg(0),0,1,2)+wall(sg(1),1,0,2)+wall(sg(2),2,0,1);
+const items=[],SC=["255,110,130","60,190,130","90,150,255"],AC=["#e0525e","#2fa66d","#3b82e0"],bi=[[1,2],[0,2],[0,1]];
+for(let a=0;a<3;a++){const[b,c]=bi[a];[[1,1],[1,-1],[-1,1],[-1,-1]].forEach(([sb,sc])=>{const mk=(u,v)=>{const p=[0,0,0];p[b]=u*sb*R;p[c]=v*sc*R;return p},cr=[mk(0,0),mk(1,0),mk(1,1),mk(0,1)],d=cr.reduce((z,p)=>z+pj(p)[2],0)/4;
+items.push({d:d,s:`<polygon points="${cr.map(pt).join(" ")}" style="fill:rgb(${SC[a]});fill-opacity:.13;stroke:rgb(${SC[a]});stroke-opacity:.4;stroke-width:.6"/>`})})}
+const lab=[];
+for(let k=0;k<3;k++){const u=[0,0,0];u[k]=1;const A=pj(u.map(x=>-x*R)),B=pj(u.map(x=>x*R)),dx=B[0]-A[0],dy=B[1]-A[1],L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L;
+[1,-1].forEach(sn=>{const E=u.map(x=>x*R*sn),Ep=pj(E);let o="";
+if(sn>0)o+=`<line x1="${f1(cx)}" y1="${f1(cy)}" x2="${f1(Ep[0])}" y2="${f1(Ep[1])}" style="stroke:${AC[k]};stroke-width:1.8"/>`;else o+=`<line x1="${f1(pj([0,0,0])[0])}" y1="${f1(pj([0,0,0])[1])}" x2="${f1(Ep[0])}" y2="${f1(Ep[1])}" style="stroke:${AC[k]};stroke-width:1.3;stroke-dasharray:4 3;stroke-opacity:.8"/>`;
+if(sn>0){const ax=sn*ux,ay=sn*uy;o+=`<path d="M${f1(Ep[0]-9*ax-4*ay)} ${f1(Ep[1]-9*ay+4*ax)}L${f1(Ep[0])} ${f1(Ep[1])}L${f1(Ep[0]-9*ax+4*ay)} ${f1(Ep[1]-9*ay-4*ax)}" style="fill:none;stroke:${AC[k]};stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"/>`}
+tk.filter(t=>t.v*sn>0&&Math.abs(t.v)<VR*0.999).forEach(t=>{const q3=pj(u.map(x=>x*t.v));o+=`<line x1="${f1(q3[0]-3.5*uy)}" y1="${f1(q3[1]+3.5*ux)}" x2="${f1(q3[0]+3.5*uy)}" y2="${f1(q3[1]-3.5*ux)}" style="stroke:${AC[k]};stroke-width:1"/>`;if(t.major)o+=`<text class="bc-tt" x="${f1(q3[0]-10*uy)}" y="${f1(q3[1]+10*ux+3.5)}">${nf(t.v)}</text>`});
+items.push({d:(Ep[2]+pj([0,0,0])[2])/2-0.05*R,s:o})});
+lab.push([B[0]+15*ux,B[1]+15*uy])}
+items.push({d:pj([0,0,0])[2]-0.06*R,s:`<circle cx="${f1(pj([0,0,0])[0])}" cy="${f1(pj([0,0,0])[1])}" r="2.2" style="fill:var(--mute)"/>`});
+const Q=P.map(pj);
+if(SIM.t>0)for(let i=0;i<N;i++){let d="";for(let k=0;k<=kk;k++){const q3=pj(tr[k][i]);d+=(k?"L":"M")+f1(q3[0])+" "+f1(q3[1])}d+="L"+f1(Q[i][0])+" "+f1(Q[i][1]);items.push({d:Q[i][2]+0.02*R,s:`<path d="${d}" style="fill:none;stroke:#e6a100;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round"/>`})}
+for(let i=0;i<N;i++){const g0=pj([P[i][0],P[i][1],0]);
+items.push({d:Q[i][2],s:`<line x1="${f1(Q[i][0])}" y1="${f1(Q[i][1])}" x2="${f1(g0[0])}" y2="${f1(g0[1])}" style="stroke:var(--mute);stroke-width:.8;stroke-dasharray:2 2;stroke-opacity:.65"/><circle cx="${f1(g0[0])}" cy="${f1(g0[1])}" r="1.8" style="fill:var(--mute);fill-opacity:.7"/><g class="bc-sb"><circle cx="${f1(Q[i][0])}" cy="${f1(Q[i][1])}" r="${f1(5.6*Q[i][3])}" fill="url(#bc3S)"/></g>`})}
+items.sort((x,y)=>y.d-x.d);items.forEach(it=>{h+=it.s});
+const LX=[],LY=[];
+for(let i=0;i<N;i++){let l=0;for(;;l++){let ok=true;const yy=Q[i][1]-9-l*17;for(let j=0;j<i;j++)if(Math.abs(Q[i][0]-LX[j])<46&&Math.abs(yy-LY[j])<16){ok=false;break}if(ok){LX[i]=Q[i][0];LY[i]=yy;break}}}
 SIM.lay=[];SP.innerHTML=h;
 if(SIM.lblN!==N){SIM.lblN=N;OV.innerHTML=nodes.map((_,i)=>`<span class="bc-xm">$\\boldsymbol{x}_{${i+1}}(t)$</span>`).join("");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([OV])}
 [...OV.children].forEach((sp,i)=>{sp.style.left=(LX[i]/480*100)+"%";sp.style.top=(LY[i]/HV*100)+"%"});
-if(!OV3.children.length){OV3.innerHTML=[1,2,3].map(k=>`<span class="bc-rh" style="display:block">$x_{i,${k}}$</span>`).join("");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([OV3])}
+if(!OV3.children.length){OV3.innerHTML=[1,2,3].map(k=>`<span class="bc-rh" style="display:block;font-size:.85rem;color:${AC[k-1]}">$x_{i,${k}}$</span>`).join("");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([OV3])}
 [...OV3.children].forEach((sp,k)=>{sp.style.left=(lab[k][0]/480*100)+"%";sp.style.top=(lab[k][1]/HV*100)+"%"});
-H2.dataset.k="";H2.textContent=can?"Drag the picture to rotate the view. Set the initial states with “Enter initial states” or “Random initial states”, then press Play.":"Drag the picture to rotate the view. Press Reset (or drag the time marker back to 0) to edit the initial states."}
+H2.dataset.k="";H2.textContent=can?"Drag the picture to rotate the view (double-click resets it). Set the initial states with “Enter initial states” or “Random initial states”, then press Play.":"Drag the picture to rotate the view (double-click resets it). Press Reset (or drag the time marker back to 0) to edit the initial states."}
 SP.addEventListener("pointerdown",e=>{if(SIM.n!==3||!nodes.length)return;V3.on=true;V3.px=e.clientX;V3.py=e.clientY;SP.style.cursor="grabbing";try{SP.setPointerCapture(e.pointerId)}catch(_){}});
 SP.addEventListener("pointermove",e=>{if(!V3.on)return;V3.a+=(e.clientX-V3.px)*0.01;V3.e=Math.max(-1.45,Math.min(1.45,V3.e+(e.clientY-V3.py)*0.01));V3.px=e.clientX;V3.py=e.clientY;draw3D()});
 const v3end=()=>{V3.on=false;if(SIM.n===3)SP.style.cursor="grab"};
 SP.addEventListener("pointerup",v3end);SP.addEventListener("pointercancel",v3end);
+SP.addEventListener("dblclick",()=>{if(SIM.n===3&&nodes.length){V3.a=-0.7;V3.e=0.42;draw3D()}});
 function drawAll(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play";syncInit()}
 function drawAll_old(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play"}
 function simRefresh(){SIM.play=false;SIM.t=0;simTopo();drawAll()}
