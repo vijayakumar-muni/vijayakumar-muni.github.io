@@ -1333,22 +1333,43 @@ function syncInit(){
 if(INIT.hidden)return;
 const N=nodes.length,key=N+"-"+SIM.n;
 if(key!==initKey){initKey=key;
-INIT.innerHTML=N?nodes.map((nd,i)=>`<label><span>$\\boldsymbol{x}_{${i+1}}(0)=$</span> ${[0,1,2].slice(0,SIM.n).map(c=>`<input data-i="${i}" data-c="${c}" size="4" aria-label="Initial state of agent ${i+1}, component ${c+1}">`).join(" ")}</label>`).join("")+`<div class="bc-ih">Values between &minus;5 and 5; decimals or fractions such as 1/2</div>`:"Add agents first";
+INIT.innerHTML=N?nodes.map((nd,i)=>`<label><span>$\\boldsymbol{x}_{${i+1}}(0)=$</span> ${[0,1,2].slice(0,SIM.n).map(c=>`<input data-i="${i}" data-c="${c}" size="4" aria-label="Initial state of agent ${i+1}, component ${c+1}">`).join(" ")}</label>`).join("")+`<div class="bc-ih">Any real values; decimals or fractions such as 1/2</div>`:"Add agents first";
 window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([INIT])}
 INIT.querySelectorAll("input").forEach(inp=>{if(inp===document.activeElement)return;const v=st(nodes[+inp.dataset.i])[+inp.dataset.c];inp.value=String(+v.toFixed(3));inp.classList.remove("bad")})}
 INIT.addEventListener("input",e=>{const inp=e.target;if(inp.tagName!=="INPUT")return;const v=parseW(inp.value);
-if(v===null||Math.abs(v)>RNG){inp.classList.add("bad");return}
+if(v===null){inp.classList.add("bad");return}
 inp.classList.remove("bad");st(nodes[+inp.dataset.i])[+inp.dataset.c]=v;SIM.play=false;SIM.t=0;drawAll()});
 OWN.onclick=()=>{INIT.hidden=!INIT.hidden;OWN.classList.toggle("on",!INIT.hidden);initKey="";syncInit()};
 root.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("[data-n]"))syncInit()});
 root.addEventListener("pointermove",()=>{if(SIM.hd>=0)syncInit()});
+function vr(){if(SIM.hd>=0&&SIM.vrf)return SIM.vrf;let m=0;nodes.forEach(nd=>{const s=st(nd);for(let c=0;c<Math.max(1,SIM.n);c++)m=Math.max(m,Math.abs(s[c]))});m=m>0?m*1.1:1;const g=Math.pow(10,Math.floor(Math.log10(m)));for(const c of [1,1.5,2,3,4,5,6,8,10])if(c*g>=m)return c*g;return 10*g}
+function drawSP(){
+const N=nodes.length,OV=q(".bc-ov");SIM.lay=[];
+if(SIM.n!==1||!N){OV.innerHTML="";SIM.lblN=-1;q(".bc-ra").style.display="none";SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">${SIM.n!==1?"The view for n = "+SIM.n+" comes in the next step":"Add agents on the left"}</text>`;H2.textContent=SIM.n!==1?"The time axis below already runs the simulation for any n.":"";return}
+const y0=40+N*20,HV=y0+32;SP.setAttribute("viewBox",`0 0 480 ${HV}`);
+const VR=vr(),px=v=>240+v*216/VR,X=pos(SIM.t).map(r=>px(r[0])),lane=[];
+for(let i=0;i<N;i++){let l=0;for(;;l++){let ok=true;for(let j=0;j<i;j++)if(lane[j]==l&&Math.abs(X[i]-X[j])<56){ok=false;break}if(ok)break}lane[i]=l}
+let h=`<line class="bc-ax" x1="24" y1="${y0}" x2="456" y2="${y0}"/><path class="bc-ax" d="M30 ${y0-4}L24 ${y0}L30 ${y0+4}M450 ${y0-4}L456 ${y0}L450 ${y0+4}"/>`;
+{const raw=VR/4,g=Math.pow(10,Math.floor(Math.log10(raw)));let stp=10*g,dv=2;for(const c of [[1,2],[2,2],[5,5]])if(c[0]*g>=raw){stp=c[0]*g;dv=c[1];break}
+const K=Math.floor(VR/(stp/dv)*1.000001);for(let k=-K;k<=K;k++){const v=k*stp/dv,x=px(v);h+=`<line class="bc-tk" x1="${x}" y1="${y0-4}" x2="${x}" y2="${y0+4}"/>`;if(k%dv==0)h+=`<text class="bc-tt" x="${x}" y="${y0+18}">${v===0?0:+v.toPrecision(8)}</text>`}}
+{const RA=q(".bc-ra");RA.style.display="";RA.style.left=(470/480*100)+"%";RA.style.top=(y0/HV*100)+"%"}
+const Y=lane.map(l=>y0-14-l*20);
+for(let i=0;i<N;i++)h+=`<line class="bc-cn" x1="${X[i]}" y1="${y0}" x2="${X[i]}" y2="${Y[i]}"/>`;
+const can=SIM.t==0&&!SIM.play;
+for(let i=0;i<N;i++){SIM.lay[i]={x:X[i],y:y0};h+=`<g class="bc-sb${can?" dg":""}"><circle cx="${X[i]}" cy="${y0}" r="3" fill="#ffd400"/></g>`}
+SP.innerHTML=h;
+if(SIM.lblN!==N){SIM.lblN=N;OV.innerHTML=nodes.map((_,i)=>`<span class="bc-xm">$\\boldsymbol{x}_{${i+1}}(t)$</span>`).join("");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([OV])}
+[...OV.children].forEach((s,i)=>{s.style.left=(X[i]/480*100)+"%";s.style.top=(Y[i]/HV*100)+"%"});
+H2.textContent=can?"Drag a yellow point along the line to set the initial state of that agent, then press Play.":"Press Reset (or drag the time marker back to 0) to edit the initial states.";
+}
+root.addEventListener("pointerup",()=>{if(SIM.vrf){SIM.vrf=null;drawAll()}});root.addEventListener("pointercancel",()=>{if(SIM.vrf){SIM.vrf=null;drawAll()}});
 function drawAll(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play";syncInit()}
 function drawAll_old(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play"}
 function simRefresh(){SIM.play=false;SIM.t=0;simTopo();drawAll()}
 function tick(ts){SIM.raf=0;if(!SIM.play)return;const d=SIM.last?(ts-SIM.last)/1000:0;SIM.last=ts;SIM.t+=d*SIM.T/DUR;if(SIM.t>=SIM.T){SIM.t=SIM.T;SIM.play=false}drawAll();if(SIM.play)SIM.raf=requestAnimationFrame(tick)}
 const vpt=(el,e)=>{const r=el.getBoundingClientRect(),v=el.viewBox.baseVal;return[(e.clientX-r.left)*v.width/r.width,(e.clientY-r.top)*v.height/r.height]};
 SP.addEventListener("pointerdown",e=>{if(SIM.n!==1||SIM.t>0||SIM.play)return;const[x,y]=vpt(SP,e);for(let i=SIM.lay.length-1;i>=0;i--)if(Math.hypot(SIM.lay[i].x-x,SIM.lay[i].y-y)<=12){SIM.hd=i;try{SP.setPointerCapture(e.pointerId)}catch(_){}break}});
-SP.addEventListener("pointermove",e=>{if(SIM.hd<0)return;const x=vpt(SP,e)[0];st(nodes[SIM.hd])[0]=Math.max(-RNG,Math.min(RNG,Math.round((x-240)/36*10)/10));drawSP()});
+SP.addEventListener("pointermove",e=>{if(SIM.hd<0)return;if(!SIM.vrf)SIM.vrf=vr();const V=SIM.vrf,f=Math.pow(10,Math.max(0,1-Math.floor(Math.log10(V)))),x=vpt(SP,e)[0];st(nodes[SIM.hd])[0]=Math.max(-V,Math.min(V,Math.round((x-240)/216*V*f)/f));drawSP()});
 SP.addEventListener("pointerup",()=>{SIM.hd=-1});SP.addEventListener("pointercancel",()=>{SIM.hd=-1});
 const setT=e=>{SIM.t=Math.max(0,Math.min(1,(vpt(TL,e)[0]-24)/408))*SIM.T;drawAll()};
 TL.addEventListener("pointerdown",e=>{if(!nodes.length)return;SIM.td=true;SIM.play=false;try{TL.setPointerCapture(e.pointerId)}catch(_){}setT(e)});
