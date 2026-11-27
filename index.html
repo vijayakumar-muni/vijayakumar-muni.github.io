@@ -279,6 +279,7 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .bc-rh,.bc-rv{position:absolute;transform:translate(-50%,-50%);font-size:.78rem;color:var(--mute);line-height:1;pointer-events:none;display:none}
 .bc-rh mjx-container,.bc-rv mjx-container{margin:0!important}
 .bc-trl{fill:none;stroke:#d4a017;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.bc-init input{width:auto;min-width:0;box-sizing:content-box}
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -1346,14 +1347,15 @@ const f=v=>String(+(Math.abs(v)<1e-12?0:v).toPrecision(4)).replace("-","−"),g=
 out="For the current initial states, <b>α</b> = ("+al.map(f).join(", ")+"): camp A converges to ("+al.map(f).join(", ")+") and camp B to ("+al.map(g).join(", ")+")"}
 if(el.dataset.s!==out){el.dataset.s=out;el.innerHTML=out}}
 window.__bcLim=limText;
-function syncInit(){limText();  
+const fit=i=>{i.style.width=Math.max(1.6,i.value.length+0.6)+"ch"};
+function syncInit(){limText(); 
 if(INIT.hidden)return;
 const N=nodes.length,key=N+"-"+SIM.n;
 if(key!==initKey){initKey=key;
-INIT.innerHTML=N?nodes.map((nd,i)=>`<label><span>$\\boldsymbol{x}_{${i+1}}(0)=$</span> <span class="${SIM.n>1?"bc-col":"bc-row"}">${[0,1,2].slice(0,SIM.n).map(c=>`<input data-i="${i}" data-c="${c}" size="4" aria-label="Initial state of agent ${i+1}, component ${c+1}">`).join("")}</span></label>`).join("")+`<div class="bc-ih">Any real values; decimals or fractions such as 1/2</div>`:"Add agents first";
+INIT.innerHTML=N?nodes.map((nd,i)=>`<label><span>$\\boldsymbol{x}_{${i+1}}(0)=$</span> <span class="${SIM.n>1?"bc-col":"bc-row"}">${[0,1,2].slice(0,SIM.n).map(c=>`<input data-i="${i}" data-c="${c}" size="4" aria-label="Initial state of agent ${i+1}, component ${c+1}">`).join("")}</span></label>`).join(""):"Add agents first";
 window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([INIT])}
-INIT.querySelectorAll("input").forEach(inp=>{if(inp===document.activeElement)return;const v=st(nodes[+inp.dataset.i])[+inp.dataset.c];inp.value=String(+v.toFixed(3));inp.classList.remove("bad")})}
-INIT.addEventListener("input",e=>{const inp=e.target;if(inp.tagName!=="INPUT")return;const v=parseW(inp.value);
+INIT.querySelectorAll("input").forEach(inp=>{if(inp===document.activeElement)return;const v=st(nodes[+inp.dataset.i])[+inp.dataset.c];inp.value=String(+v.toFixed(3));inp.classList.remove("bad");fit(inp)})}
+INIT.addEventListener("input",e=>{const inp=e.target;if(inp.tagName!=="INPUT")return;fit(inp);const v=parseW(inp.value);
 if(v===null){inp.classList.add("bad");return}
 inp.classList.remove("bad");st(nodes[+inp.dataset.i])[+inp.dataset.c]=v;SIM.play=false;SIM.t=0;drawAll()});
 OWN.onclick=()=>{INIT.hidden=!INIT.hidden;OWN.classList.toggle("on",!INIT.hidden);initKey="";syncInit()};
