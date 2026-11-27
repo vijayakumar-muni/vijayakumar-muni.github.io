@@ -1355,7 +1355,7 @@ const cv=a=>a.length>1?"$["+a.map(x=>"{"+x+"}").join("\\quad ")+"]^\\intercal$":
 for(let k=0;k<Math.max(1,SIM.n);k++){let s=0;for(let j=0;j<N;j++)s+=w[j]*a.col[j]*st(nodes[j])[k];al.push(s)}
 const f=v=>String(+(Math.abs(v)<1e-12?0:v).toPrecision(4)).replace("-","−"),g=v=>f(-v);
 out="For the current initial states, <b>α</b> = "+cv(al.map(f))+": camp A converges to "+cv(al.map(f))+" and camp B converges to "+cv(al.map(g))+"."}
-if(el.dataset.s!==out){el.dataset.s=out;el.innerHTML=out;if(window.MathJax&&MathJax.typesetPromise&&out.indexOf("$")>=0)MathJax.typesetPromise([el])}}
+if(el.dataset.s!==out){el.dataset.s=out;out=out.replace(/<b>[^<]*<\/b>/,"$\\boldsymbol{\\alpha}$");el.innerHTML=out;if(window.MathJax&&MathJax.typesetPromise&&out.indexOf("$")>=0)MathJax.typesetPromise([el])}}
 window.__bcLim=limText;
 const fit=i=>{i.style.width=Math.max(1.6,i.value.length+0.6)+"ch"};
 function syncInit(){limText(); 
