@@ -1405,7 +1405,7 @@ const nf=v=>v===0?0:+v.toPrecision(8),f1=v=>v.toFixed(1);
 function drawSP(){
 const N=nodes.length,OV=q(".bc-ov"),RA=q(".bc-ra"),RH=q(".bc-rh"),RV=q(".bc-rv");SIM.lay=[];
 RA.style.display=RH.style.display=RV.style.display="none";
-if(!N||SIM.n>2){OV.innerHTML="";SIM.lblN=-1;SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">${N?"The view for n = 3 comes in the next step":"Add agents on the left"}</text>`;if(N){if(H2.dataset.k!=="3"){H2.dataset.k="3";H2.innerHTML="The time axis above already runs the simulation for any $n$.";window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([H2])}}else{H2.dataset.k="";H2.textContent=""}return}
+if(SIM.n>2&&N){draw3D();return}if(SIM.n<3)SP.style.cursor="";if(OV3)OV3.innerHTML="";if(!N||SIM.n>2){OV.innerHTML="";SIM.lblN=-1;SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">${N?"The view for n = 3 comes in the next step":"Add agents on the left"}</text>`;if(N){if(H2.dataset.k!=="3"){H2.dataset.k="3";H2.innerHTML="The time axis above already runs the simulation for any $n$.";window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([H2])}}else{H2.dataset.k="";H2.textContent=""}return}
 const VR=vr(),P=pos(SIM.t),tr=trajGet(),kk=Math.min(TS,Math.floor(SIM.t/(SIM.T/TS))),can=SIM.t==0&&!SIM.play,tk=tickList(VR);
 let h="",HV,PX_=[],PY_=[],LX=[],LY=[];
 if(SIM.n===1){
@@ -1432,6 +1432,34 @@ if(SIM.lblN!==N){SIM.lblN=N;OV.innerHTML=nodes.map((_,i)=>`<span class="bc-xm">$
 [...OV.children].forEach((s,i)=>{s.style.left=(LX[i]/480*100)+"%";s.style.top=(LY[i]/HV*100)+"%"});
 H2.dataset.k="";H2.textContent=can?(SIM.n===1?"Drag a yellow point along the line to set the initial state of that agent, then press Play.":"Drag a yellow point in the plane to set the initial state of that agent, then press Play."):"Press Reset (or drag the time marker back to 0) to edit the initial states.";
 }
+const V3={a:-0.62,e:0.38,on:false,px:0,py:0};
+let OV3=null;
+function draw3D(){
+const N=nodes.length,OV=q(".bc-ov");
+if(!OV3){OV3=document.createElement("div");OV3.className="bc-ov";OV.parentNode.appendChild(OV3)}
+const VR=vr(),P=pos(SIM.t),tr=trajGet(),kk=Math.min(TS,Math.floor(SIM.t/(SIM.T/TS))),can=SIM.t==0&&!SIM.play,tk=tickList(VR);
+const cx=240,cy=200,HV=400,s=135/VR,ca=Math.cos(V3.a),sa=Math.sin(V3.a),ce=Math.cos(V3.e),se=Math.sin(V3.e);
+const pj=p=>{const x1=p[0]*ca-p[1]*sa,y1=p[0]*sa+p[1]*ca;return[cx+s*x1,cy-s*(p[2]*ce+y1*se),y1*ce-p[2]*se]};
+SP.setAttribute("viewBox","0 0 480 "+HV);SP.style.cursor="grab";
+let h="";const AX=[[1,0,0],[0,1,0],[0,0,1]],lab=[];
+AX.forEach((u,k)=>{const a=pj(u.map(c=>-c*VR)),b=pj(u.map(c=>c*VR)),dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L;
+h+=`<line class="bc-ax" x1="${f1(a[0])}" y1="${f1(a[1])}" x2="${f1(b[0])}" y2="${f1(b[1])}"/><path class="bc-ax" d="M${f1(b[0]-8*ux-4*uy)} ${f1(b[1]-8*uy+4*ux)}L${f1(b[0])} ${f1(b[1])}L${f1(b[0]-8*ux+4*uy)} ${f1(b[1]-8*uy-4*ux)}"/>`;
+tk.forEach(t=>{const q3=pj(u.map(c=>c*t.v));h+=`<line class="bc-tk" x1="${f1(q3[0]-4*uy)}" y1="${f1(q3[1]+4*ux)}" x2="${f1(q3[0]+4*uy)}" y2="${f1(q3[1]-4*ux)}"/>`;if(t.major&&t.v!==0)h+=`<text class="bc-tt" x="${f1(q3[0]-9*uy)}" y="${f1(q3[1]+9*ux+3.5)}">${nf(t.v)}</text>`});
+lab.push([b[0]+12*ux,b[1]+12*uy])});
+if(SIM.t>0)for(let i=0;i<N;i++){let d="";for(let k=0;k<=kk;k++){const q3=pj(tr[k][i]);d+=(k?"L":"M")+f1(q3[0])+" "+f1(q3[1])}const e3=pj(P[i]);d+="L"+f1(e3[0])+" "+f1(e3[1]);h+=`<path class="bc-trl" d="${d}"/>`}
+const Q=P.map(pj),ord=Q.map((_,i)=>i).sort((i,j)=>Q[j][2]-Q[i][2]),LX=[],LY=[];
+ord.forEach(i=>{h+=`<g class="bc-sb"><circle cx="${f1(Q[i][0])}" cy="${f1(Q[i][1])}" r="3" fill="#ffd400"/></g>`});
+for(let i=0;i<N;i++){let l=0;for(;;l++){let ok=true;const yy=Q[i][1]-7-l*17;for(let j=0;j<i;j++)if(Math.abs(Q[i][0]-LX[j])<46&&Math.abs(yy-LY[j])<16){ok=false;break}if(ok){LX[i]=Q[i][0];LY[i]=yy;break}}}
+SIM.lay=[];SP.innerHTML=h;
+if(SIM.lblN!==N){SIM.lblN=N;OV.innerHTML=nodes.map((_,i)=>`<span class="bc-xm">$\\boldsymbol{x}_{${i+1}}(t)$</span>`).join("");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([OV])}
+[...OV.children].forEach((sp,i)=>{sp.style.left=(LX[i]/480*100)+"%";sp.style.top=(LY[i]/HV*100)+"%"});
+if(!OV3.children.length){OV3.innerHTML=[1,2,3].map(k=>`<span class="bc-rh" style="display:block">$x_{i,${k}}$</span>`).join("");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([OV3])}
+[...OV3.children].forEach((sp,k)=>{sp.style.left=(lab[k][0]/480*100)+"%";sp.style.top=(lab[k][1]/HV*100)+"%"});
+H2.dataset.k="";H2.textContent=can?"Drag the picture to rotate the view. Set the initial states with “Enter initial states” or “Random initial states”, then press Play.":"Drag the picture to rotate the view. Press Reset (or drag the time marker back to 0) to edit the initial states."}
+SP.addEventListener("pointerdown",e=>{if(SIM.n!==3||!nodes.length)return;V3.on=true;V3.px=e.clientX;V3.py=e.clientY;SP.style.cursor="grabbing";try{SP.setPointerCapture(e.pointerId)}catch(_){}});
+SP.addEventListener("pointermove",e=>{if(!V3.on)return;V3.a+=(e.clientX-V3.px)*0.01;V3.e=Math.max(-1.45,Math.min(1.45,V3.e+(e.clientY-V3.py)*0.01));V3.px=e.clientX;V3.py=e.clientY;draw3D()});
+const v3end=()=>{V3.on=false;if(SIM.n===3)SP.style.cursor="grab"};
+SP.addEventListener("pointerup",v3end);SP.addEventListener("pointercancel",v3end);  
 function drawAll(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play";syncInit()}
 function drawAll_old(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play"}
 function simRefresh(){SIM.play=false;SIM.t=0;simTopo();drawAll()}
