@@ -1154,7 +1154,7 @@ let h=ck(a.strong,"Strongly connected")+ck(a.symm,"$\\mathsf{w}_{ij}\\mathsf{w}_
 +ck(a.balanced,"Structurally balanced"+(a.balanced?" &mdash; camp A = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"}, camp B = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""));
 let v;
 if(a.strong&&a.symm&&a.balanced)v=""; 
-else if(a.strong&&a.symm)v="<b>Structurally unbalanced:</b> <i>x</i><sub>i</sub>(t) &rarr; 0 for every agent <i>i</i>, whatever the initial states";
+else if(a.strong&&a.symm)v="<b>Structurally unbalanced:</b> $\\boldsymbol{x}_i(t)\\to\\boldsymbol{0}$ for every agent $i$, whatever their initial states are";
 else v="<b>Not covered by the theorem.</b>";
 resEl.innerHTML=h+(v?'<div class="bc-v">'+v+"</div>":"");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([resEl]);
 }
