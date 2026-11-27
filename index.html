@@ -1155,7 +1155,7 @@ let h=ck(a.strong,"Strongly connected")+ck(a.symm,"$\\mathsf{w}_{ij}\\mathsf{w}_
 let v;
 if(a.strong&&a.symm&&a.balanced)v=""; 
 else if(a.strong&&a.symm)v="<b>Structurally unbalanced:</b> $\\boldsymbol{x}_i(t)\\to\\boldsymbol{0}$ for every agent $i$, whatever their initial states are";
-else v="<b>Not covered by the theorem.</b>";
+else v="<b>Not covered by the theorem</b>";
 resEl.innerHTML=h+(v?'<div class="bc-v">'+v+"</div>":"");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([resEl]);
 }
 function draw(){
