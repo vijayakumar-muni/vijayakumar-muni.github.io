@@ -275,7 +275,10 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .bc-init input.bad{border-color:#d63030;outline:1px solid #d63030}
 .bc-init mjx-container{margin:0!important}
 .bc-ih{flex-basis:100%}
-.bc-col{display:inline-flex;flex-direction:column;gap:.25rem;padding:.3rem .55rem;border-left:1.5px solid var(--mute);border-right:1.5px solid var(--mute);background:linear-gradient(var(--mute),var(--mute)) left top/.4rem 1.5px no-repeat,linear-gradient(var(--mute),var(--mute)) left bottom/.4rem 1.5px no-repeat,linear-gradient(var(--mute),var(--mute)) right top/.4rem 1.5px no-repeat,linear-gradient(var(--mute),var(--mute)) right bottom/.4rem 1.5px no-repeat}  
+.bc-col{display:inline-flex;flex-direction:column;gap:.25rem;padding:.3rem .55rem;border-left:1.5px solid var(--mute);border-right:1.5px solid var(--mute);background:linear-gradient(var(--mute),var(--mute)) left top/.4rem 1.5px no-repeat,linear-gradient(var(--mute),var(--mute)) left bottom/.4rem 1.5px no-repeat,linear-gradient(var(--mute),var(--mute)) right top/.4rem 1.5px no-repeat,linear-gradient(var(--mute),var(--mute)) right bottom/.4rem 1.5px no-repeat}
+.bc-rh,.bc-rv{position:absolute;transform:translate(-50%,-50%);font-size:.78rem;color:var(--mute);line-height:1;pointer-events:none;display:none}
+.bc-rh mjx-container,.bc-rv mjx-container{margin:0!important}
+.bc-trl{fill:none;stroke:#d4a017;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -1127,7 +1130,7 @@ root.innerHTML=`<div class="bc-p">
 <div class="bc-bar"><button type="button" data-m="node" class="on"><svg class="bc-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bcBI" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs><circle cx="12" cy="12" r="7" fill="url(#bcBI)" stroke="#8a6410" stroke-width=".8"/></svg> Agent</button><button type="button" data-m="edge">&rarr; Communication</button><button type="button" data-m="del">&#10005; Delete agent</button><label>weight <input class="bc-w" value="1" size="6" aria-label="Communication weight"></label><label><input type="checkbox" class="bc-b"> both ways</label><select class="bc-ex" aria-label="Examples"></select><button type="button" data-a="clr">Clear</button></div>
 <svg class="bc-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg>
 <div class="bc-hint"></div>
-</div><div class="bc-right"><div class="bc-bar"><span class="bc-lab">Each agent's state dimension $n$:</span><button type="button" data-n="1" class="on">1</button><button type="button" data-n="2">2</button><button type="button" data-n="3">3</button><button type="button" data-s="rnd">Random initial states</button><button type="button" data-s="own">Enter initial states</button></div><div class="bc-init" hidden></div><div class="bc-spw"><svg class="bc-sp" viewBox="0 0 480 140" role="img" aria-label="State space"></svg><div class="bc-ov"></div><span class="bc-ra">$\\mathbb{R}$</span></div><div class="bc-tlw"><svg class="bc-tl" viewBox="0 0 480 58" role="img" aria-label="Time axis"></svg><span class="bc-ta">$t$</span><span class="bc-tr"><span>$t$</span><span class="bc-tv"></span></span></div><div class="bc-bar"><button type="button" data-p="play">&#9654; Play</button><button type="button" data-p="rst">&#8634; Reset</button></div><div class="bc-h2"></div></div></div>
+</div><div class="bc-right"><div class="bc-bar"><span class="bc-lab">Each agent's state dimension $n$:</span><button type="button" data-n="1" class="on">1</button><button type="button" data-n="2">2</button><button type="button" data-n="3">3</button><button type="button" data-s="rnd">Random initial states</button><button type="button" data-s="own">Enter initial states</button></div><div class="bc-init" hidden></div><div class="bc-spw"><svg class="bc-sp" viewBox="0 0 480 140" role="img" aria-label="State space"></svg><div class="bc-ov"></div><span class="bc-ra">$\\mathbb{R}$</span><span class="bc-rh">$x_{i,1}$</span><span class="bc-rv">$x_{i,2}$</span></div><div class="bc-tlw"><svg class="bc-tl" viewBox="0 0 480 58" role="img" aria-label="Time axis"></svg><span class="bc-ta">$t$</span><span class="bc-tr"><span>$t$</span><span class="bc-tv"></span></span></div><div class="bc-bar"><button type="button" data-p="play">&#9654; Play</button><button type="button" data-p="rst">&#8634; Reset</button></div><div class="bc-h2"></div></div></div>
 <div class="bc-res" aria-live="polite"></div></div>`;
 const q=s=>root.querySelector(s),svg=q(".bc-svg"),hintEl=q(".bc-hint"),resEl=q(".bc-res"),wIn=q(".bc-w"),bIn=q(".bc-b"),exSel=q(".bc-ex");
 exSel.innerHTML="<option>Examples…</option>"+EX.map((a,k)=>`<option value="${k}">${a[0]}</option>`).join("");
@@ -1364,13 +1367,51 @@ if(SIM.lblN!==N){SIM.lblN=N;OV.innerHTML=nodes.map((_,i)=>`<span class="bc-xm">$
 H2.textContent=can?"Drag a yellow point along the line to set the initial state of that agent, then press Play.":"Press Reset (or drag the time marker back to 0) to edit the initial states.";
 }
 root.addEventListener("pointerup",()=>{if(SIM.vrf){SIM.vrf=null;drawAll()}});root.addEventListener("pointercancel",()=>{if(SIM.vrf){SIM.vrf=null;drawAll()}});
+const TS=400;
+function trajGet(){const N=nodes.length,key=edges.map(e=>e.join(",")).join(";")+"|"+nodes.map(n=>st(n).join(",")).join(";");
+if(SIM.tk===key&&SIM.tr)return SIM.tr;SIM.tk=key;const E=expm(SIM.M,SIM.T/TS);let cur=nodes.map(n=>st(n).slice());const tr=[cur];
+for(let k=1;k<=TS;k++){const nx=cur.map((_,i)=>{const r=[0,0,0];for(let j=0;j<N;j++){const e=E[i][j];if(e!==0){r[0]+=e*cur[j][0];r[1]+=e*cur[j][1];r[2]+=e*cur[j][2]}}return r});tr.push(nx);cur=nx}
+return SIM.tr=tr}
+function tickList(VR){const raw=VR/4,g=Math.pow(10,Math.floor(Math.log10(raw)));let stp=10*g,dv=2;for(const c of [[1,2],[2,2],[5,5]])if(c[0]*g>=raw){stp=c[0]*g;dv=c[1];break}
+const K=Math.floor(VR/(stp/dv)*1.000001),o=[];for(let k=-K;k<=K;k++)o.push({v:k*stp/dv,major:k%dv==0});return o}
+const nf=v=>v===0?0:+v.toPrecision(8),f1=v=>v.toFixed(1);
+function drawSP(){
+const N=nodes.length,OV=q(".bc-ov"),RA=q(".bc-ra"),RH=q(".bc-rh"),RV=q(".bc-rv");SIM.lay=[];
+RA.style.display=RH.style.display=RV.style.display="none";
+if(!N||SIM.n>2){OV.innerHTML="";SIM.lblN=-1;SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">${N?"The view for n = 3 comes in the next step":"Add agents on the left"}</text>`;H2.textContent=N?"The time axis below already runs the simulation for any n.":"";return}
+const VR=vr(),P=pos(SIM.t),tr=trajGet(),kk=Math.min(TS,Math.floor(SIM.t/(SIM.T/TS))),can=SIM.t==0&&!SIM.play,tk=tickList(VR);
+let h="",HV,PX_=[],PY_=[],LX=[],LY=[];
+if(SIM.n===1){
+const y0=40+N*20,px=v=>240+v*216/VR;HV=y0+32;SP.setAttribute("viewBox",`0 0 480 ${HV}`);
+h+=`<line class="bc-ax" x1="24" y1="${y0}" x2="456" y2="${y0}"/><path class="bc-ax" d="M30 ${y0-4}L24 ${y0}L30 ${y0+4}M450 ${y0-4}L456 ${y0}L450 ${y0+4}"/>`;
+tk.forEach(t=>{const x=px(t.v);h+=`<line class="bc-tk" x1="${x}" y1="${y0-4}" x2="${x}" y2="${y0+4}"/>`;if(t.major)h+=`<text class="bc-tt" x="${x}" y="${y0+18}">${nf(t.v)}</text>`});
+const lane=[];
+for(let i=0;i<N;i++){PX_[i]=px(P[i][0]);PY_[i]=y0;let l=0;for(;;l++){let ok=true;for(let j=0;j<i;j++)if(lane[j]==l&&Math.abs(PX_[i]-PX_[j])<56){ok=false;break}if(ok)break}lane[i]=l;LX[i]=PX_[i];LY[i]=y0-14-l*20}
+if(SIM.t>0)for(let i=0;i<N;i++){let lo=P[i][0],hi=lo;for(let k=0;k<=kk;k++){const v=tr[k][i][0];if(v<lo)lo=v;if(v>hi)hi=v}if(hi>lo)h+=`<line class="bc-trl" x1="${px(lo)}" y1="${y0}" x2="${px(hi)}" y2="${y0}"/>`}
+for(let i=0;i<N;i++)h+=`<line class="bc-cn" x1="${PX_[i]}" y1="${y0}" x2="${PX_[i]}" y2="${LY[i]}"/>`;
+RA.style.display="";RA.style.left=(470/480*100)+"%";RA.style.top=(y0/HV*100)+"%";
+}else{
+const cx=240,cy=185,K=160/VR;HV=370;SP.setAttribute("viewBox","0 0 480 370");SIM.geo={cx,cy,K};
+h+=`<line class="bc-ax" x1="24" y1="${cy}" x2="456" y2="${cy}"/><line class="bc-ax" x1="${cx}" y1="14" x2="${cx}" y2="356"/><path class="bc-ax" d="M450 ${cy-4}L456 ${cy}L450 ${cy+4}M${cx-4} 20L${cx} 14L${cx+4} 20"/>`;
+tk.forEach(t=>{const x=cx+t.v*K,y=cy-t.v*K;h+=`<line class="bc-tk" x1="${x}" y1="${cy-4}" x2="${x}" y2="${cy+4}"/><line class="bc-tk" x1="${cx-4}" y1="${y}" x2="${cx+4}" y2="${y}"/>`;if(t.major&&t.v!==0)h+=`<text class="bc-tt" x="${x}" y="${cy+17}">${nf(t.v)}</text><text class="bc-tt" x="${cx-8}" y="${y+3.5}" style="text-anchor:end">${nf(t.v)}</text>`});
+h+=`<text class="bc-tt" x="${cx-8}" y="${cy+16}" style="text-anchor:end">0</text>`;
+for(let i=0;i<N;i++){PX_[i]=cx+P[i][0]*K;PY_[i]=cy-P[i][1]*K;let l=0;for(;;l++){let ok=true;const yy=PY_[i]-7-l*17;for(let j=0;j<i;j++)if(Math.abs(PX_[i]-LX[j])<46&&Math.abs(yy-LY[j])<16){ok=false;break}if(ok){LX[i]=PX_[i];LY[i]=yy;break}}}
+if(SIM.t>0)for(let i=0;i<N;i++){let d="M"+f1(cx+tr[0][i][0]*K)+" "+f1(cy-tr[0][i][1]*K);for(let k=1;k<=kk;k++)d+="L"+f1(cx+tr[k][i][0]*K)+" "+f1(cy-tr[k][i][1]*K);d+="L"+f1(PX_[i])+" "+f1(PY_[i]);h+=`<path class="bc-trl" d="${d}"/>`}
+RH.style.display="block";RH.style.left=(468/480*100)+"%";RH.style.top=((cy-12)/HV*100)+"%";RV.style.display="block";RV.style.left=((cx+22)/480*100)+"%";RV.style.top=(10/HV*100)+"%";
+}
+for(let i=0;i<N;i++){SIM.lay[i]={x:PX_[i],y:PY_[i]};h+=`<g class="bc-sb${can?" dg":""}"><circle cx="${PX_[i]}" cy="${PY_[i]}" r="3" fill="#ffd400"/></g>`}
+SP.innerHTML=h;
+if(SIM.lblN!==N){SIM.lblN=N;OV.innerHTML=nodes.map((_,i)=>`<span class="bc-xm">$\\boldsymbol{x}_{${i+1}}(t)$</span>`).join("");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([OV])}
+[...OV.children].forEach((s,i)=>{s.style.left=(LX[i]/480*100)+"%";s.style.top=(LY[i]/HV*100)+"%"});
+H2.textContent=can?(SIM.n===1?"Drag a yellow point along the line to set the initial state of that agent, then press Play.":"Drag a yellow point in the plane to set the initial state of that agent, then press Play."):"Press Reset (or drag the time marker back to 0) to edit the initial states";
+}
 function drawAll(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play";syncInit()}
 function drawAll_old(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play"}
 function simRefresh(){SIM.play=false;SIM.t=0;simTopo();drawAll()}
 function tick(ts){SIM.raf=0;if(!SIM.play)return;const d=SIM.last?(ts-SIM.last)/1000:0;SIM.last=ts;SIM.t+=d*SIM.T/DUR;if(SIM.t>=SIM.T){SIM.t=SIM.T;SIM.play=false}drawAll();if(SIM.play)SIM.raf=requestAnimationFrame(tick)}
 const vpt=(el,e)=>{const r=el.getBoundingClientRect(),v=el.viewBox.baseVal;return[(e.clientX-r.left)*v.width/r.width,(e.clientY-r.top)*v.height/r.height]};
-SP.addEventListener("pointerdown",e=>{if(SIM.n!==1||SIM.t>0||SIM.play)return;const[x,y]=vpt(SP,e);for(let i=SIM.lay.length-1;i>=0;i--)if(Math.hypot(SIM.lay[i].x-x,SIM.lay[i].y-y)<=12){SIM.hd=i;try{SP.setPointerCapture(e.pointerId)}catch(_){}break}});
-SP.addEventListener("pointermove",e=>{if(SIM.hd<0)return;if(!SIM.vrf)SIM.vrf=vr();const V=SIM.vrf,f=Math.pow(10,Math.max(0,1-Math.floor(Math.log10(V)))),x=vpt(SP,e)[0];st(nodes[SIM.hd])[0]=Math.max(-V,Math.min(V,Math.round((x-240)/216*V*f)/f));drawSP()});
+SP.addEventListener("pointerdown",e=>{if(SIM.n>2||SIM.t>0||SIM.play)return;const[x,y]=vpt(SP,e);for(let i=SIM.lay.length-1;i>=0;i--)if(Math.hypot(SIM.lay[i].x-x,SIM.lay[i].y-y)<=12){SIM.hd=i;try{SP.setPointerCapture(e.pointerId)}catch(_){}break}});
+SP.addEventListener("pointermove",e=>{if(SIM.hd<0)return;if(!SIM.vrf)SIM.vrf=vr();const V=SIM.vrf,f=Math.pow(10,Math.max(0,1-Math.floor(Math.log10(V)))),p=vpt(SP,e),s=st(nodes[SIM.hd]),cl=v=>Math.max(-V,Math.min(V,Math.round(v*f)/f));if(SIM.n===1)s[0]=cl((p[0]-240)/216*V);else{const g=SIM.geo;s[0]=cl((p[0]-g.cx)/g.K);s[1]=cl((g.cy-p[1])/g.K)}drawSP()});
 SP.addEventListener("pointerup",()=>{SIM.hd=-1});SP.addEventListener("pointercancel",()=>{SIM.hd=-1});
 const setT=e=>{SIM.t=Math.max(0,Math.min(1,(vpt(TL,e)[0]-24)/408))*SIM.T;drawAll()};
 TL.addEventListener("pointerdown",e=>{if(!nodes.length)return;SIM.td=true;SIM.play=false;try{TL.setPointerCapture(e.pointerId)}catch(_){}setT(e)});
