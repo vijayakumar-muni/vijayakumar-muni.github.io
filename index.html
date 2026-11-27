@@ -1114,8 +1114,8 @@ function verdict(){
 const a=an,N=a.N;
 if(N<2){resEl.innerHTML="Add at least two agents and a communication to analyse the MAS";return}
 const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</span> ${t}</div>`;
-let h=ck(a.strong,"Strongly connected")+ck(a.symm,"$\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$ for every pair of agents linked in both directions"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")))
-+ck(a.balanced,"Structurally balanced"+(a.balanced?" &mdash; camp A = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"}, camp B = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""));
+let h=ck(a.strong,"Strongly connected")+ck(a.symm,"$\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$ for each existing communications $(\\mathsf{j},\\,\\mathsf{i})$ and $(\\mathsf{i},\\,\\mathsf{j})$"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")))
++ck(a.balanced,"Structurally balanced"+(a.balanced?" &ndash; camp A = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"}, camp B = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""));
 let v;
 if(a.strong&&a.symm&&a.balanced)v=""; 
 else if(a.strong&&a.symm)v="<b>Structurally unbalanced:</b> <i>x</i><sub>i</sub>(t) &rarr; 0 for every agent <i>i</i>, whatever the initial states";
