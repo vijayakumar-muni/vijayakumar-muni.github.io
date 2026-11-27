@@ -253,6 +253,7 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .bc-sb text{fill:#2a1c00;font:400 12px Inter,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none;paint-order:stroke;stroke:rgba(255,246,214,.75);stroke-width:2px}
 .bc-h2{font-size:.82rem;color:var(--mute);margin-top:.35rem}
 .bc-grid{align-items:center}
+.bc-xl{font:400 12px Inter,sans-serif;fill:var(--ink);text-anchor:middle;pointer-events:none}  
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -1213,7 +1214,7 @@ function simTopo(){const N=nodes.length;SIM.M=N?negL():null;if(!N){SIM.T=2;retur
 let dm=0;for(let i=0;i<N;i++)dm=Math.max(dm,-SIM.M[i][i]);SIM.T=dm>0?horizon(SIM.M,dm):2}
 function pos(t){const N=nodes.length,P=expm(SIM.M,t),X0=nodes.map(nd=>st(nd));return X0.map((_,i)=>{const r=[0,0,0];for(let j=0;j<N;j++){const e=P[i][j];r[0]+=e*X0[j][0];r[1]+=e*X0[j][1];r[2]+=e*X0[j][2]}return r})}
 const tf=v=>SIM.T<10?v.toFixed(2):SIM.T<100?v.toFixed(1):v.toFixed(0);
-function drawSP(){
+function drawSP_old(){
 const N=nodes.length;SIM.lay=[];
 if(SIM.n!==1){SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">The view for n = ${SIM.n} comes in the next step</text>`;H2.textContent="The time axis below already runs the simulation for any n.";return}
 if(!N){SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">Add agents on the left</text>`;H2.textContent="";return}
@@ -1231,6 +1232,24 @@ const can=SIM.t==0&&!SIM.play;
 for(let i=0;i<N;i++){SIM.lay[i]={x:X[i],y:Y[i]};h+=`<g class="bc-sb${can?" dg":""}"><circle cx="${X[i]}" cy="${Y[i]}" r="10" fill="url(#bcBS)"/><text x="${X[i]}" y="${Y[i]}">${i+1}</text></g>`}
 SP.innerHTML=h;
 H2.textContent=can?"Drag an agent along the line to set its initial state, then press Play.":"Press Reset (or drag the time marker back to 0) to edit the initial states.";
+}
+function drawSP(){
+const N=nodes.length;SIM.lay=[];
+if(SIM.n!==1){SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">The view for n = ${SIM.n} comes in the next step</text>`;H2.textContent="The time axis below already runs the simulation for any n.";return}
+if(!N){SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">Add agents on the left</text>`;H2.textContent="";return}
+const y0=38+N*16;SP.setAttribute("viewBox",`0 0 480 ${y0+32}`);
+const X=pos(SIM.t).map(r=>PX(r[0])),lane=[];
+for(let i=0;i<N;i++){let l=0;for(;;l++){let ok=true;for(let j=0;j<i;j++)if(lane[j]==l&&Math.abs(X[i]-X[j])<24){ok=false;break}if(ok)break}lane[i]=l}
+let h=`<line class="bc-ax" x1="24" y1="${y0}" x2="456" y2="${y0}"/><path class="bc-ax" d="M30 ${y0-4}L24 ${y0}L30 ${y0+4}M450 ${y0-4}L456 ${y0}L450 ${y0+4}"/>`;
+for(let v=-6;v<=6;v++){h+=`<line class="bc-tk" x1="${PX(v)}" y1="${y0-4}" x2="${PX(v)}" y2="${y0+4}"/>`;if(v%2==0)h+=`<text class="bc-tt" x="${PX(v)}" y="${y0+18}">${v}</text>`}
+h+=`<text class="bc-tt" x="470" y="${y0+4}" style="font-style:italic">x</text>`;
+if(SIM.t>0)nodes.forEach(nd=>{h+=`<circle class="bc-i0" cx="${PX(st(nd)[0])}" cy="${y0}" r="5.5"/>`});
+const Y=lane.map(l=>y0-30-l*16);
+for(let i=0;i<N;i++)h+=`<line class="bc-cn" x1="${X[i]}" y1="${y0}" x2="${X[i]}" y2="${Y[i]+6}"/><text class="bc-xl" x="${X[i]}" y="${Y[i]}"><tspan font-weight="700" font-style="italic">x</tspan><tspan dy="3" font-size="9">${i+1}</tspan></text>`;
+const can=SIM.t==0&&!SIM.play;
+for(let i=0;i<N;i++){SIM.lay[i]={x:X[i],y:y0};h+=`<g class="bc-sb${can?" dg":""}"><circle cx="${X[i]}" cy="${y0}" r="5" fill="#ffd400"/></g>`}
+SP.innerHTML=h;
+H2.textContent=can?"Drag a yellow point along the line to set the initial state of that agent, then press Play.":"Press Reset (or drag the time marker back to 0) to edit the initial states.";
 }
 function drawTL(){
 const T=SIM.T,x0=24,w=408,tx=x0+SIM.t/T*w;
