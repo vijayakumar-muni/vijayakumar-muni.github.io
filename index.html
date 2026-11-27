@@ -275,6 +275,7 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .bc-init input.bad{border-color:#d63030;outline:1px solid #d63030}
 .bc-init mjx-container{margin:0!important}
 .bc-ih{flex-basis:100%}
+.bc-col{display:inline-flex;flex-direction:column;gap:.25rem;padding:.3rem .55rem;border-left:1.5px solid var(--mute);border-right:1.5px solid var(--mute);background:linear-gradient(var(--mute),var(--mute)) left top/.4rem 1.5px no-repeat,linear-gradient(var(--mute),var(--mute)) left bottom/.4rem 1.5px no-repeat,linear-gradient(var(--mute),var(--mute)) right top/.4rem 1.5px no-repeat,linear-gradient(var(--mute),var(--mute)) right bottom/.4rem 1.5px no-repeat}  
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -1333,7 +1334,7 @@ function syncInit(){
 if(INIT.hidden)return;
 const N=nodes.length,key=N+"-"+SIM.n;
 if(key!==initKey){initKey=key;
-INIT.innerHTML=N?nodes.map((nd,i)=>`<label><span>$\\boldsymbol{x}_{${i+1}}(0)=$</span> ${[0,1,2].slice(0,SIM.n).map(c=>`<input data-i="${i}" data-c="${c}" size="4" aria-label="Initial state of agent ${i+1}, component ${c+1}">`).join(" ")}</label>`).join("")+`<div class="bc-ih">Any real values; decimals or fractions such as 1/2</div>`:"Add agents first";
+INIT.innerHTML=N?nodes.map((nd,i)=>`<label><span>$\\boldsymbol{x}_{${i+1}}(0)=$</span> <span class="${SIM.n>1?"bc-col":"bc-row"}">${[0,1,2].slice(0,SIM.n).map(c=>`<input data-i="${i}" data-c="${c}" size="4" aria-label="Initial state of agent ${i+1}, component ${c+1}">`).join("")}</span></label>`).join("")+`<div class="bc-ih">Any real values; decimals or fractions such as 1/2</div>`:"Add agents first";
 window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([INIT])}
 INIT.querySelectorAll("input").forEach(inp=>{if(inp===document.activeElement)return;const v=st(nodes[+inp.dataset.i])[+inp.dataset.c];inp.value=String(+v.toFixed(3));inp.classList.remove("bad")})}
 INIT.addEventListener("input",e=>{const inp=e.target;if(inp.tagName!=="INPUT")return;const v=parseW(inp.value);
