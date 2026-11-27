@@ -1351,11 +1351,11 @@ const N=a.N,A=Array.from({length:N},()=>Array(N).fill(0));edges.forEach(([j,i,w]
 const M=[];for(let r=0;r<N;r++){const row=[];for(let c=0;c<N;c++)row.push((c==r?A[c].reduce((s,v)=>s+v,0):0)-A[c][r]);row.push(0);M.push(row)}
 M[N-1]=Array(N).fill(1).concat([1]);
 for(let c=0;c<N;c++){let p=c;for(let r=c+1;r<N;r++)if(Math.abs(M[r][c])>Math.abs(M[p][c]))p=r;[M[c],M[p]]=[M[p],M[c]];for(let r=0;r<N;r++)if(r!=c){const f=M[r][c]/M[c][c];for(let k=c;k<=N;k++)M[r][k]-=f*M[c][k]}}
-const cv=a=>a.length>1?"["+a.join("\u2002")+"]<sup class=\"bc-tp\">\u22A4</sup>":a[0];const w=M.map((r,i)=>r[N]/r[i]),al=[];
+const cv=a=>a.length>1?"$["+a.map(x=>"{"+x+"}").join("\\ ")+"]^\\intercal$":a[0];const cvOld=a=>a.length>1?"["+a.join("\u2002")+"]<sup class=\"bc-tp\">\u22A4</sup>":a[0];const w=M.map((r,i)=>r[N]/r[i]),al=[];
 for(let k=0;k<Math.max(1,SIM.n);k++){let s=0;for(let j=0;j<N;j++)s+=w[j]*a.col[j]*st(nodes[j])[k];al.push(s)}
 const f=v=>String(+(Math.abs(v)<1e-12?0:v).toPrecision(4)).replace("-","−"),g=v=>f(-v);
 out="For the current initial states, <b>α</b> = "+cv(al.map(f))+": camp A converges to "+cv(al.map(f))+" and camp B converges to "+cv(al.map(g))}
-if(el.dataset.s!==out){el.dataset.s=out;el.innerHTML=out}}
+if(el.dataset.s!==out){el.dataset.s=out;el.innerHTML=out;if(window.MathJax&&MathJax.typesetPromise&&out.indexOf("$")>=0)MathJax.typesetPromise([el])}}
 window.__bcLim=limText;
 const fit=i=>{i.style.width=Math.max(1.6,i.value.length+0.6)+"ch"};
 function syncInit(){limText(); 
