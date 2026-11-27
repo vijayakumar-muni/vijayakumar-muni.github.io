@@ -281,6 +281,7 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .bc-trl{fill:none;stroke:#d4a017;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 .bc-init input{width:auto;min-width:0;box-sizing:content-box}
 .bc-cv{padding:.1rem .5rem;gap:.1rem;vertical-align:middle;line-height:1.25;text-align:center}
+.bc-res .bc-v{text-align:justify;text-justify:inter-word}  
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -1158,9 +1159,9 @@ const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</s
 let h=ck(a.strong,"Strongly connected")+ck(a.symm,"$\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$ for each existing communications $(j,\\,i)$ and $(i,\\,j)$"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")))
 +ck(a.balanced,"Structurally balanced"+(a.balanced?" &mdash; camp A = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"}, camp B = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""));
 let v;
-if(a.strong&&a.symm&&a.balanced)v="<b>Conclusion:</b> The MAS achieves a bipartite asymptotic consensus, $\\lim_{t\\to+\\infty}\\boldsymbol{x}_i(t)=\\sigma_i\\boldsymbol{\\alpha}$ for every agent $i$, where $\\sigma_i=1$ if agent $i$ is in camp A, $\\sigma_i=-1$ if it is in camp B, $\\boldsymbol{\\alpha}\\triangleq\\sum_{j=1}^{N}w_j\\sigma_j\\boldsymbol{x}_j(0)$, and $\\boldsymbol{w}=\\left[w_1\\quad w_2\\quad\\ldots\\quad w_N\\right]^\\intercal$ is the positive vector with $\\boldsymbol{w}^\\intercal(\\mathcal{D}-|\\mathcal{A}|)=\\mathbf{O}$ and $\\sum_{j=1}^Nw_j=1$ (all $w_j=1/N$ when $|\\mathsf{w}_{ij}|=|\\mathsf{w}_{ji}|$)<div class='bc-al'></div>";
-else if(a.strong&&a.symm)v="<b>Structurally unbalanced:</b> $\\boldsymbol{x}_i(t)\\to\\boldsymbol{0}$ for every agent $i$, whatever their initial states are!";
-else v="<b>Not covered by the theorem</b>";
+if(a.strong&&a.symm&&a.balanced)v="<b>Conclusion:</b> Achieves a bipartite asymptotic consensus, $\\lim_{t\\to+\\infty}\\boldsymbol{x}_i(t)=\\sigma_i\\boldsymbol{\\alpha}$ for every agent $i$, where $\\sigma_i=1$ if agent $i$ is in camp A, $\\sigma_i=-1$ if it is in camp B, $\\boldsymbol{\\alpha}\\triangleq\\sum_{j=1}^{N}w_j\\sigma_j\\boldsymbol{x}_j(0)$, and $\\boldsymbol{w}=\\left[w_1\\quad w_2\\quad\\ldots\\quad w_N\\right]^\\intercal$ is the positive vector with $\\boldsymbol{w}^\\intercal(\\mathcal{D}-|\\mathcal{A}|)=\\mathbf{O}$ and $\\sum_{j=1}^Nw_j=1$ (all $w_j=1/N$ when $|\\mathsf{w}_{ij}|=|\\mathsf{w}_{ji}|$)<div class='bc-al'></div>";
+else if(a.strong&&a.symm)v="<b>Conclusion:</b> $\\lim_{t\\to+\\infty}\\boldsymbol{x}_i(t)=\\boldsymbol{0}$ for every agent $i$, whatever the initial states $\\boldsymbol{x}_i(0)$ are!";
+else v="<b>Inconclusive. Further investigation is needed</b>";
 resEl.innerHTML=h+(v?'<div class="bc-v">'+v+"</div>":"");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([resEl]);
 }
 function draw(){
