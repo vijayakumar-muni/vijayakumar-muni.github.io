@@ -285,7 +285,8 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .bc-tp{font-family:"STIX Two Math","Cambria Math","Latin Modern Math","DejaVu Sans",serif;font-size:.85em;margin-left:.1em}
 .dm-bar input.dm-w,.dm-bar select.dm-ex{background:var(--chip);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:.2rem .45rem;font:inherit;font-size:.8rem}
 .dm-bar select.dm-ex option{background:var(--chip);color:var(--ink)}
-.bc-bar input:not([type=checkbox]),.bc-bar select{color:var(--ink)}  
+.bc-bar input:not([type=checkbox]),.bc-bar select{color:var(--ink)}
+.bc-bar select,.bc-bar input:not([type=checkbox]){font-family:inherit;font-weight:inherit;line-height:inherit}  
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -1137,7 +1138,7 @@ root.innerHTML=`<div class="bc-p">
 <div class="bc-bar"><button type="button" data-m="node" class="on"><svg class="bc-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bcBI" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs><circle cx="12" cy="12" r="7" fill="url(#bcBI)" stroke="#8a6410" stroke-width=".8"/></svg> Agent</button><button type="button" data-m="edge">&rarr; Communication</button><button type="button" data-m="del">&#10005; Delete agent</button><label>weight <input class="bc-w" value="1" size="6" aria-label="Communication weight"></label><label><input type="checkbox" class="bc-b"> both ways</label><select class="bc-ex" aria-label="Examples"></select><button type="button" data-a="clr">Clear</button></div>
 <svg class="bc-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg>
 <div class="bc-hint"></div>
-</div><div class="bc-right"><div class="bc-bar"><span class="bc-lab">Each agent's state dimension $n$:</span><button type="button" data-n="1" class="on">1</button><button type="button" data-n="2">2</button><button type="button" data-n="3">3</button><button type="button" data-s="rnd">Random initial states</button><button type="button" data-s="own">Enter initial states</button></div><div class="bc-init" hidden></div><div class="bc-spw"><svg class="bc-sp" viewBox="0 0 480 140" role="img" aria-label="State space"></svg><div class="bc-ov"></div><span class="bc-ra">$\\mathbb{R}$</span><span class="bc-rh">$x_{i,1}$</span><span class="bc-rv">$x_{i,2}$</span></div><div class="bc-tlw"><svg class="bc-tl" viewBox="0 0 480 58" role="img" aria-label="Time axis"></svg><span class="bc-ta">$t$</span><span class="bc-tr"><span>$t$</span><span class="bc-tv"></span></span></div><div class="bc-bar"><button type="button" data-p="play">&#9654; Play</button><button type="button" data-p="rst">&#8634; Reset</button></div><div class="bc-h2"></div></div></div>
+</div><div class="bc-right"><div class="bc-bar"><span class="bc-lab">Each agent's state dimension is $n$:</span><button type="button" data-n="1" class="on">1</button><button type="button" data-n="2">2</button><button type="button" data-n="3">3</button><button type="button" data-s="rnd">Random initial states</button><button type="button" data-s="own">Enter initial states</button></div><div class="bc-init" hidden></div><div class="bc-spw"><svg class="bc-sp" viewBox="0 0 480 140" role="img" aria-label="State space"></svg><div class="bc-ov"></div><span class="bc-ra">$\\mathbb{R}$</span><span class="bc-rh">$x_{i,1}$</span><span class="bc-rv">$x_{i,2}$</span></div><div class="bc-tlw"><svg class="bc-tl" viewBox="0 0 480 58" role="img" aria-label="Time axis"></svg><span class="bc-ta">$t$</span><span class="bc-tr"><span>$t$</span><span class="bc-tv"></span></span></div><div class="bc-bar"><button type="button" data-p="play">&#9654; Play</button><button type="button" data-p="rst">&#8634; Reset</button></div><div class="bc-h2"></div></div></div>
 <div class="bc-res" aria-live="polite"></div></div>`;
 const q=s=>root.querySelector(s),svg=q(".bc-svg"),hintEl=q(".bc-hint"),resEl=q(".bc-res"),wIn=q(".bc-w"),bIn=q(".bc-b"),exSel=q(".bc-ex");
 exSel.innerHTML="<option>Examples…</option>"+EX.map((a,k)=>`<option value="${k}">${a[0]}</option>`).join("");
@@ -1399,7 +1400,7 @@ const nf=v=>v===0?0:+v.toPrecision(8),f1=v=>v.toFixed(1);
 function drawSP(){
 const N=nodes.length,OV=q(".bc-ov"),RA=q(".bc-ra"),RH=q(".bc-rh"),RV=q(".bc-rv");SIM.lay=[];
 RA.style.display=RH.style.display=RV.style.display="none";
-if(!N||SIM.n>2){OV.innerHTML="";SIM.lblN=-1;SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">${N?"The view for n = 3 comes in the next step":"Add agents on the left"}</text>`;H2.textContent=N?"The time axis below already runs the simulation for any n.":"";return}
+if(!N||SIM.n>2){OV.innerHTML="";SIM.lblN=-1;SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">${N?"The view for n = 3 comes in the next step":"Add agents on the left"}</text>`;if(N){if(H2.dataset.k!=="3"){H2.dataset.k="3";H2.innerHTML="The time axis above already runs the simulation for any $n$.";window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([H2])}}else{H2.dataset.k="";H2.textContent=""}return}
 const VR=vr(),P=pos(SIM.t),tr=trajGet(),kk=Math.min(TS,Math.floor(SIM.t/(SIM.T/TS))),can=SIM.t==0&&!SIM.play,tk=tickList(VR);
 let h="",HV,PX_=[],PY_=[],LX=[],LY=[];
 if(SIM.n===1){
@@ -1424,7 +1425,7 @@ for(let i=0;i<N;i++){SIM.lay[i]={x:PX_[i],y:PY_[i]};h+=`<g class="bc-sb${can?" d
 SP.innerHTML=h;
 if(SIM.lblN!==N){SIM.lblN=N;OV.innerHTML=nodes.map((_,i)=>`<span class="bc-xm">$\\boldsymbol{x}_{${i+1}}(t)$</span>`).join("");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([OV])}
 [...OV.children].forEach((s,i)=>{s.style.left=(LX[i]/480*100)+"%";s.style.top=(LY[i]/HV*100)+"%"});
-H2.textContent=can?(SIM.n===1?"Drag a yellow point along the line to set the initial state of that agent, then press Play.":"Drag a yellow point in the plane to set the initial state of that agent, then press Play."):"Press Reset (or drag the time marker back to 0) to edit the initial states";
+H2.dataset.k="";H2.textContent=can?(SIM.n===1?"Drag a yellow point along the line to set the initial state of that agent, then press Play.":"Drag a yellow point in the plane to set the initial state of that agent, then press Play."):"Press Reset (or drag the time marker back to 0) to edit the initial states";
 }
 function drawAll(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play";syncInit()}
 function drawAll_old(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play"}
