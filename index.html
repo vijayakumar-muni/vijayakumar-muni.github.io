@@ -282,6 +282,7 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .bc-init input{width:auto;min-width:0;box-sizing:content-box}
 .bc-cv{padding:.1rem .5rem;gap:.1rem;vertical-align:middle;line-height:1.25;text-align:center}
 .bc-res .bc-v{text-align:justify;text-justify:inter-word}  
+.bc-tp{font-family:"STIX Two Math","Cambria Math","Latin Modern Math","DejaVu Sans",serif;font-size:.85em;margin-left:.1em}
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -1159,8 +1160,8 @@ const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</s
 let h=ck(a.strong,"Strongly connected")+ck(a.symm,"$\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$ for each existing communications $(j,\\,i)$ and $(i,\\,j)$"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")))
 +ck(a.balanced,"Structurally balanced"+(a.balanced?" &mdash; camp A = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"}, camp B = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""));
 let v;
-if(a.strong&&a.symm&&a.balanced)v="<b>Conclusion:</b> Achieves a bipartite asymptotic consensus, $\\lim_{t\\to+\\infty}\\boldsymbol{x}_i(t)=\\sigma_i\\boldsymbol{\\alpha}$ for every agent $i$, where $\\sigma_i=1$ if agent $i$ is in camp A, $\\sigma_i=-1$ if it is in camp B, $\\boldsymbol{\\alpha}\\triangleq\\sum_{j=1}^{N}w_j\\sigma_j\\boldsymbol{x}_j(0)$, and $\\boldsymbol{w}=\\left[w_1\\quad w_2\\quad\\ldots\\quad w_N\\right]^\\intercal$ is the positive vector with $\\boldsymbol{w}^\\intercal(\\mathcal{D}-|\\mathcal{A}|)=\\mathbf{O}$ and $\\sum_{j=1}^Nw_j=1$ (all $w_j=1/N$ when $|\\mathsf{w}_{ij}|=|\\mathsf{w}_{ji}|$)<div class='bc-al'></div>";
-else if(a.strong&&a.symm)v="<b>Conclusion:</b> $\\lim_{t\\to+\\infty}\\boldsymbol{x}_i(t)=\\boldsymbol{0}$ for every agent $i$, whatever the initial states $\\boldsymbol{x}_i(0)$ are!";
+if(a.strong&&a.symm&&a.balanced)v="<b>Conclusion:</b> MAS achieves a bipartite asymptotic consensus, $\\lim_{t\\to+\\infty}\\boldsymbol{x}_i(t)=\\sigma_i\\boldsymbol{\\alpha}$ for every agent $i$, where $\\sigma_i=1$ if agent $i$ is in camp A, $\\sigma_i=-1$ if agent $i$ is in camp B, $\\boldsymbol{\\alpha}\\triangleq\\sum_{j=1}^{N}w_j\\sigma_j\\boldsymbol{x}_j(0),$ and $\\boldsymbol{w}=\\left[w_1\\quad w_2\\quad\\ldots\\quad w_N\\right]^\\intercal$ is the positive vector with $\\boldsymbol{w}^\\intercal(\\mathcal{D}-|\\mathcal{A}|)=\\mathbf{O}$ and $\\sum_{j=1}^Nw_j=1$ (all $w_j=1/N$ when $|\\mathsf{w}_{ij}|=|\\mathsf{w}_{ji}|$).<div class='bc-al'></div>";
+else if(a.strong&&a.symm)v="<b>Conclusion:</b> MAS achieves $\\lim_{t\\to+\\infty}\\boldsymbol{x}_i(t)=\\boldsymbol{0}$ for every agent $i$, whatever the initial states $\\boldsymbol{x}_i(0)$ are!";
 else v="<b>Inconclusive. Further investigation is needed</b>";
 resEl.innerHTML=h+(v?'<div class="bc-v">'+v+"</div>":"");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([resEl]);
 }
@@ -1343,10 +1344,10 @@ const N=a.N,A=Array.from({length:N},()=>Array(N).fill(0));edges.forEach(([j,i,w]
 const M=[];for(let r=0;r<N;r++){const row=[];for(let c=0;c<N;c++)row.push((c==r?A[c].reduce((s,v)=>s+v,0):0)-A[c][r]);row.push(0);M.push(row)}
 M[N-1]=Array(N).fill(1).concat([1]);
 for(let c=0;c<N;c++){let p=c;for(let r=c+1;r<N;r++)if(Math.abs(M[r][c])>Math.abs(M[p][c]))p=r;[M[c],M[p]]=[M[p],M[c]];for(let r=0;r<N;r++)if(r!=c){const f=M[r][c]/M[c][c];for(let k=c;k<=N;k++)M[r][k]-=f*M[c][k]}}
-const cv=a=>a.length>1?'<span class="bc-col bc-cv">'+a.map(x=>"<span>"+x+"</span>").join("")+"</span>":a[0];const w=M.map((r,i)=>r[N]/r[i]),al=[];
+const cv=a=>a.length>1?"["+a.join(",\u2002")+"]<sup class=\"bc-tp\">\u22A4</sup>":a[0];const w=M.map((r,i)=>r[N]/r[i]),al=[];
 for(let k=0;k<Math.max(1,SIM.n);k++){let s=0;for(let j=0;j<N;j++)s+=w[j]*a.col[j]*st(nodes[j])[k];al.push(s)}
 const f=v=>String(+(Math.abs(v)<1e-12?0:v).toPrecision(4)).replace("-","−"),g=v=>f(-v);
-out="For the current initial states, <b>α</b> = "+cv(al.map(f))+": camp A converges to "+cv(al.map(f))+" and camp B to "+cv(al.map(g))}
+out="For the current initial states, <b>α</b> = "+cv(al.map(f))+": camp A converges to "+cv(al.map(f))+" and camp B converges to "+cv(al.map(g))}
 if(el.dataset.s!==out){el.dataset.s=out;el.innerHTML=out}}
 window.__bcLim=limText;
 const fit=i=>{i.style.width=Math.max(1.6,i.value.length+0.6)+"ch"};
