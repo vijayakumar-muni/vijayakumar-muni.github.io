@@ -1112,15 +1112,15 @@ return{N,strong,symm:bad.length==0,bad,balanced,col};
 const L=s=>s.map(i=>i+1).join(", ");
 function verdict(){
 const a=an,N=a.N;
-if(N<2){resEl.innerHTML="Add at least two agents and a communication to analyse the MAS.";return}
+if(N<2){resEl.innerHTML="Add at least two agents and a communication to analyse the MAS";return}
 const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</span> ${t}</div>`;
-let h=ck(a.strong,"Strongly connected")+ck(a.symm,"<i>w</i><sub>ij</sub><i>w</i><sub>ji</sub> &gt; 0 for every pair of agents linked in both directions"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")))
+let h=ck(a.strong,"Strongly connected")+ck(a.symm,"$\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$ for every pair of agents linked in both directions"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")))
 +ck(a.balanced,"Structurally balanced"+(a.balanced?" &mdash; camp A = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"}, camp B = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""));
 let v;
 if(a.strong&&a.symm&&a.balanced)v=""; 
-else if(a.strong&&a.symm)v="<b>Structurally unbalanced:</b> <i>x</i><sub>i</sub>(t) &rarr; 0 for every agent <i>i</i>, whatever the initial states.";
-else v="<b>Not covered by the theorem.</b> It needs a strongly connected network with <i>w</i><sub>ij</sub><i>w</i><sub>ji</sub> &gt; 0 on every two-way link.";
-resEl.innerHTML=h+(v?'<div class="bc-v">'+v+"</div>":"");
+else if(a.strong&&a.symm)v="<b>Structurally unbalanced:</b> <i>x</i><sub>i</sub>(t) &rarr; 0 for every agent <i>i</i>, whatever the initial states";
+else v="<b>Not covered by the theorem.</b> It needs a strongly connected network with $\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$ on every two-way link";
+resEl.innerHTML=h+(v?'<div class="bc-v">'+v+"</div>":"");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([resEl]);
 }
 function draw(){
 const has=(j,i)=>edges.some(e=>e[0]==j&&e[1]==i);
@@ -1180,7 +1180,7 @@ svg.addEventListener("pointercancel",()=>{pend=null});
 root.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{mode=b.dataset.m;sel=-1;hint="";root.querySelectorAll("[data-m]").forEach(c=>c.classList.toggle("on",c===b));draw()});
 root.querySelector('[data-a="clr"]').onclick=()=>{nodes=[];edges=[];sel=-1;hint="";update()};
 exSel.onchange=()=>{if(exSel.value===""||isNaN(+exSel.value))return;ex(EX[+exSel.value]);exSel.selectedIndex=0;update()};
-ex(EX[0]);update();
+update();
 window.__bc={analyse:()=>analyse(),get nodes(){return nodes},get edges(){return edges}};
 })()}catch(e){console.error("[bcdemo]",e)}
 </script>
