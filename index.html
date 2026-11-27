@@ -737,7 +737,7 @@ const MAXN=8,W=640,H=300,BAND=54,R=14,esc=s=>String(s).replace(/&/g,"&amp;").rep
 const K4=[1,2,3,4].flatMap(a=>[1,2,3,4].filter(b=>b!==a).map(b=>[a,b,1]));
 const EX={"Path network":{n:[[110,150],[250,150],[390,150],[530,150]],e:[[1,2,1],[2,3,1],[3,4,1]]},
 "Cycle network":{n:[[250,60],[390,150],[250,240],[110,150]],e:[[1,2,1],[2,3,1],[3,4,1],[4,1,1]]},
-"Star networ":{n:[[320,150],[320,50],[190,230],[450,230]],e:[[1,2,1],[2,1,1],[1,3,1],[3,1,1],[1,4,1],[4,1,1]]},
+"Star network":{n:[[320,150],[320,50],[190,230],[450,230]],e:[[1,2,1],[2,1,1],[1,3,1],[3,1,1],[1,4,1],[4,1,1]]},
 "Complete network":{n:[[220,70],[420,70],[420,240],[220,240]],e:K4},
 "Signed–directed–weighted network":{n:[[140,150],[320,60],[500,150]],e:[[1,2,-2],[2,3,0.5],[3,1,1.5],[1,3,-1]]},
 "Two components":{n:[[160,150],[320,150],[500,150]],e:[[1,2,1],[2,1,1],[3,3,2]]},
@@ -1074,13 +1074,13 @@ const W=480,H=300,R=18,MAXN=10;
 let nodes=[],edges=[],mode="node",sel=-1,hint="",pend=null,an=null;
 /* edge convention: [j,i,w] = communication from agent j to agent i, weight w (A[i][j]=w) */
 const EX=[
-["Two antagonistic camps (balanced)",[[90,70],[270,70],[270,230],[90,230]],[[1,2,1],[2,1,1],[3,4,1],[4,3,1],[2,3,-1],[3,2,-1],[4,1,-1],[1,4,-1]]],
-["Triangle with one antagonistic link (unbalanced)",[[180,60],[80,220],[280,220]],[[1,2,1],[2,1,1],[2,3,1],[3,2,1],[3,1,-1],[1,3,-1]]],
-["All cooperative, 4 agents (ordinary consensus)",[[90,70],[270,70],[270,230],[90,230]],[[1,2,1],[2,1,1],[2,3,1],[3,2,1],[3,4,1],[4,3,1],[4,1,1],[1,4,1],[1,3,1],[3,1,1],[2,4,1],[4,2,1]]],
-["Directed, different weights (balanced)",[[90,70],[270,70],[270,230],[90,230]],[[1,2,2],[2,1,0.5],[2,3,-1.5],[3,2,-1],[3,4,1],[4,1,-0.5]]],
-["Directed, different weights (unbalanced)",[[90,70],[270,70],[270,230],[90,230]],[[1,2,2],[2,1,0.5],[2,3,-1.5],[3,2,-1],[3,4,1],[4,1,0.5]]],
-["Leader-follower chain (not strongly connected)",[[60,150],[180,150],[300,150]],[[1,2,1],[2,3,-1]]],
-["Opposite signs on a two-way link (not covered)",[[180,60],[80,220],[280,220]],[[1,2,1],[2,1,-1],[2,3,1],[3,2,1],[3,1,1],[1,3,1]]]
+["Two antagonistic camps (structurally balanced)",[[90,70],[270,70],[270,230],[90,230]],[[1,2,1],[2,1,1],[3,4,1],[4,3,1],[2,3,-1],[3,2,-1],[4,1,-1],[1,4,-1]]],
+["Triangle with one antagonistic link (structurally unbalanced)",[[180,60],[80,220],[280,220]],[[1,2,1],[2,1,1],[2,3,1],[3,2,1],[3,1,-1],[1,3,-1]]],
+["All cooperative (ordinary consensus)",[[90,70],[270,70],[270,230],[90,230]],[[1,2,1],[2,1,1],[2,3,1],[3,2,1],[3,4,1],[4,3,1],[4,1,1],[1,4,1],[1,3,1],[3,1,1],[2,4,1],[4,2,1]]],
+["Directed, different weights (structurally balanced)",[[90,70],[270,70],[270,230],[90,230]],[[1,2,2],[2,1,0.5],[2,3,-1.5],[3,2,-1],[3,4,1],[4,1,-0.5]]],
+["Directed, different weights (structurally unbalanced)",[[90,70],[270,70],[270,230],[90,230]],[[1,2,2],[2,1,0.5],[2,3,-1.5],[3,2,-1],[3,4,1],[4,1,0.5]]],
+["Leader&ndash;follower chain (not strongly connected)",[[60,150],[180,150],[300,150]],[[1,2,1],[2,3,-1]]],
+["Opposite signs on a two-way communication (not covered)",[[180,60],[80,220],[280,220]],[[1,2,1],[2,1,-1],[2,3,1],[3,2,1],[3,1,1],[1,3,1]]]
 ];
 const HINT={node:"Click empty space to add an agent (up to 10). Drag an agent to move it",edge:"Click the source agent, then the target agent. The communication gets the weight typed above; weight 0 removes it",del:"Click an agent to delete it"};
 const ex=a=>{nodes=a[1].map(p=>({x:240+(p[0]-180)*1.5,y:150+(p[1]-150)*1.2}));edges=a[2].map(e=>[e[0]-1,e[1]-1,e[2]]);sel=-1;hint=""};
