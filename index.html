@@ -1155,7 +1155,7 @@ return{N,strong,symm:bad.length==0,bad,balanced,col};
 const L=s=>s.length?s.map(i=>i+1).join(", "):" ";
 function verdict(){
 const a=an,N=a.N;
-if(N<2){resEl.innerHTML="Add at least two agents and a communication to analyse the MAS";return}
+if(N<2){resEl.innerHTML="Add at least two agents and a communication to analyse the MAS.";return}
 const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</span> ${t}</div>`;
 let h=ck(a.strong,"Strongly connected")+ck(a.symm,"$\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$ for each existing communications $(j,\\,i)$ and $(i,\\,j)$"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")))
 +ck(a.balanced,"Structurally balanced"+(a.balanced?" &mdash; camp A = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"}, camp B = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""));
@@ -1344,7 +1344,7 @@ const N=a.N,A=Array.from({length:N},()=>Array(N).fill(0));edges.forEach(([j,i,w]
 const M=[];for(let r=0;r<N;r++){const row=[];for(let c=0;c<N;c++)row.push((c==r?A[c].reduce((s,v)=>s+v,0):0)-A[c][r]);row.push(0);M.push(row)}
 M[N-1]=Array(N).fill(1).concat([1]);
 for(let c=0;c<N;c++){let p=c;for(let r=c+1;r<N;r++)if(Math.abs(M[r][c])>Math.abs(M[p][c]))p=r;[M[c],M[p]]=[M[p],M[c]];for(let r=0;r<N;r++)if(r!=c){const f=M[r][c]/M[c][c];for(let k=c;k<=N;k++)M[r][k]-=f*M[c][k]}}
-const cv=a=>a.length>1?"["+a.join(",\u2002")+"]<sup class=\"bc-tp\">\u22A4</sup>":a[0];const w=M.map((r,i)=>r[N]/r[i]),al=[];
+const cv=a=>a.length>1?"["+a.join("\u00A0")+"]<sup class=\"bc-tp\">\u22A4</sup>":a[0];const w=M.map((r,i)=>r[N]/r[i]),al=[];
 for(let k=0;k<Math.max(1,SIM.n);k++){let s=0;for(let j=0;j<N;j++)s+=w[j]*a.col[j]*st(nodes[j])[k];al.push(s)}
 const f=v=>String(+(Math.abs(v)<1e-12?0:v).toPrecision(4)).replace("-","−"),g=v=>f(-v);
 out="For the current initial states, <b>α</b> = "+cv(al.map(f))+": camp A converges to "+cv(al.map(f))+" and camp B converges to "+cv(al.map(g))}
