@@ -1238,7 +1238,7 @@ function pos(t){const N=nodes.length,P=expm(SIM.M,t),X0=nodes.map(nd=>st(nd));re
 const tf=v=>SIM.T<10?v.toFixed(2):SIM.T<100?v.toFixed(1):v.toFixed(0);
 function drawSP_old(){
 const N=nodes.length;SIM.lay=[];
-if(SIM.n!==1){SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">The view for n = ${SIM.n} comes in the next step</text>`;H2.textContent="The time axis below already runs the simulation for any n.";return}
+if(SIM.n!==1){SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">The view for n = ${SIM.n} comes in the next step</text>`;H2.textContent="The time axis already runs the simulation for any $n$";return}
 if(!N){SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">Add agents on the left</text>`;H2.textContent="";return}
 const y0=34+N*22;SP.setAttribute("viewBox",`0 0 480 ${y0+32}`);
 const X=pos(SIM.t).map(r=>PX(r[0])),lane=[];
@@ -1257,7 +1257,7 @@ H2.textContent=can?"Drag an agent along the line to set its initial state, then 
 }
 function drawSP_old2(){
 const N=nodes.length;SIM.lay=[];
-if(SIM.n!==1){SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">The view for n = ${SIM.n} comes in the next step</text>`;H2.textContent="The time axis below already runs the simulation for any n.";return}
+if(SIM.n!==1){SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">The view for n = ${SIM.n} comes in the next step</text>`;H2.textContent="The time axis already runs the simulation for any $n$";return}
 if(!N){SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">Add agents on the left</text>`;H2.textContent="";return}
 const y0=38+N*16;SP.setAttribute("viewBox",`0 0 480 ${y0+32}`);
 const X=pos(SIM.t).map(r=>PX(r[0])),lane=[];
@@ -1275,7 +1275,7 @@ H2.textContent=can?"Drag a yellow point along the line to set the initial state 
 }
 function drawSP(){
 const N=nodes.length,OV=q(".bc-ov");SIM.lay=[];
-if(SIM.n!==1||!N){OV.innerHTML="";SIM.lblN=-1;SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">${SIM.n!==1?"The view for n = "+SIM.n+" comes in the next step":"Add agents on the left"}</text>`;H2.textContent=SIM.n!==1?"The time axis below already runs the simulation for any n.":"";return}
+if(SIM.n!==1||!N){OV.innerHTML="";SIM.lblN=-1;SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">${SIM.n!==1?"The view for n = "+SIM.n+" comes in the next step":"Add agents on the left"}</text>`;H2.textContent=SIM.n!==1?"The time axis already runs the simulation for any $n$":"";return}
 const y0=40+N*20,HV=y0+32;SP.setAttribute("viewBox",`0 0 480 ${HV}`);
 const X=pos(SIM.t).map(r=>PX(r[0])),lane=[];
 for(let i=0;i<N;i++){let l=0;for(;;l++){let ok=true;for(let j=0;j<i;j++)if(lane[j]==l&&Math.abs(X[i]-X[j])<40){ok=false;break}if(ok)break}lane[i]=l}
@@ -1303,7 +1303,7 @@ TL.innerHTML=h;
 }
 function drawSP(){
 const N=nodes.length,OV=q(".bc-ov");SIM.lay=[];
-if(SIM.n!==1||!N){OV.innerHTML="";SIM.lblN=-1;q(".bc-ra").style.display="none";SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">${SIM.n!==1?"The view for n = "+SIM.n+" comes in the next step":"Add agents on the left"}</text>`;H2.textContent=SIM.n!==1?"The time axis below already runs the simulation for any n.":"";return}
+if(SIM.n!==1||!N){OV.innerHTML="";SIM.lblN=-1;q(".bc-ra").style.display="none";SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">${SIM.n!==1?"The view for n = "+SIM.n+" comes in the next step":"Add agents on the left"}</text>`;H2.textContent=SIM.n!==1?"The time axis already runs the simulation for any $n$":"";return}
 const y0=40+N*20,HV=y0+32;SP.setAttribute("viewBox",`0 0 480 ${HV}`);
 const X=pos(SIM.t).map(r=>PX(r[0])),lane=[];
 for(let i=0;i<N;i++){let l=0;for(;;l++){let ok=true;for(let j=0;j<i;j++)if(lane[j]==l&&Math.abs(X[i]-X[j])<56){ok=false;break}if(ok)break}lane[i]=l}
@@ -1346,7 +1346,7 @@ root.addEventListener("pointermove",()=>{if(SIM.hd>=0)syncInit()});
 function vr(){if(SIM.hd>=0&&SIM.vrf)return SIM.vrf;let m=0;nodes.forEach(nd=>{const s=st(nd);for(let c=0;c<Math.max(1,SIM.n);c++)m=Math.max(m,Math.abs(s[c]))});m=m>0?m*1.1:1;const g=Math.pow(10,Math.floor(Math.log10(m)));for(const c of [1,1.5,2,3,4,5,6,8,10])if(c*g>=m)return c*g;return 10*g}
 function drawSP(){
 const N=nodes.length,OV=q(".bc-ov");SIM.lay=[];
-if(SIM.n!==1||!N){OV.innerHTML="";SIM.lblN=-1;q(".bc-ra").style.display="none";SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">${SIM.n!==1?"The view for n = "+SIM.n+" comes in the next step":"Add agents on the left"}</text>`;H2.textContent=SIM.n!==1?"The time axis below already runs the simulation for any n.":"";return}
+if(SIM.n!==1||!N){OV.innerHTML="";SIM.lblN=-1;q(".bc-ra").style.display="none";SP.setAttribute("viewBox","0 0 480 150");SP.innerHTML=`<text class="bc-ph" x="240" y="78">${SIM.n!==1?"The view for n = "+SIM.n+" comes in the next step":"Add agents on the left"}</text>`;H2.textContent=SIM.n!==1?"The time axis already runs the simulation for any $n$":"";return}
 const y0=40+N*20,HV=y0+32;SP.setAttribute("viewBox",`0 0 480 ${HV}`);
 const VR=vr(),px=v=>240+v*216/VR,X=pos(SIM.t).map(r=>px(r[0])),lane=[];
 for(let i=0;i<N;i++){let l=0;for(;;l++){let ok=true;for(let j=0;j<i;j++)if(lane[j]==l&&Math.abs(X[i]-X[j])<56){ok=false;break}if(ok)break}lane[i]=l}
