@@ -1428,7 +1428,7 @@ for(let i=0;i<N;i++){SIM.lay[i]={x:PX_[i],y:PY_[i]};h+=`<g class="bc-sb${can?" d
 SP.innerHTML=h;
 if(SIM.lblN!==N){SIM.lblN=N;OV.innerHTML=nodes.map((_,i)=>`<span class="bc-xm">$\\boldsymbol{x}_{${i+1}}(t)$</span>`).join("");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([OV])}
 [...OV.children].forEach((s,i)=>{s.style.left=(LX[i]/480*100)+"%";s.style.top=(LY[i]/HV*100)+"%"});
-H2.dataset.k="";H2.textContent=can?(SIM.n===1?"Drag a yellow point along the line to set the initial state of that agent, then press Play.":"Drag a yellow point in the plane to set the initial state of that agent, then press Play."):"Press Reset (or drag the time marker back to 0) to edit the initial states";
+H2.dataset.k="";H2.textContent=can?(SIM.n===1?"Drag a yellow point along the line to set the initial state of that agent, then press Play.":"Drag a yellow point in the plane to set the initial state of that agent, then press Play."):"Press Reset (or drag the time marker back to 0) to edit the initial states.";
 }
 function drawAll(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play";syncInit()}
 function drawAll_old(){drawSP();drawTL();PB.textContent=SIM.play?"⏸ Pause":"▶ Play"}
