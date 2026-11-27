@@ -803,19 +803,19 @@ const W=obs
 :{noun:"controllability",sys:L=>`$\\dot{\\boldsymbol{x}}(t)=(\\mathcal{${L}}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)+(\\mathcal{B}\\otimes\\mathbf{I}_n)\\boldsymbol{u}(t)$`,M:"$\\mathcal{B}$",nm:"input matrix",thing:"control inputs",line:"columns",nz:"rows",who:"leaders/drivers",whoS:"leaders/drivers",ok:"controllable",no:"uncontrollable",sym:"N<sub>L/D</sub>",si:"N<sub>I</sub>",kind:"inputs",ach:"give every agent its own input",basis:"canonical basis of $\\mathbb{R}^N$",ys:"Your set of leaders/drivers is"};
 const cases=(tg,L)=>{const r=RS[tg],m=MM[tg],one=r.good.length===1,
 chips=`<span class="dm-ch dm-ci dm-all">${r.good.map((s,i)=>`<button type="button" data-d="${tg}" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</span>`,
-SETS=`${one?`the only minimum set of ${W.whoS}`:`all minimum sets of ${W.whoS}`} (size ${r.k}, out of ${r.total} possible set${r.total===1?"":"s"}) through which the MAS is ${W.ok} ${one?"is":"are"} ${chips}.${r.k>1?` Every smaller set leaves the MAS ${W.no}.`:""}`,
+SETS=`${one?`the only minimum set of ${W.whoS}`:`all minimum sets of ${W.whoS}`} (size ${r.k}, out of ${r.total} possible set${r.total===1?"":"s"}) through which the MAS is ${W.ok} ${one?"is":"are"} ${chips}.${r.k>1?` Every smaller set leaves the MAS ${W.no}`:""}`,
 MX=`\\max_{\\lambda}\\left\\{\\text{geometric multiplicity}(\\lambda):\\ \\lambda\\text{ running over all eigenvalues of }\\mathcal{${L}}\\right\\}`;
 return `<p><b class="dm-cs">Case 1:</b> In the system ${W.sys(L)}, suppose the ${W.nm} ${W.M} is allowed to design arbitrarily:</p><ul>
 <li>The minimum number of independent ${W.thing} (equivalently, the minimum number of nonzero ${W.line} of ${W.M}) required to make the MAS ${W.ok} is<div class="dm-eq"><span class="dm-eqs"><b>${W.si}</b></span><span class="dm-eqm">\\[=${MX}=\\]</span><span class="dm-ch dm-ci"><button type="button" data-io="${tg}" aria-pressed="false" title="Show the ${W.kind} in the drawing">${m}</button></span></div></li>
 <li>The minimum number of ${W.who} (equivalently, the minimum number of nonzero ${W.nz} of ${W.M}) required to make the MAS ${W.ok} is <b>${W.sym} = ${r.k}</b>. Furthermore, ${SETS}</li></ul>
 <p><b class="dm-cs">Case 2:</b> In the system ${W.sys(L)}, suppose the ${W.nm} ${W.M} is restricted to have its ${W.line} chosen only from the ${W.basis}:</p><ul>
 <li>The minimum number of independent ${W.thing} (equivalently, the minimum number of nonzero ${W.line} of ${W.M}) required to make the MAS ${W.ok} is <b>${r.k}</b>, which equals the minimum number of ${W.who} (equivalently, the minimum number of nonzero ${W.nz} of ${W.M}). Surprisingly, this value is<div class="dm-eq"><span class="dm-eqm">\\[\\geqq\\ ${MX}\\]</span></div>Furthermore, ${SETS}</li></ul>`};
-const LT=`<div class="dm-lab">Laplacian of the MAS, $\\mathcal{L}\\triangleq\\mathcal{D}-\\mathcal{A}$, where $\\mathcal{D}\\triangleq\\mathrm{diag}\\!\\left(\\sum_{j\\in\\mathcal{N}_1}|\\mathsf{w}_{1j}|,\\ \\sum_{j\\in\\mathcal{N}_2}|\\mathsf{w}_{2j}|,\\ \\ldots,\\ \\sum_{j\\in\\mathcal{N}_N}|\\mathsf{w}_{Nj}|\\right)$ and $\\mathcal{N}_i\\triangleq\\{j:\\,\\mathsf{w}_{ij}\\neq 0\\}$:</div><div class="dm-sc"><table class="dm-t"><tr><th></th>${nodes.map((_,j)=>`<th>${j+1}</th>`).join("")}</tr>${Ls.map((r,i)=>`<tr><th>${i+1}</th>${r.map(v=>`<td class="dm-ro">${esc(v)}</td>`).join("")}</tr>`).join("")}</table></div>`;
-let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0.</p>':"";
+const LT=`<div class="dm-lab">Laplacian of the MAS, $\\mathcal{L}\\triangleq\\mathcal{D}-\\mathcal{A}$, where $\\mathcal{D}\\triangleq\\mathrm{diag}\\!\\left(\\sum_{j\\in\\mathcal{N}_1}|\\mathsf{w}_{1j}|,\\quad\\sum_{j\\in\\mathcal{N}_2}|\\mathsf{w}_{2j}|,\\quad\\ldots,\\quad\\sum_{j\\in\\mathcal{N}_N}|\\mathsf{w}_{Nj}|\\right)$ and $\\mathcal{N}_i\\triangleq\\{j:\\,\\mathsf{w}_{ij}\\neq 0\\}$:</div><div class="dm-sc"><table class="dm-t"><tr><th></th>${nodes.map((_,j)=>`<th>${j+1}</th>`).join("")}</tr>${Ls.map((r,i)=>`<tr><th>${i+1}</th>${r.map(v=>`<td class="dm-ro">${esc(v)}</td>`).join("")}</tr>`).join("")}</table></div>`;
+let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0</p>':"";
 h+=`<p class="dm-th-h">Dynamics of the MAS: $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$. No matter what, the ${W.noun} of this MAS is always achievable (for example, ${W.ach}). The questions are: what is the minimum number of independent ${W.thing} and what is the minimum number of ${W.who} required to achieve it?</p>`+cases("a","A")+LT;
 h+=`<p class="dm-th-h">Change the dynamics of the MAS to $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{L}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$. Here too, no matter what, the ${W.noun} of this MAS is always achievable (for example, ${W.ach}). The same questions are asked again: what is the minimum number of independent ${W.thing} and what is the minimum number of ${W.who} required to achieve it?</p>`+cases("l","L");
 const U=[...sel].sort((a,b)=>a-b);
-if(U.length){const f=tg=>{const ok=ctrl(RS[tg].P,N,U);return `<b class="${ok?"dm-ok":"dm-no"}">${ok?W.ok+" ✓":W.no+" ✗"}</b>`};h+=`<p>${W.ys} {${U.map(x=>x+1).join(", ")}}: ${f("a")} in the adjacency dynamics and ${f("l")} in the Laplacian dynamics.</p>`}
+if(U.length){const f=tg=>{const ok=ctrl(RS[tg].P,N,U);return `<b class="${ok?"dm-ok":"dm-no"}">${ok?W.ok+" ✓":W.no+" ✗"}</b>`};h+=`<p>${W.ys} {${U.map(x=>x+1).join(", ")}}: ${f("a")} in the adjacency dynamics and ${f("l")} in the Laplacian dynamics</p>`}
 res.innerHTML=h;
 const same=(s,t)=>s.length===t.length&&s.every(x=>t.includes(x)),
 offIO=()=>{io=null;cap.innerHTML="";res.querySelectorAll("[data-io]").forEach(x=>{x.classList.remove("on");x.setAttribute("aria-pressed","false")})},
@@ -832,8 +832,6 @@ res.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{const tg=b.dataset.d,
 if(hlD===tg&&same(hl,s)&&hl.length){hl=[];offIO();mark(tg,null);drawG();return}
 if(io){showIO(tg,s);res.querySelectorAll("[data-io]").forEach(x=>{const on=x.dataset.io===tg;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on?"true":"false")})}else{hl=s.slice();hlD=tg;drawG()}
 mark(tg,s)})}  
-
-
 function fillEx(){const sl=q(".dm-ex");sl.innerHTML="<option>Examples…</option>"+Object.keys(EX).map(k=>{const ex=EX[k],n=ex.n.length,S0=Array.from({length:n},()=>Array(n).fill(""));ex.e.forEach(([j,i,w])=>S0[i-1][j-1]=String(w));
 const r=solve(obs?S0[0].map((_,j)=>S0.map(x=>x[j])):S0),m=maxMult(n,r.P);
 const lab=k.startsWith("Minimum control inputs/outputs")?(obs?"Minimum outputs < minimum sensors":"Minimum control inputs < minimum leaders/drivers"):k;
@@ -871,7 +869,6 @@ sel=new Set();fillEx();full()});
 fillEx();
 q('[data-m="node"]').classList.add("on");q(".dm-hint").textContent=HINT.node;full();
 })()}catch(e){console.error("[demo]",e)}
-
 const secs=[...document.querySelectorAll("main section")];
 $("#nav").innerHTML=`<a href="#" class="home">Home</a>`+secs.map(s=>`<a href="#${s.id}">${s.querySelector("h2").textContent}</a>`).join("");
 $("#mnav").innerHTML=$("#nav").innerHTML;
@@ -1084,8 +1081,8 @@ const EX=[
 const HINT={node:"Click empty space to add an agent (up to 10). Drag an agent to move it.",edge:"Click the source agent, then the target agent. The communication gets the weight typed above; weight 0 removes it.",del:"Click an agent to delete it."};
 const ex=a=>{nodes=a[1].map(p=>({x:240+(p[0]-180)*1.5,y:150+(p[1]-150)*1.2}));edges=a[2].map(e=>[e[0]-1,e[1]-1,e[2]]);sel=-1;hint=""};
 root.innerHTML=`<div class="bc-p">
-<p class="bc-d">$N$: The total number of agents in the MAS; $\\boldsymbol{x}_i(t)\\in\\mathbb{R}^n$: The state of agent $i$ at time $t$; $\\boldsymbol{x}(t)\\triangleq\\left[\\boldsymbol{x}_1(t)^\\intercal\\quad\\boldsymbol{x}_2(t)^\\intercal\\quad\\ldots\\quad\\boldsymbol{x}_N(t)^\\intercal\\right]^\\intercal$: The state of the MAS at time $t$; Communication topology: Time-invariant; Communication topology ($\\mathcal{A}$: element in row $i$, column $j$ = weight of the communication from agent $j$ to $i$, denoted by $\\mathsf{w}_{ij}$)</p>
-<p class="bc-d">Dynamics of the MAS: $\\dot{\\boldsymbol{x}}(t)=-(\\mathcal{L}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$, where $\\mathcal{L}\\triangleq\\mathcal{D}-\\mathcal{A}$, Communication topology ($\\mathcal{A}$: element in row $i$, column $j$ = weight of the communication from agent $j$ to $i$, denoted by $\\mathsf{w}_{ij}$), $\\mathcal{D}\\triangleq\\mathrm{diag}\\!\\left(\\sum_{j\\in\\mathcal{N}_1}|\\mathsf{w}_{1j}|,\\quad\\sum_{j\\in\\mathcal{N}_2}|\\mathsf{w}_{2j}|,\\quad\\ldots,\\quad\\sum_{j\\in\\mathcal{N}_N}|\\mathsf{w}_{Nj}|\\right)$, and $\\mathcal{N}_i\\triangleq\\{j:\\,\\mathsf{w}_{ij}\\neq 0\\}$</p>
+<p class="bc-d">$N$: The total number of agents in the MAS; $\\boldsymbol{x}_i(t)\\in\\mathbb{R}^n$: The state of agent $i$ at time $t$; $\\boldsymbol{x}(t)\\triangleq\\left[\\boldsymbol{x}_1(t)^\\intercal\\quad\\boldsymbol{x}_2(t)^\\intercal\\quad\\ldots\\quad\\boldsymbol{x}_N(t)^\\intercal\\right]^\\intercal$: The state of the MAS at time $t$; Communication topology: Time-invariant and is $\\mathcal{A}$ (element in row $i$, column $j$ = weight of the communication from agent $j$ to $i$, denoted by $\\mathsf{w}_{ij}$)</p>
+<p class="bc-d">Dynamics of the MAS: $\\dot{\\boldsymbol{x}}(t)=-(\\mathcal{L}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$, where $\\mathcal{L}\\triangleq\\mathcal{D}-\\mathcal{A}$, $\\mathcal{D}\\triangleq\\mathrm{diag}\\!\\left(\\sum_{j\\in\\mathcal{N}_1}|\\mathsf{w}_{1j}|,\\quad\\sum_{j\\in\\mathcal{N}_2}|\\mathsf{w}_{2j}|,\\quad\\ldots,\\quad\\sum_{j\\in\\mathcal{N}_N}|\\mathsf{w}_{Nj}|\\right)$, and $\\mathcal{N}_i\\triangleq\\{j:\\,\\mathsf{w}_{ij}\\neq 0\\}$</p>
 <div class="bc-grid"><div>
 <div class="bc-bar"><button type="button" data-m="node" class="on"><svg class="bc-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bcBI" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs><circle cx="12" cy="12" r="7" fill="url(#bcBI)" stroke="#8a6410" stroke-width=".8"/></svg> Agent</button><button type="button" data-m="edge">&rarr; Communication</button><button type="button" data-m="del">&#10005; Delete node</button><label>weight <input class="bc-w" value="1" size="6" aria-label="Communication weight"></label><label><input type="checkbox" class="bc-b"> both ways</label><select class="bc-ex" aria-label="Examples"></select><button type="button" data-a="clr">Clear</button></div>
 <svg class="bc-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg>
@@ -1098,53 +1095,53 @@ exSel.innerHTML="<option>Examples…</option>"+EX.map((a,k)=>`<option value="${k
 const fmt=w=>String(+w.toFixed(3));
 const sg=v=>v>0?1:v<0?-1:0;
 function analyse(){
- const N=nodes.length,A=Array.from({length:N},()=>Array(N).fill(0));
- edges.forEach(([j,i,w])=>{A[i][j]=w});
- const r=A.map((row,i)=>row.map((v,j)=>i==j||v!==0));
- for(let k=0;k<N;k++)for(let i=0;i<N;i++)if(r[i][k])for(let j=0;j<N;j++)if(r[k][j])r[i][j]=true;
- const strong=N>0&&r.every(row=>row.every(Boolean));
- const bad=[];for(let i=0;i<N;i++)for(let j=i+1;j<N;j++)if(A[i][j]!==0&&A[j][i]!==0&&A[i][j]*A[j][i]<0)bad.push([i,j]);
- const col=Array(N).fill(0);
- for(let s=0;s<N;s++)if(!col[s]){col[s]=1;const Q=[s];while(Q.length){const u=Q.shift();for(let v=0;v<N;v++){const w=A[u][v]!==0?A[u][v]:A[v][u];if(w!==0&&!col[v]){col[v]=sg(w)*col[u];Q.push(v)}}}}
- const balanced=edges.every(([j,i,w])=>col[i]===sg(w)*col[j]);
- return{N,strong,symm:bad.length==0,bad,balanced,col};
+const N=nodes.length,A=Array.from({length:N},()=>Array(N).fill(0));
+edges.forEach(([j,i,w])=>{A[i][j]=w});
+const r=A.map((row,i)=>row.map((v,j)=>i==j||v!==0));
+for(let k=0;k<N;k++)for(let i=0;i<N;i++)if(r[i][k])for(let j=0;j<N;j++)if(r[k][j])r[i][j]=true;
+const strong=N>0&&r.every(row=>row.every(Boolean));
+const bad=[];for(let i=0;i<N;i++)for(let j=i+1;j<N;j++)if(A[i][j]!==0&&A[j][i]!==0&&A[i][j]*A[j][i]<0)bad.push([i,j]);
+const col=Array(N).fill(0);
+for(let s=0;s<N;s++)if(!col[s]){col[s]=1;const Q=[s];while(Q.length){const u=Q.shift();for(let v=0;v<N;v++){const w=A[u][v]!==0?A[u][v]:A[v][u];if(w!==0&&!col[v]){col[v]=sg(w)*col[u];Q.push(v)}}}}
+const balanced=edges.every(([j,i,w])=>col[i]===sg(w)*col[j]);
+return{N,strong,symm:bad.length==0,bad,balanced,col};
 }
 const L=s=>s.map(i=>i+1).join(", ");
 function verdict(){
- const a=an,N=a.N;
- if(N<2){resEl.innerHTML="Add at least two agents and some links to analyse the network.";return}
- const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</span> ${t}</div>`;
- let h=ck(a.strong,"Strongly connected")+ck(a.symm,"<i>w</i><sub>ij</sub><i>w</i><sub>ji</sub> &gt; 0 for every pair of agents linked in both directions"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")))
-  +ck(a.balanced,"Structurally balanced"+(a.balanced?" &mdash; camp A = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"}, camp B = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""));
- let v;
- if(a.strong&&a.symm&&a.balanced)v="<b>Bipartite asymptotic consensus:</b> <i>x</i><sub>i</sub>(t) &rarr; &sigma;<sub>i</sub>&alpha; with &sigma;<sub>i</sub>=+1 in camp A and &minus;1 in camp B; &alpha; is fixed by the initial states (it is 0 for special initial states).";
- else if(a.strong&&a.symm)v="<b>Structurally unbalanced:</b> <i>x</i><sub>i</sub>(t) &rarr; 0 for every agent <i>i</i>, whatever the initial states.";
- else v="<b>Not covered by the theorem.</b> It needs a strongly connected network with <i>w</i><sub>ij</sub><i>w</i><sub>ji</sub> &gt; 0 on every two-way link.";
- resEl.innerHTML=h+'<div class="bc-v">'+v+"</div>";
+const a=an,N=a.N;
+if(N<2){resEl.innerHTML="Add at least two agents and some links to analyse the network.";return}
+const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</span> ${t}</div>`;
+let h=ck(a.strong,"Strongly connected")+ck(a.symm,"<i>w</i><sub>ij</sub><i>w</i><sub>ji</sub> &gt; 0 for every pair of agents linked in both directions"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")))
++ck(a.balanced,"Structurally balanced"+(a.balanced?" &mdash; camp A = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"}, camp B = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""));
+let v;
+if(a.strong&&a.symm&&a.balanced)v="<b>Bipartite asymptotic consensus:</b> <i>x</i><sub>i</sub>(t) &rarr; &sigma;<sub>i</sub>&alpha; with &sigma;<sub>i</sub>=+1 in camp A and &minus;1 in camp B; &alpha; is fixed by the initial states (it is 0 for special initial states).";
+else if(a.strong&&a.symm)v="<b>Structurally unbalanced:</b> <i>x</i><sub>i</sub>(t) &rarr; 0 for every agent <i>i</i>, whatever the initial states.";
+else v="<b>Not covered by the theorem.</b> It needs a strongly connected network with <i>w</i><sub>ij</sub><i>w</i><sub>ji</sub> &gt; 0 on every two-way link.";
+resEl.innerHTML=h+'<div class="bc-v">'+v+"</div>";
 }
 function draw(){
- const has=(j,i)=>edges.some(e=>e[0]==j&&e[1]==i);
- const ball=(id,a,b,c)=>`<radialGradient id="${id}" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="${a}"/><stop offset=".45" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></radialGradient>`;
- let h=`<defs>${[["g","#1f9d55"],["r","#d63030"]].map(([k,c])=>`<marker id="bc${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`).join("")}${ball("bcBA","#fffbe8","#f2b92c","#a8780f")}${ball("bcBB","#eaf4ff","#4a9df0","#1d4f96")}</defs>`;
- let lab="";
- edges.forEach(([j,i,w])=>{
-  const p=nodes[j],t=nodes[i],dx=t.x-p.x,dy=t.y-p.y,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,nx=-uy,ny=ux;
-  const c=w>0?"#1f9d55":"#d63030",mk=w>0?"bcg":"bcr";
-  const curved=has(i,j),off=curved?Math.min(30,len*.22):0;
-  const cx=(p.x+t.x)/2+nx*off,cy=(p.y+t.y)/2+ny*off;
-  const sx=curved?cx-p.x:dx,sy=curved?cy-p.y:dy,sl=Math.hypot(sx,sy)||1;
-  const ex_=curved?cx-t.x:-dx,ey=curved?cy-t.y:-dy,el_=Math.hypot(ex_,ey)||1;
-  const x1=p.x+sx/sl*R,y1=p.y+sy/sl*R,x2=t.x+ex_/el_*(R+1),y2=t.y+ey/el_*(R+1);
-  h+=`<path d="${curved?`M${x1} ${y1}Q${cx} ${cy} ${x2} ${y2}`:`M${x1} ${y1}L${x2} ${y2}`}" fill="none" stroke="${c}" stroke-width="1.2" marker-end="url(#${mk})"/>`;
-  const mx=curved?.25*x1+.5*cx+.25*x2:(x1+x2)/2,my=curved?.25*y1+.5*cy+.25*y2:(y1+y2)/2;
-  lab+=`<text class="bc-l" x="${mx+nx*(curved?9:10)}" y="${my+ny*(curved?9:10)}" fill="${c}" dominant-baseline="central">${fmt(w)}</text>`;
- });
- h+=lab;
- const colored=an&&an.N>=2&&an.balanced;
- nodes.forEach((n,k)=>{const b=colored&&an.col[k]<0;
-  h+=`<g class="bc-n${k==sel&&mode=="edge"?" src":""}${b?" cb":""}"><circle class="b" cx="${n.x}" cy="${n.y}" r="${R}" fill="url(#${b?"bcBB":"bcBA"})" stroke="${b?"#1d4f96":"#8a6410"}"/><text x="${n.x}" y="${n.y}">${k+1}</text></g>`});
- svg.innerHTML=h;
- hintEl.textContent=hint||HINT[mode];
+const has=(j,i)=>edges.some(e=>e[0]==j&&e[1]==i);
+const ball=(id,a,b,c)=>`<radialGradient id="${id}" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="${a}"/><stop offset=".45" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></radialGradient>`;
+let h=`<defs>${[["g","#1f9d55"],["r","#d63030"]].map(([k,c])=>`<marker id="bc${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`).join("")}${ball("bcBA","#fffbe8","#f2b92c","#a8780f")}${ball("bcBB","#eaf4ff","#4a9df0","#1d4f96")}</defs>`;
+let lab="";
+edges.forEach(([j,i,w])=>{
+const p=nodes[j],t=nodes[i],dx=t.x-p.x,dy=t.y-p.y,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,nx=-uy,ny=ux;
+const c=w>0?"#1f9d55":"#d63030",mk=w>0?"bcg":"bcr";
+const curved=has(i,j),off=curved?Math.min(30,len*.22):0;
+const cx=(p.x+t.x)/2+nx*off,cy=(p.y+t.y)/2+ny*off;
+const sx=curved?cx-p.x:dx,sy=curved?cy-p.y:dy,sl=Math.hypot(sx,sy)||1;
+const ex_=curved?cx-t.x:-dx,ey=curved?cy-t.y:-dy,el_=Math.hypot(ex_,ey)||1;
+const x1=p.x+sx/sl*R,y1=p.y+sy/sl*R,x2=t.x+ex_/el_*(R+1),y2=t.y+ey/el_*(R+1);
+h+=`<path d="${curved?`M${x1} ${y1}Q${cx} ${cy} ${x2} ${y2}`:`M${x1} ${y1}L${x2} ${y2}`}" fill="none" stroke="${c}" stroke-width="1.2" marker-end="url(#${mk})"/>`;
+const mx=curved?.25*x1+.5*cx+.25*x2:(x1+x2)/2,my=curved?.25*y1+.5*cy+.25*y2:(y1+y2)/2;
+lab+=`<text class="bc-l" x="${mx+nx*(curved?9:10)}" y="${my+ny*(curved?9:10)}" fill="${c}" dominant-baseline="central">${fmt(w)}</text>`;
+});
+h+=lab;
+const colored=an&&an.N>=2&&an.balanced;
+nodes.forEach((n,k)=>{const b=colored&&an.col[k]<0;
+h+=`<g class="bc-n${k==sel&&mode=="edge"?" src":""}${b?" cb":""}"><circle class="b" cx="${n.x}" cy="${n.y}" r="${R}" fill="url(#${b?"bcBB":"bcBA"})" stroke="${b?"#1d4f96":"#8a6410"}"/><text x="${n.x}" y="${n.y}">${k+1}</text></g>`});
+svg.innerHTML=h;
+hintEl.textContent=hint||HINT[mode];
 }
 function update(){an=analyse();draw();verdict()}
 const pt=e=>{const r=svg.getBoundingClientRect();return[(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]};
@@ -1153,27 +1150,27 @@ const setEdge=(j,i,w)=>{edges=edges.filter(e=>!(e[0]==j&&e[1]==i));if(w!==0)edge
 function parseW(s){s=s.trim();let v;const m=s.match(/^(-?\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/);if(m)v=+m[1]/+m[2];else if(/^-?\d*\.?\d+$/.test(s))v=+s;else return null;return isFinite(v)?v:null}
 function delNode(k){nodes.splice(k,1);edges=edges.filter(e=>e[0]!=k&&e[1]!=k).map(e=>[e[0]>k?e[0]-1:e[0],e[1]>k?e[1]-1:e[1],e[2]])}
 function click(id,x,y){
- hint="";
- if(mode=="del"){if(id>=0){delNode(id)}}
- else if(mode=="edge"){
-  if(id<0)sel=-1;
-  else if(sel<0){sel=id;hint="Agent "+(id+1)+" is the source. Now click the target agent."}
-  else if(sel==id){hint="Self-loops are not allowed here; choose a different target agent.";sel=-1}
-  else{const w=parseW(wIn.value);
-   if(w===null){hint="Enter a number or a fraction such as -1.5 or 1/2 as the weight.";wIn.classList.add("bad")}
-   else{wIn.classList.remove("bad");setEdge(sel,id,w);if(bIn.checked)setEdge(id,sel,w)}
-   sel=-1}
- }else if(id<0){
-  if(nodes.length>=MAXN)hint="At most "+MAXN+" agents are allowed.";
-  else nodes.push({x:Math.max(R+2,Math.min(W-R-2,x)),y:Math.max(R+2,Math.min(H-R-2,y))});
- }
- update();
+hint="";
+if(mode=="del"){if(id>=0){delNode(id)}}
+else if(mode=="edge"){
+if(id<0)sel=-1;
+else if(sel<0){sel=id;hint="Agent "+(id+1)+" is the source. Now click the target agent."}
+else if(sel==id){hint="Self-loops are not allowed here; choose a different target agent.";sel=-1}
+else{const w=parseW(wIn.value);
+if(w===null){hint="Enter a number or a fraction such as -1.5 or 1/2 as the weight.";wIn.classList.add("bad")}
+else{wIn.classList.remove("bad");setEdge(sel,id,w);if(bIn.checked)setEdge(id,sel,w)}
+sel=-1}
+}else if(id<0){
+if(nodes.length>=MAXN)hint="At most "+MAXN+" agents are allowed.";
+else nodes.push({x:Math.max(R+2,Math.min(W-R-2,x)),y:Math.max(R+2,Math.min(H-R-2,y))});
+}
+update();
 }
 svg.addEventListener("pointerdown",e=>{const[x,y]=pt(e);pend={id:hit(x,y),cx:e.clientX,cy:e.clientY,x,y,drag:false};try{svg.setPointerCapture(e.pointerId)}catch(_){}});
 svg.addEventListener("pointermove",e=>{
- if(!pend||pend.id<0)return;
- if(!pend.drag&&Math.hypot(e.clientX-pend.cx,e.clientY-pend.cy)>6)pend.drag=true;
- if(pend.drag){const[x,y]=pt(e),n=nodes[pend.id];n.x=Math.max(R+2,Math.min(W-R-2,x));n.y=Math.max(R+2,Math.min(H-R-2,y));draw()}
+if(!pend||pend.id<0)return;
+if(!pend.drag&&Math.hypot(e.clientX-pend.cx,e.clientY-pend.cy)>6)pend.drag=true;
+if(pend.drag){const[x,y]=pt(e),n=nodes[pend.id];n.x=Math.max(R+2,Math.min(W-R-2,x));n.y=Math.max(R+2,Math.min(H-R-2,y));draw()}
 });
 svg.addEventListener("pointerup",e=>{if(!pend)return;const p=pend;pend=null;if(!p.drag)click(p.id,p.x,p.y)});
 svg.addEventListener("pointercancel",()=>{pend=null});
