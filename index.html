@@ -1156,7 +1156,7 @@ const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</s
 let h=ck(a.strong,"Strongly connected")+ck(a.symm,"$\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$ for each existing communications $(j,\\,i)$ and $(i,\\,j)$"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")))
 +ck(a.balanced,"Structurally balanced"+(a.balanced?" &mdash; camp A = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"}, camp B = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""));
 let v;
-if(a.strong&&a.symm&&a.balanced)v=""; 
+if(a.strong&&a.symm&&a.balanced)v="<b>Conclusion:</b> the MAS achieves bipartite asymptotic consensus: $\\lim_{t\\to+\\infty}\\boldsymbol{x}_i(t)=\\sigma_i\\boldsymbol{\\alpha}$ for every agent $i$, where $\\sigma_i=1$ if agent $i$ is in camp A, $\\sigma_i=-1$ if it is in camp B, $\\boldsymbol{\\alpha}\\triangleq\\sum_{j=1}^{N}w_j\\sigma_j\\boldsymbol{x}_j(0)$, and $w=[w_1\\ \\ldots\\ w_N]^\\top$ is the positive vector with $w^\\top(\\mathcal{D}-|\\mathcal{A}|)=0$ and $\\sum_{j}w_j=1$ (all $w_j=1/N$ when $|\\mathsf{w}_{ij}|=|\\mathsf{w}_{ji}|$)<div class='bc-al'></div>";
 else if(a.strong&&a.symm)v="<b>Structurally unbalanced:</b> $\\boldsymbol{x}_i(t)\\to\\boldsymbol{0}$ for every agent $i$, whatever their initial states are";
 else v="<b>Not covered by the theorem</b>";
 resEl.innerHTML=h+(v?'<div class="bc-v">'+v+"</div>":"");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([resEl]);
@@ -1333,7 +1333,20 @@ TL.innerHTML=h;
 }
 const INIT=q(".bc-init"),OWN=q('[data-s="own"]');
 let initKey="";
-function syncInit(){
+function limText(){
+const el=q(".bc-al");if(!el)return;const a=an;let out="";
+if(a&&a.N===nodes.length&&a.N>=2&&a.strong&&a.symm&&a.balanced){
+const N=a.N,A=Array.from({length:N},()=>Array(N).fill(0));edges.forEach(([j,i,w])=>{A[i][j]=Math.abs(w)});
+const M=[];for(let r=0;r<N;r++){const row=[];for(let c=0;c<N;c++)row.push((c==r?A[c].reduce((s,v)=>s+v,0):0)-A[c][r]);row.push(0);M.push(row)}
+M[N-1]=Array(N).fill(1).concat([1]);
+for(let c=0;c<N;c++){let p=c;for(let r=c+1;r<N;r++)if(Math.abs(M[r][c])>Math.abs(M[p][c]))p=r;[M[c],M[p]]=[M[p],M[c]];for(let r=0;r<N;r++)if(r!=c){const f=M[r][c]/M[c][c];for(let k=c;k<=N;k++)M[r][k]-=f*M[c][k]}}
+const w=M.map((r,i)=>r[N]/r[i]),al=[];
+for(let k=0;k<Math.max(1,SIM.n);k++){let s=0;for(let j=0;j<N;j++)s+=w[j]*a.col[j]*st(nodes[j])[k];al.push(s)}
+const f=v=>String(+(Math.abs(v)<1e-12?0:v).toPrecision(4)).replace("-","−"),g=v=>f(-v);
+out="For the current initial states, <b>α</b> = ("+al.map(f).join(", ")+"): camp A converges to ("+al.map(f).join(", ")+") and camp B to ("+al.map(g).join(", ")+")"}
+if(el.dataset.s!==out){el.dataset.s=out;el.innerHTML=out}}
+window.__bcLim=limText;
+function syncInit(){limText();  
 if(INIT.hidden)return;
 const N=nodes.length,key=N+"-"+SIM.n;
 if(key!==initKey){initKey=key;
