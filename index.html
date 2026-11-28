@@ -313,6 +313,7 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .dm-ol ul>li{position:relative;padding-left:1.1em}
 .dm-ol ul>li::before{content:"";position:absolute;left:0;top:.6em;width:.4em;height:.4em;border-radius:50%;background:currentColor}
 .dm-eq .dm-ci{position:relative;top:-2px}
+.dm-res li>.dm-ci{position:relative;top:-1px}
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -881,7 +882,7 @@ const W=obs
 :{noun:"controllability",sys:L=>`$\\dot{\\boldsymbol{x}}(t)=(\\mathcal{${L}}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)+(\\mathcal{B}\\otimes\\mathbf{I}_n)\\boldsymbol{u}(t)$`,M:"$\\mathcal{B}$",nm:"input matrix",thing:"control inputs",line:"columns",nz:"rows",who:"leaders/drivers",whoS:"leaders/drivers",ok:"controllable",no:"uncontrollable",sym:"N<sub>L/D</sub>",si:"N<sub>I</sub>",kind:"inputs",ach:"give every agent its own input",basis:"canonical basis of $\\mathbb{R}^N$",ys:"Your set of leaders/drivers is"};
 const cases=(tg,L)=>{const r=RS[tg],m=MM[tg],one=r.good.length===1,
 chips=`<span class="dm-ch dm-ci dm-all">${r.good.map((s,i)=>`<button type="button" data-d="${tg}" data-s="${i}">{${s.map(x=>x+1).join(", ")}}</button>`).join("")}</span>`,
-SETS=`${one?`the only minimum set of ${W.whoS}`:`all minimum sets of ${W.whoS}`} (size ${r.k}, out of ${r.total} possible set${r.total===1?"":"s"}) through which the MAS is ${W.ok} ${one?"is":"are"} ${chips}.${r.k>1?` Every smaller set leaves the MAS ${W.no}`:""}`,
+SETS=`${one?`the only minimum set of ${W.whoS}`:`all minimum sets of ${W.whoS}`} (size ${r.k}, out of ${r.total} possible set${r.total===1?"":"s"}) through which the MAS is ${W.ok} ${one?"is":"are"} ${chips}.${r.k>1?` Every smaller set leaves the MAS ${W.no}.`:""}`,
 MX=`\\max_{\\lambda}\\left\\{\\text{geometric multiplicity}(\\lambda):\\ \\lambda\\text{ running over all eigenvalues of }\\mathcal{${L}}\\right\\}`;
 return `<p><b class="dm-cs">Case 1:</b> In the system ${W.sys(L)}, suppose the ${W.nm} ${W.M} is allowed to design arbitrarily:</p><ul>
 <li>The minimum number of independent ${W.thing} (equivalently, the minimum number of nonzero ${W.line} of ${W.M}) required to make the MAS ${W.ok} is<div class="dm-eq"><span class="dm-eqs"><b>${W.si}</b></span><span class="dm-eqm">\\[=${MX}=\\]</span><span class="dm-ch dm-ci"><button type="button" data-io="${tg}" aria-pressed="false" title="Show the ${W.kind} in the drawing">${m}</button><span style="align-self:baseline">.</span></span></div></li>
