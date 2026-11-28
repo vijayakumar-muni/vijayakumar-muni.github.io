@@ -318,6 +318,8 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 @media(min-width:1100px){#bcdemo .bc-p>.bc-bar{gap:.3rem}#bcdemo .bc-p>.bc-bar button{padding-left:.6rem;padding-right:.6rem}#bcdemo .bc-p>.bc-bar .bc-ex{flex:0 1 auto;width:7.4rem}#bcdemo .bc-p>.bc-bar .bc-w{width:2.6rem}}
 #bcdemo .bc-p>.bc-hint{margin:.1rem 0 .7rem;min-height:2.9em}
 @media(max-width:700px){#bcdemo .bc-p>.bc-hint{min-height:4.4em}}
+.bc-eq{overflow-x:auto;overflow-y:hidden}
+.bc-eq mjx-container[display="true"]{margin:.4rem 0!important}
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -1163,8 +1165,12 @@ const EX=[
 const HINT={node:"Click empty space to add an agent (up to 10). Drag an agent to move it.",edge:"Click the source agent, then the target agent. The communication gets the weight typed above; weight 0 removes it.",del:"Click an agent to delete it."};
 const ex=a=>{nodes=a[1].map(p=>({x:240+(p[0]-180)*1.5,y:150+(p[1]-150)*1.2}));edges=a[2].map(e=>[e[0]-1,e[1]-1,e[2]]);sel=-1;hint=""};
 root.innerHTML=`<div class="bc-p">
-<p class="bc-d">$N$: The total number of agents in the MAS; $\\boldsymbol{x}_i(t)\\in\\mathbb{R}^n$: The state of agent $i$ at time $t$; $\\boldsymbol{x}(t)\\triangleq\\left[\\boldsymbol{x}_1(t)^\\intercal\\quad\\boldsymbol{x}_2(t)^\\intercal\\quad\\ldots\\quad\\boldsymbol{x}_N(t)^\\intercal\\right]^\\intercal$: The state of the MAS at time $t$; Communication topology: Time-invariant and is given by $\\mathcal{A}$ (element in row $i$, column $j$ = weight of the communication from agent $j$ to $i$, denoted by $\\mathsf{w}_{ij}$).</p>
-<p class="bc-d">Dynamics of the MAS: $\\dot{\\boldsymbol{x}}(t)=-(\\mathcal{L}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$, where the Laplacian $\\mathcal{L}\\triangleq\\mathcal{D}-\\mathcal{A}$, $\\mathcal{D}\\triangleq\\mathrm{diag}\\!\\left(\\sum_{j\\in\\mathcal{N}_1}|\\mathsf{w}_{1j}|,\\quad\\sum_{j\\in\\mathcal{N}_2}|\\mathsf{w}_{2j}|,\\quad\\ldots,\\quad\\sum_{j\\in\\mathcal{N}_N}|\\mathsf{w}_{Nj}|\\right),$ and $\\mathcal{N}_i\\triangleq\\{j:\\,\\mathsf{w}_{ij}\\neq 0\\}.$</p>
+<p class="bc-d">$N$: The total number of agents in the MAS; $\\boldsymbol{x}_i(t)\\in\\mathbb{R}^n$: The state of agent $i$ at time $t$; $\\boldsymbol{x}(t)\\triangleq\\begin{bmatrix}\\boldsymbol{x}_1(t)^\\intercal&\\boldsymbol{x}_2(t)^\\intercal&\\ldots&\\boldsymbol{x}_N(t)^\\intercal\\mkern-9mu\\end{bmatrix}^\\intercal$: The state of the MAS at time $t$; Communication topology of the MAS: Time-invariant.</p>
+<p class="bc-d">Communication topology of the MAS (element in row $i$, column $j$ = weight of the communication from agent $j$ to $i$, denoted by $\\mathsf{w}_{ij}$):</p>
+<div class="bc-d bc-eq bc-ea"></div>
+<p class="bc-d">Laplacian of the MAS (defined by $\\mathcal{D}-\\mathcal{A}$, where $\\mathcal{D}\\triangleq\\mathrm{diag}\\!\\left(\\sum_{j\\in\\mathcal{N}_1}|\\mathsf{w}_{1j}|,\\quad\\sum_{j\\in\\mathcal{N}_2}|\\mathsf{w}_{2j}|,\\quad\\ldots,\\quad\\sum_{j\\in\\mathcal{N}_N}|\\mathsf{w}_{Nj}|\\right)$ and $\\mathcal{N}_i\\triangleq\\{j:\\,\\mathsf{w}_{ij}\\neq 0\\}$):</p>
+<div class="bc-d bc-eq bc-el"></div>
+<p class="bc-d">Dynamics of the MAS: $\\dot{\\boldsymbol{x}}(t)=-(\\mathcal{L}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$.</p>
 <div class="bc-grid"><div>
 <div class="bc-bar"><button type="button" data-m="node" class="on"><svg class="bc-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bcBI" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs><circle cx="12" cy="12" r="7" fill="url(#bcBI)" stroke="#8a6410" stroke-width=".8"/></svg> Agent</button><button type="button" data-m="edge">&rarr; Communication</button><button type="button" data-m="del">&#10005; Delete agent</button><label>weight <input class="bc-w" value="1" size="6" aria-label="Communication weight"></label><label><input type="checkbox" class="bc-b"> both ways</label><select class="bc-ex" aria-label="Examples"></select><button type="button" data-a="clr">Clear</button></div>
 <svg class="bc-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg>
@@ -1188,8 +1194,12 @@ const balanced=edges.every(([j,i,w])=>col[i]===sg(w)*col[j]);
 return{N,strong,symm:bad.length==0,bad,balanced,col};
 }
 const L=s=>s.length?s.map(i=>i+1).join(", "):" ";
-function verdict(){
-root.querySelectorAll(".bc-d").forEach(p=>{p.style.display=nodes.length>=2&&edges.length?"":"none"});
+function fillEq(){
+const N=nodes.length,A=Array.from({length:N},()=>Array(N).fill(0));edges.forEach(([j,i,w])=>{A[i][j]=w});
+const Lm=A.map((r,i)=>r.map((v,j)=>i==j?r.reduce((s,x)=>s+Math.abs(x),0):-v));
+const bm=M=>"\\begin{bmatrix}"+M.map(r=>r.map(v=>"{"+fmt(v)+"}").join("&")).join("\\\\")+"\\end{bmatrix}";
+[[".bc-ea","\\mathcal{A}",A],[".bc-el","\\mathcal{L}",Lm]].forEach(([s,n,M])=>{const el=q(s);if(!el)return;const t=N>=2&&edges.length?"$$"+n+"="+bm(M)+"$$":"";if(el.dataset.s===t)return;el.dataset.s=t;el.innerHTML=t;if(t&&window.MathJax&&MathJax.typesetPromise)MathJax.typesetPromise([el])})}
+function verdict(){root.querySelectorAll(".bc-d").forEach(p=>{p.style.display=nodes.length>=2&&edges.length?"":"none"});fillEq();
 const a=an,N=a.N;
 if(N<2||!edges.length){resEl.innerHTML="Add at least two agents and a communication to analyse the MAS.";return}
 const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</span> ${t}</div>`;
