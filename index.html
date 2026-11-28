@@ -291,7 +291,8 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .dm-amx::after{right:0;border-left:0}
 .dm-aeq .dm-t{width:auto;margin:0}
 .dm-aeq .dm-t td{padding:.12rem .2rem}
-.dm-aeq .dm-t td input{width:2.7rem;min-width:0;text-align:center;box-sizing:border-box}  
+.dm-aeq .dm-t td input{width:2.7rem;min-width:0;text-align:center;box-sizing:border-box}
+.dm-aeq .dm-t td.dm-ro{min-width:2.7rem;text-align:center;padding:.3rem .2rem}
 @media(max-width:700px){.bc-res .bc-v{text-align:left}}
 .bc-tp{font-family:"STIX Two Math","Cambria Math","Latin Modern Math","DejaVu Sans",serif;font-size:.85em;margin-left:.1em}
 .dm-bar input.dm-w,.dm-bar select.dm-ex{background:var(--chip);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:.2rem .45rem;font:inherit;font-size:.8rem}
@@ -877,13 +878,13 @@ return `<p><b class="dm-cs">Case 1:</b> In the system ${W.sys(L)}, suppose the $
 <li>The minimum number of ${W.who} (equivalently, the minimum number of nonzero ${W.nz} of ${W.M}) required to make the MAS ${W.ok} is <b>${W.sym} = ${r.k}</b>. Furthermore, ${SETS}</li></ul>
 <p><b class="dm-cs">Case 2:</b> In the system ${W.sys(L)}, suppose the ${W.nm} ${W.M} is restricted to have its ${W.line} chosen only from the ${W.basis}:</p><ul>
 <li>The minimum number of independent ${W.thing} (equivalently, the minimum number of nonzero ${W.line} of ${W.M}) required to make the MAS ${W.ok} is <b>${r.k}</b>, which equals the minimum number of ${W.who} (equivalently, the minimum number of nonzero ${W.nz} of ${W.M}). Surprisingly, this value is<div class="dm-eq"><span class="dm-eqm">\\[\\geqq\\ ${MX}\\,.\\]</span></div>Furthermore, ${SETS}</li></ul>`};
-const LT=`<div class="dm-lab">Laplacian of the MAS, $\\mathcal{L}\\triangleq\\mathcal{D}-\\mathcal{A}$, where $\\mathcal{D}\\triangleq\\mathrm{diag}\\!\\left(\\sum_{j\\in\\mathcal{N}_1}|\\mathsf{w}_{1j}|,\\quad\\sum_{j\\in\\mathcal{N}_2}|\\mathsf{w}_{2j}|,\\quad\\ldots,\\quad\\sum_{j\\in\\mathcal{N}_N}|\\mathsf{w}_{Nj}|\\right)$ and $\\mathcal{N}_i\\triangleq\\{j:\\,\\mathsf{w}_{ij}\\neq 0\\}$:</div><div class="dm-sc"><table class="dm-t"><tr><th></th>${nodes.map((_,j)=>`<th>${j+1}</th>`).join("")}</tr>${Ls.map((r,i)=>`<tr><th>${i+1}</th>${r.map(v=>`<td class="dm-ro">${esc(v)}</td>`).join("")}</tr>`).join("")}</table></div>`;
+const LT="",LT2=`<div class="dm-lab">Laplacian of the MAS, $\\mathcal{L}\\triangleq\\mathcal{D}-\\mathcal{A}$, where $\\mathcal{D}\\triangleq\\mathrm{diag}\\!\\left(\\sum_{j\\in\\mathcal{N}_1}|\\mathsf{w}_{1j}|,\\quad\\sum_{j\\in\\mathcal{N}_2}|\\mathsf{w}_{2j}|,\\quad\\ldots,\\quad\\sum_{j\\in\\mathcal{N}_N}|\\mathsf{w}_{Nj}|\\right)$ and $\\mathcal{N}_i\\triangleq\\{j:\\,\\mathsf{w}_{ij}\\neq 0\\}$:</div><div class="dm-lab dm-aeq"><span class="dm-aeqa">$\\mathcal{L}=$</span><div class="dm-sc dm-amx"><table class="dm-t">${Ls.map((r,i)=>`<tr>${r.map(v=>`<td class="dm-ro">${esc(v)}</td>`).join("")}</tr>`).join("")}</table></div></div>`;
 let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0</p>':"";
 h+=`<p class="dm-th-h">Let the dynamics of the MAS: $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$. No matter what, the ${W.noun} of this MAS is always achievable (for example, ${W.ach}). The questions are: what is the minimum number of independent ${W.thing} and what is the minimum number of ${W.who} required to achieve it?</p>`+cases("a","A")+LT;
 h+=`<p class="dm-th-h">Change the dynamics of the MAS to $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{L}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$. Here too, no matter what, the ${W.noun} of this MAS is always achievable (for example, ${W.ach}). The same questions are asked again: what is the minimum number of independent ${W.thing} and what is the minimum number of ${W.who} required to achieve it?</p>`+cases("l","L");
 const U=[...sel].sort((a,b)=>a-b);
 if(U.length){const f=tg=>{const ok=ctrl(RS[tg].P,N,U);return `<b class="${ok?"dm-ok":"dm-no"}">${ok?W.ok+" ✓":W.no+" ✗"}</b>`};h+=`<p>${W.ys} {${U.map(x=>x+1).join(", ")}}: ${f("a")} in the adjacency dynamics and ${f("l")} in the Laplacian dynamics.</p>`}
-res.innerHTML=h;
+res.innerHTML=LT2+h;
 const same=(s,t)=>s.length===t.length&&s.every(x=>t.includes(x)),
 offIO=()=>{io=null;cap.innerHTML="";res.querySelectorAll("[data-io]").forEach(x=>{x.classList.remove("on");x.setAttribute("aria-pressed","false")})},
 mark=(tg,s)=>res.querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",!!s&&x.dataset.d===tg&&same(RS[tg].good[+x.dataset.s],s))),
