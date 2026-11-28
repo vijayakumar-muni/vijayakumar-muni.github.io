@@ -1189,6 +1189,7 @@ return{N,strong,symm:bad.length==0,bad,balanced,col};
 }
 const L=s=>s.length?s.map(i=>i+1).join(", "):" ";
 function verdict(){
+root.querySelectorAll(".bc-d").forEach(p=>{p.style.display=nodes.length>=2&&edges.length?"":"none"});
 const a=an,N=a.N;
 if(N<2||!edges.length){resEl.innerHTML="Add at least two agents and a communication to analyse the MAS.";return}
 const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</span> ${t}</div>`;
