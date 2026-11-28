@@ -321,7 +321,8 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .bc-eq{overflow-x:auto;overflow-y:hidden}
 .bc-eq mjx-container[display="true"]{margin:.4rem 0!important}
 .bc-case b{font-weight:600}
-.bc-case ul{list-style:none;margin:.25rem 0 0;padding-left:1.1rem}
+.bc-case{display:grid;grid-template-columns:max-content 1fr;column-gap:.4em}
+.bc-case ul{grid-column:2;list-style:none;margin:.25rem 0 0;padding-left:0}
 .bc-case li{position:relative;padding-left:1.1em;margin:.2rem 0}
 .bc-case li::before{content:"";position:absolute;left:0;top:.62em;width:.4em;height:.4em;border-radius:50%;background:currentColor}
 </style>
@@ -1175,7 +1176,7 @@ root.innerHTML=`<div class="bc-p">
 <p class="bc-d">Laplacian of the MAS (defined by $\\mathcal{D}-\\mathcal{A}$, where $\\mathcal{D}\\triangleq\\mathrm{diag}\\!\\left(\\sum_{j\\in\\mathcal{N}_1}|\\mathsf{w}_{1j}|,\\quad\\sum_{j\\in\\mathcal{N}_2}|\\mathsf{w}_{2j}|,\\quad\\ldots,\\quad\\sum_{j\\in\\mathcal{N}_N}|\\mathsf{w}_{Nj}|\\right)$ and $\\mathcal{N}_i\\triangleq\\{j:\\,\\mathsf{w}_{ij}\\neq 0\\}$):</p>
 <div class="bc-d dm-aeq bc-el"></div>
 <p class="bc-d">Question: Under what condition(s) the MAS achieves an asymptotic (bipartite) consensus if its dynamics is $\\dot{\\boldsymbol{x}}(t)=-(\\mathcal{L}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$?</p>
-<div class="bc-d bc-case"><b>Case 1:</b><ul><li>MAS is structurally balanced</li><li>MAS is strongly connected</li><li>$\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$ for each existing communication $(j,\\,i)$ and $(i,\\,j)$.</li></ul></div>
+<div class="bc-d bc-case"><b>Case 1:</b><span>When the following three conditions hold:</span><ul><li>MAS is structurally balanced</li><li>MAS is strongly connected</li><li>$\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$ for each existing communication $(j,\\,i)$ and $(i,\\,j)$.</li></ul></div>
 <div class="bc-grid"><div>
 <div class="bc-bar"><button type="button" data-m="node" class="on"><svg class="bc-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bcBI" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs><circle cx="12" cy="12" r="7" fill="url(#bcBI)" stroke="#8a6410" stroke-width=".8"/></svg> Agent</button><button type="button" data-m="edge">&rarr; Communication</button><button type="button" data-m="del">&#10005; Delete agent</button><label>weight <input class="bc-w" value="1" size="6" aria-label="Communication weight"></label><label><input type="checkbox" class="bc-b"> both ways</label><select class="bc-ex" aria-label="Examples"></select><button type="button" data-a="clr">Clear</button></div>
 <svg class="bc-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg>
