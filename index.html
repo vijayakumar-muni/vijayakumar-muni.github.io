@@ -1190,7 +1190,7 @@ return{N,strong,symm:bad.length==0,bad,balanced,col};
 const L=s=>s.length?s.map(i=>i+1).join(", "):" ";
 function verdict(){
 const a=an,N=a.N;
-if(N<2){resEl.innerHTML="Add at least two agents and a communication to analyse the MAS.";return}
+if(N<2||!edges.length){resEl.innerHTML="Add at least two agents and a communication to analyse the MAS.";return}
 const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</span> ${t}</div>`;
 let h=ck(a.strong,"Strongly connected")+ck(a.symm,"$\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$ for each existing communications $(j,\\,i)$ and $(i,\\,j)$"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")))
 +ck(a.balanced,"Structurally balanced"+(a.balanced?" &mdash; camp A = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"}, camp B = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""));
