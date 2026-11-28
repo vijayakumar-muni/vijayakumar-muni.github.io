@@ -321,7 +321,6 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .bc-eq{overflow-x:auto;overflow-y:hidden}
 .bc-eq mjx-container[display="true"]{margin:.4rem 0!important}
 .bc-case b{font-weight:600}
-.bc-case{display:grid;grid-template-columns:max-content 1fr;column-gap:.4em}
 .bc-case ul{grid-column:2;list-style:none;margin:.25rem 0 0;padding-left:0}
 .bc-case li{position:relative;padding-left:1.1em;margin:.2rem 0}
 .bc-case li::before{content:"";position:absolute;left:0;top:.62em;width:.4em;height:.4em;border-radius:50%;background:currentColor}
@@ -1179,7 +1178,7 @@ root.innerHTML=`<div class="bc-p">
 <div class="bc-d dm-aeq bc-el"></div>
 <p class="bc-d">Question: Under what condition(s) the MAS achieves an asymptotic (bipartite) consensus if its dynamics is $\\dot{\\boldsymbol{x}}(t)=-(\\mathcal{L}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$?</p>
 <div class="bc-d bc-pr"><p style="margin:0">Consider the following three properties:</p><ol><li>MAS is structurally balanced.</li><li>MAS is strongly connected.</li><li>If both $(j,\\,i)$ and $(i,\\,j)$ communications exist, then $\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$.</li></ol></div>
-<div class="bc-d bc-case"><b>Case 1:</b><span>When the following three conditions hold:</span></div>
+<div class="bc-d bc-case"><b>Case 1:</b>If and only if the three properties hold, then the MAS achieves an asymptotic (bipartite) consensus: $\\lim_{t\\to+\\infty}\\boldsymbol{x}_i(t)=\\sigma_i\\boldsymbol{\\alpha}$ for every agent $i$, where $\\sigma_i=1$ if agent $i$ is in camp A, $\\sigma_i=-1$ if agent $i$ is in camp B, $\\boldsymbol{\\alpha}\\triangleq\\sum_{j=1}^{N}w_j\\sigma_j\\boldsymbol{x}_j(0)$, and $w=[w_1\\ \\ldots\\ w_N]^\\top$ is the positive vector with $w^\\top(\\mathcal{D}-|\\mathcal{A}|)=0$ and $\\sum_{j}w_j=1$ (all $w_j=1/N$ when $|\\mathsf{w}_{ij}|=|\\mathsf{w}_{ji}|$). <span class="bc-al"></span></div>
 <div class="bc-grid"><div>
 <div class="bc-bar"><button type="button" data-m="node" class="on"><svg class="bc-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bcBI" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs><circle cx="12" cy="12" r="7" fill="url(#bcBI)" stroke="#8a6410" stroke-width=".8"/></svg> Agent</button><button type="button" data-m="edge">&rarr; Communication</button><button type="button" data-m="del">&#10005; Delete agent</button><label>weight <input class="bc-w" value="1" size="6" aria-label="Communication weight"></label><label><input type="checkbox" class="bc-b"> both ways</label><select class="bc-ex" aria-label="Examples"></select><button type="button" data-a="clr">Clear</button></div>
 <svg class="bc-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Network drawing area"></svg>
@@ -1405,7 +1404,7 @@ TL.innerHTML=h;
 const INIT=q(".bc-init"),OWN=q('[data-s="own"]');
 let initKey="";
 function limText(){
-const el=q(".bc-al");if(!el)return;const a=an;let out="";
+const els=root.querySelectorAll(".bc-al");if(!els.length)return;const a=an;let out="";
 if(a&&a.N===nodes.length&&a.N>=2&&a.strong&&a.symm&&a.balanced){
 const N=a.N,A=Array.from({length:N},()=>Array(N).fill(0));edges.forEach(([j,i,w])=>{A[i][j]=Math.abs(w)});
 const M=[];for(let r=0;r<N;r++){const row=[];for(let c=0;c<N;c++)row.push((c==r?A[c].reduce((s,v)=>s+v,0):0)-A[c][r]);row.push(0);M.push(row)}
@@ -1415,7 +1414,7 @@ const cv=a=>a.length>1?"$["+a.map(x=>"{"+x+"}").join("\\quad ")+"]^\\intercal$":
 for(let k=0;k<Math.max(1,SIM.n);k++){let s=0;for(let j=0;j<N;j++)s+=w[j]*a.col[j]*st(nodes[j])[k];al.push(s)}
 const f=v=>String(+(Math.abs(v)<1e-12?0:v).toPrecision(4)).replace("-","−"),g=v=>f(-v);
 out="For the current initial states, <b>α</b> = "+cv(al.map(f))+": camp A converges to "+cv(al.map(f))+" and camp B converges to "+cv(al.map(g))+"."}
-if(el.dataset.s!==out){el.dataset.s=out;out=out.replace(/<b>[^<]*<\/b>/,"$\\boldsymbol{\\alpha}$");el.innerHTML=out;if(window.MathJax&&MathJax.typesetPromise&&out.indexOf("$")>=0)MathJax.typesetPromise([el])}}
+out=out.replace(/<b>[^<]*<\/b>/,"$\\boldsymbol{\\alpha}$");els.forEach(el=>{if(el.dataset.sig!==out){el.dataset.sig=out;el.innerHTML=out;if(window.MathJax&&MathJax.typesetPromise&&out.indexOf("$")>=0)MathJax.typesetPromise([el])}})}
 window.__bcLim=limText;
 const fit=i=>{i.style.width=Math.max(1.6,i.value.length+0.6)+"ch"};
 function syncInit(){limText(); 
