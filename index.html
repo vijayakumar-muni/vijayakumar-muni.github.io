@@ -314,6 +314,7 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .dm-ol ul>li::before{content:"";position:absolute;left:0;top:.6em;width:.4em;height:.4em;border-radius:50%;background:currentColor}
 .dm-eq .dm-ci{position:relative;top:-2px}
 .dm-res li>.dm-ci{position:relative;top:-1px}
+.bc-grid~.bc-d{margin:.6rem 0}  
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -891,7 +892,7 @@ return `<p><b class="dm-cs">Case 1:</b> In the system ${W.sys(L)}, suppose the $
 <li>The minimum number of independent ${W.thing} (equivalently, the minimum number of nonzero ${W.line} of ${W.M}) required to make the MAS ${W.ok} is <b>${r.k}</b>, which equals the minimum number of ${W.who} (equivalently, the minimum number of nonzero ${W.nz} of ${W.M}). Surprisingly, this value is<div class="dm-eq"><span class="dm-eqm">\\[\\geqq\\ ${MX}\\,.\\]</span></div>Furthermore, ${SETS}</li></ul>`};
 const LT="",LT2=`<div class="dm-lab">Laplacian of the MAS (defined by $\\mathcal{D}-\\mathcal{A}$, where $\\mathcal{D}\\triangleq\\mathrm{diag}\\!\\left(\\sum_{j\\in\\mathcal{N}_1}|\\mathsf{w}_{1j}|,\\quad\\sum_{j\\in\\mathcal{N}_2}|\\mathsf{w}_{2j}|,\\quad\\ldots,\\quad\\sum_{j\\in\\mathcal{N}_N}|\\mathsf{w}_{Nj}|\\right)$ and $\\mathcal{N}_i\\triangleq\\{j:\\,\\mathsf{w}_{ij}\\neq 0\\}$):</div><div class="dm-lab dm-aeq"><span class="dm-aeqa">$\\mathcal{L}=$</span><div class="dm-sc dm-amx"><table class="dm-t">${Ls.map((r,i)=>`<tr>${r.map(v=>`<td class="dm-ro">${esc(v)}</td>`).join("")}</tr>`).join("")}</table></div></div>`;
 let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0</p>':"";
-h+=`<ol class="dm-ol"><li>`;h+=`<p class="dm-th-h">Let the dynamics of the MAS: $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$. No matter what, the ${W.noun} of this MAS is always achievable (for example, ${W.ach}). The questions are: what is the minimum number of independent ${W.thing} and what is the minimum number of ${W.who} required to achieve it?</p>`+cases("a","A")+"</li><li>"+LT;
+h+=`<ol class="dm-ol"><li>`;h+=`<p class="dm-th-h">Let the dynamics of the MAS be $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$. No matter what, the ${W.noun} of this MAS is always achievable (for example, ${W.ach}). The questions are: what is the minimum number of independent ${W.thing} and what is the minimum number of ${W.who} required to achieve it?</p>`+cases("a","A")+"</li><li>"+LT;
 h+=`<p class="dm-th-h">Change the dynamics of the MAS to $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{L}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$. Here too, no matter what, the ${W.noun} of this MAS is always achievable (for example, ${W.ach}). The same questions are asked again: what is the minimum number of independent ${W.thing} and what is the minimum number of ${W.who} required to achieve it?</p>`+cases("l","L")+"</li></ol>";
 const U=[...sel].sort((a,b)=>a-b);
 if(U.length){const f=tg=>{const ok=ctrl(RS[tg].P,N,U);return `<b class="${ok?"dm-ok":"dm-no"}">${ok?W.ok+" ✓":W.no+" ✗"}</b>`};h+=`<p>${W.ys} {${U.map(x=>x+1).join(", ")}}: ${f("a")} in the adjacency dynamics and ${f("l")} in the Laplacian dynamics.</p>`}
@@ -1167,7 +1168,7 @@ root.innerHTML=`<div class="bc-p">
 <div class="bc-hint"></div>
 </div><div class="bc-right"><div class="bc-bar"><span class="bc-lab">Each agent's state dimension is $n$:</span><button type="button" data-n="1" class="on">1</button><button type="button" data-n="2">2</button><button type="button" data-n="3">3</button><button type="button" data-s="rnd">Random initial states</button><button type="button" data-s="own">Enter initial states</button></div><div class="bc-init" hidden></div><div class="bc-spw"><svg class="bc-sp" viewBox="0 0 480 140" role="img" aria-label="State space"></svg><div class="bc-ov"></div><span class="bc-ra">$\\mathbb{R}$</span><span class="bc-rh">$x_{i,1}$</span><span class="bc-rv">$x_{i,2}$</span></div><div class="bc-tlw"><svg class="bc-tl" viewBox="0 0 480 58" role="img" aria-label="Time axis"></svg><span class="bc-ta">$t$</span><span class="bc-tr"><span>$t$</span><span class="bc-tv"></span></span></div><div class="bc-bar"><button type="button" data-p="play">&#9654; Play</button><button type="button" data-p="rst">&#8634; Reset</button></div><div class="bc-h2"></div></div></div>
 <div class="bc-res" aria-live="polite"></div></div>`;
-const q=s=>root.querySelector(s),svg=q(".bc-svg"),hintEl=q(".bc-hint"),resEl=q(".bc-res"),wIn=q(".bc-w"),bIn=q(".bc-b"),exSel=q(".bc-ex");
+{const rs=root.querySelector(".bc-res");root.querySelectorAll(".bc-d").forEach(p=>rs.parentNode.insertBefore(p,rs))}const q=s=>root.querySelector(s),svg=q(".bc-svg"),hintEl=q(".bc-hint"),resEl=q(".bc-res"),wIn=q(".bc-w"),bIn=q(".bc-b"),exSel=q(".bc-ex");
 exSel.innerHTML="<option>Examples…</option>"+EX.map((a,k)=>`<option value="${k}">${a[0]}</option>`).join("");
 const fmt=w=>String(+w.toFixed(3));
 const sg=v=>v>0?1:v<0?-1:0;
