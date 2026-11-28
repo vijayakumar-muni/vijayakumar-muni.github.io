@@ -1232,8 +1232,9 @@ function verdict(){root.querySelectorAll(".bc-d").forEach(p=>{p.style.display=no
 const a=an,N=a.N;
 if(N<2||!edges.length){resEl.innerHTML="Add at least two agents and a communication to analyse the MAS.";return}
 const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</span> ${t}</div>`;
-let h=ck(a.strong,"Strongly connected")+ck(a.symm,"$\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$ for each existing communications $(j,\\,i)$ and $(i,\\,j)$"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")))
-+ck(a.balanced,"Structurally balanced"+(a.balanced?" &mdash; camp A = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"}, camp B = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""));
+let h=ck(a.balanced,"MAS is structurally balanced"+(a.balanced?" with camp $\\text{A}$ = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"} and camp $\\text{B}$ = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""))
++ck(a.strong,"MAS is strongly connected")
++ck(a.symm,"If both $(j,\\,i)$ and $(i,\\,j)$ communications exist, then $\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")));
 let v;
 if(a.strong&&a.symm&&a.balanced)v="<b>Conclusion:</b> MAS achieves an asymptotic (bipartite) consensus. <span class='bc-al'></span>";
 else if(a.strong&&a.symm)v="<b>Conclusion:</b> MAS achieves a consensus to the origin, whatever the initial states of the agents' are";
