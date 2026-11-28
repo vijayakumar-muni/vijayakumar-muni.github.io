@@ -303,6 +303,10 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .bc-tl .bc-pl{fill:#ff2d55;filter:none}
 .bc-xm{color:var(--mute);font-size:.82rem}
 #demo .dm-n text,#bcdemo .bc-n text{font-family:MJXTEX,"Latin Modern Math","STIX Two Math","Cambria Math","Times New Roman",serif!important;font-size:17px!important;dominant-baseline:alphabetic!important;transform:translateY(5.6px)}
+.dm-ol{margin:.5rem 0 .6rem;padding-left:1.4rem}
+.dm-ol>li{margin:.6rem 0;padding-left:.2rem}
+.dm-ol>li::marker{font-weight:600}
+.dm-ol>li>p:first-child{margin-top:0}
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -880,8 +884,8 @@ return `<p><b class="dm-cs">Case 1:</b> In the system ${W.sys(L)}, suppose the $
 <li>The minimum number of independent ${W.thing} (equivalently, the minimum number of nonzero ${W.line} of ${W.M}) required to make the MAS ${W.ok} is <b>${r.k}</b>, which equals the minimum number of ${W.who} (equivalently, the minimum number of nonzero ${W.nz} of ${W.M}). Surprisingly, this value is<div class="dm-eq"><span class="dm-eqm">\\[\\geqq\\ ${MX}\\,.\\]</span></div>Furthermore, ${SETS}</li></ul>`};
 const LT="",LT2=`<div class="dm-lab">Laplacian of the MAS (defined by $\\mathcal{D}-\\mathcal{A}$, where $\\mathcal{D}\\triangleq\\mathrm{diag}\\!\\left(\\sum_{j\\in\\mathcal{N}_1}|\\mathsf{w}_{1j}|,\\quad\\sum_{j\\in\\mathcal{N}_2}|\\mathsf{w}_{2j}|,\\quad\\ldots,\\quad\\sum_{j\\in\\mathcal{N}_N}|\\mathsf{w}_{Nj}|\\right)$ and $\\mathcal{N}_i\\triangleq\\{j:\\,\\mathsf{w}_{ij}\\neq 0\\}$):</div><div class="dm-lab dm-aeq"><span class="dm-aeqa">$\\mathcal{L}=$</span><div class="dm-sc dm-amx"><table class="dm-t">${Ls.map((r,i)=>`<tr>${r.map(v=>`<td class="dm-ro">${esc(v)}</td>`).join("")}</tr>`).join("")}</table></div></div>`;
 let h=bad?'<p class="dm-warn">Some entries are not valid numbers and are treated as 0</p>':"";
-h+=`<p class="dm-th-h">Let the dynamics of the MAS: $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$. No matter what, the ${W.noun} of this MAS is always achievable (for example, ${W.ach}). The questions are: what is the minimum number of independent ${W.thing} and what is the minimum number of ${W.who} required to achieve it?</p>`+cases("a","A")+LT;
-h+=`<p class="dm-th-h">Change the dynamics of the MAS to $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{L}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$. Here too, no matter what, the ${W.noun} of this MAS is always achievable (for example, ${W.ach}). The same questions are asked again: what is the minimum number of independent ${W.thing} and what is the minimum number of ${W.who} required to achieve it?</p>`+cases("l","L");
+h+=`<ol class="dm-ol"><li>`;h+=`<p class="dm-th-h">Let the dynamics of the MAS: $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{A}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$. No matter what, the ${W.noun} of this MAS is always achievable (for example, ${W.ach}). The questions are: what is the minimum number of independent ${W.thing} and what is the minimum number of ${W.who} required to achieve it?</p>`+cases("a","A")+"</li><li>"+LT;
+h+=`<p class="dm-th-h">Change the dynamics of the MAS to $\\dot{\\boldsymbol{x}}(t)=(\\mathcal{L}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$. Here too, no matter what, the ${W.noun} of this MAS is always achievable (for example, ${W.ach}). The same questions are asked again: what is the minimum number of independent ${W.thing} and what is the minimum number of ${W.who} required to achieve it?</p>`+cases("l","L")+"</li></ol>";
 const U=[...sel].sort((a,b)=>a-b);
 if(U.length){const f=tg=>{const ok=ctrl(RS[tg].P,N,U);return `<b class="${ok?"dm-ok":"dm-no"}">${ok?W.ok+" ✓":W.no+" ✗"}</b>`};h+=`<p>${W.ys} {${U.map(x=>x+1).join(", ")}}: ${f("a")} in the adjacency dynamics and ${f("l")} in the Laplacian dynamics.</p>`}
 res.innerHTML=LT2+h;
