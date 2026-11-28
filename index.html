@@ -333,6 +333,14 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 @media(max-width:700px){.bc-case{display:block}}
 .bc-case>b{font-variant-numeric:tabular-nums;min-width:3.634em}
 .bc-case+.bc-case{margin-top:.9rem}
+.bc-rw{display:flex;align-items:center;gap:.6rem}
+.bc-rl{flex:0 1 auto}
+.bc-rc{flex:none;font-weight:600;color:var(--ink);text-align:center}
+.bc-rr{flex:1 1 0;min-width:0}
+.bc-bw{flex:none;width:14px;align-self:stretch;position:relative;margin:.1rem 0}
+.bc-bs{position:absolute;left:0;top:0;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.6}
+.bc-bs.bc-bl{transform:scaleX(-1)}
+@media(max-width:700px){.bc-rw{flex-wrap:wrap}.bc-bw{display:none}.bc-rl{flex:1 1 100%}.bc-rc{flex:1 1 100%;text-align:left;margin-top:.4rem;padding-top:.4rem;border-top:1px solid var(--line)}.bc-rr{flex:1 1 100%}}  
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
@@ -1235,11 +1243,12 @@ const ck=(b,t)=>`<div><span class="${b?"ok":"no"}">${b?"&#10003;":"&#10007;"}</s
 let h=ck(a.balanced,"MAS is structurally balanced"+(a.balanced?" with camp $\\text{A}$ = {"+L(a.col.map((c,i)=>c>0?i:-1).filter(i=>i>=0))+"} and camp $\\text{B}$ = {"+L(a.col.map((c,i)=>c<0?i:-1).filter(i=>i>=0))+"}":""))
 +ck(a.strong,"MAS is strongly connected")
 +ck(a.symm,"If both $(j,\\,i)$ and $(i,\\,j)$ communications exist, then $\\mathsf{w}_{ij}\\mathsf{w}_{ji}>0$"+(a.symm?"":" &mdash; violated for agents "+a.bad.map(p=>"("+(p[0]+1)+","+(p[1]+1)+")").join(", ")));
-let v;
-if(a.strong&&a.symm&&a.balanced)v="<b>Conclusion:</b> MAS achieves an asymptotic (bipartite) consensus. <span class='bc-al'></span>";
-else if(a.strong&&a.symm)v="<b>Conclusion:</b> MAS achieves a consensus to the origin, whatever the initial states of the agents' are";
-else v="<b>Inconclusive. Further investigation is needed.</b>";
-resEl.innerHTML=h+(v?'<div class="bc-v">'+v+"</div>":"");window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([resEl]);
+let cs,v;
+if(a.strong&&a.symm&&a.balanced){cs="Case 1 applied";v="MAS achieves an asymptotic (bipartite) consensus. <span class='bc-al'></span>"}
+else if(a.strong&&a.symm){cs="Case 2 applied";v="MAS achieves a consensus to the origin."}
+else{cs="Others applied";v="The result is inconclusive."}
+const BR='<div class="bc-bw"><svg class="bc-bs" viewBox="0 0 10 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 1Q5 1 5 12L5 38Q5 50 10 50Q5 50 5 62L5 88Q5 99 0 99" vector-effect="non-scaling-stroke"/></svg></div>';
+resEl.innerHTML='<div class="bc-rw"><div class="bc-rl">'+h+'</div>'+BR+'<div class="bc-rc">'+cs+'</div>'+BR.replace('class="bc-bs"','class="bc-bs bc-bl"')+'<div class="bc-rr">'+v+'</div></div>';window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([resEl]);
 }
 function draw(){
 const has=(j,i)=>edges.some(e=>e[0]==j&&e[1]==i);
