@@ -1167,9 +1167,9 @@ const ex=a=>{nodes=a[1].map(p=>({x:240+(p[0]-180)*1.5,y:150+(p[1]-150)*1.2}));ed
 root.innerHTML=`<div class="bc-p">
 <p class="bc-d">$N$: The total number of agents in the MAS; $\\boldsymbol{x}_i(t)\\in\\mathbb{R}^n$: The state of agent $i$ at time $t$; $\\boldsymbol{x}(t)\\triangleq\\begin{bmatrix}\\boldsymbol{x}_1(t)^\\intercal&\\boldsymbol{x}_2(t)^\\intercal&\\ldots&\\boldsymbol{x}_N(t)^\\intercal\\mkern-9mu\\end{bmatrix}^\\intercal$: The state of the MAS at time $t$; Communication topology of the MAS: Time-invariant.</p>
 <p class="bc-d">Communication topology of the MAS (element in row $i$, column $j$ = weight of the communication from agent $j$ to $i$, denoted by $\\mathsf{w}_{ij}$):</p>
-<div class="bc-d bc-eq bc-ea"></div>
+<div class="bc-d dm-aeq bc-ea"></div>
 <p class="bc-d">Laplacian of the MAS (defined by $\\mathcal{D}-\\mathcal{A}$, where $\\mathcal{D}\\triangleq\\mathrm{diag}\\!\\left(\\sum_{j\\in\\mathcal{N}_1}|\\mathsf{w}_{1j}|,\\quad\\sum_{j\\in\\mathcal{N}_2}|\\mathsf{w}_{2j}|,\\quad\\ldots,\\quad\\sum_{j\\in\\mathcal{N}_N}|\\mathsf{w}_{Nj}|\\right)$ and $\\mathcal{N}_i\\triangleq\\{j:\\,\\mathsf{w}_{ij}\\neq 0\\}$):</p>
-<div class="bc-d bc-eq bc-el"></div>
+<div class="bc-d dm-aeq bc-el"></div>
 <p class="bc-d">Question: Under what condition(s) the MAS achieves an asymptotic (bipartite) consensus? Let the dynamics of the MAS be $\\dot{\\boldsymbol{x}}(t)=-(\\mathcal{L}\\otimes\\mathbf{I}_n)\\boldsymbol{x}(t)$. The question is: </p>
 <div class="bc-grid"><div>
 <div class="bc-bar"><button type="button" data-m="node" class="on"><svg class="bc-ic" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="bcBI" cx=".5" cy=".5" r=".5" fx=".34" fy=".32"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#f2b92c"/><stop offset="1" stop-color="#a8780f"/></radialGradient></defs><circle cx="12" cy="12" r="7" fill="url(#bcBI)" stroke="#8a6410" stroke-width=".8"/></svg> Agent</button><button type="button" data-m="edge">&rarr; Communication</button><button type="button" data-m="del">&#10005; Delete agent</button><label>weight <input class="bc-w" value="1" size="6" aria-label="Communication weight"></label><label><input type="checkbox" class="bc-b"> both ways</label><select class="bc-ex" aria-label="Examples"></select><button type="button" data-a="clr">Clear</button></div>
@@ -1199,6 +1199,18 @@ const N=nodes.length,A=Array.from({length:N},()=>Array(N).fill(0));edges.forEach
 const Lm=A.map((r,i)=>r.map((v,j)=>i==j?r.reduce((s,x)=>s+Math.abs(x),0):-v));
 const bm=M=>"\\begin{bmatrix}"+M.map(r=>r.map(v=>"{"+fmt(v)+"}").join("&")).join("\\\\")+"\\end{bmatrix}";
 [[".bc-ea","\\mathcal{A}",A],[".bc-el","\\mathcal{L}",Lm]].forEach(([s,n,M])=>{const el=q(s);if(!el)return;const t=N>=2&&edges.length?"$$"+n+"="+bm(M)+"$$":"";if(el.dataset.s===t)return;el.dataset.s=t;el.innerHTML=t;if(t&&window.MathJax&&MathJax.typesetPromise)MathJax.typesetPromise([el])})}
+function fillEq(){
+const N=nodes.length,show=N>=2&&edges.length,ea=q(".bc-ea"),el=q(".bc-el");if(!ea||!el)return;
+const ty=e=>{window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([e])};
+if(!show){ea.dataset.cols="";el.dataset.sig="";ea.innerHTML="";el.innerHTML="";return}
+const A=Array.from({length:N},()=>Array(N).fill(0));edges.forEach(([j,i,w])=>{A[i][j]=w});
+if(ea.dataset.cols!==String(N)){ea.dataset.cols=N;
+ea.innerHTML='<span class="dm-aeqa">$\\mathcal{A}=$</span><div class="dm-sc dm-amx"><table class="dm-t">'+A.map((r,i)=>"<tr>"+r.map((v,j)=>'<td><input data-i="'+i+'" data-j="'+j+'" value="'+fmt(v)+'"'+(i==j?' readonly tabindex="-1"':"")+' aria-label="a '+(i+1)+","+(j+1)+'"></td>').join("")+"</tr>").join("")+"</table></div>";ty(ea)}
+else ea.querySelectorAll("input").forEach(x=>{if(x===document.activeElement)return;x.value=fmt(A[+x.dataset.i][+x.dataset.j]);x.classList.remove("bad")});
+const Lm=A.map((r,i)=>r.map((v,j)=>i==j?r.reduce((s,x)=>s+Math.abs(x),0):-v)),t=Lm.map(r=>r.map(fmt).join(",")).join(";");
+if(el.dataset.sig!==t){el.dataset.sig=t;el.innerHTML='<span class="dm-aeqa">$\\mathcal{L}=$</span><div class="dm-sc dm-amx"><table class="dm-t">'+Lm.map(r=>"<tr>"+r.map(v=>'<td class="dm-ro">'+fmt(v)+"</td>").join("")+"</tr>").join("")+"</table></div>";ty(el)}}
+q(".bc-ea").addEventListener("input",e=>{const t=e.target;if(!t.dataset||t.dataset.i===undefined||t.readOnly)return;const s=t.value.trim(),w=s===""?0:parseW(s);if(w===null){t.classList.add("bad");return}t.classList.remove("bad");setEdge(+t.dataset.j,+t.dataset.i,w);update()});
+q(".bc-ea").addEventListener("change",e=>{const t=e.target;if(t.dataset&&t.dataset.i!==undefined&&!t.readOnly&&t.value.trim()===""){t.value="0";t.classList.remove("bad")}});
 function verdict(){root.querySelectorAll(".bc-d").forEach(p=>{p.style.display=nodes.length>=2&&edges.length?"":"none"});fillEq();
 const a=an,N=a.N;
 if(N<2||!edges.length){resEl.innerHTML="Add at least two agents and a communication to analyse the MAS.";return}
