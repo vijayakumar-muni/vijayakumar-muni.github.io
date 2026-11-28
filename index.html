@@ -307,7 +307,11 @@ main p,main li,.meta,.dm-cap{text-align:justify;text-justify:inter-word;hyphens:
 .dm-ol>li{margin:.6rem 0;padding-left:1.5rem;position:relative;counter-increment:dmol}
 .dm-ol>li::before{content:counter(dmol) ".";position:absolute;left:0;top:0;font-weight:600}
 .dm-ol>li>p:first-child{margin-top:0}
-@media(min-width:701px){.dm-lab:not(.dm-aeq){text-align:justify}}  
+@media(min-width:701px){.dm-lab:not(.dm-aeq){text-align:justify}}
+.dm-ol .dm-cs{display:inline-block;width:4.2em}
+.dm-ol ul{list-style:none;margin:.3rem 0 .6rem 4.48em;padding-left:0}
+.dm-ol ul>li{position:relative;padding-left:1.1em}
+.dm-ol ul>li::before{content:"";position:absolute;left:0;top:.6em;width:.4em;height:.4em;border-radius:50%;background:currentColor}  
 </style>
 <script>MathJax={tex:{inlineMath:[['$','$']],processEscapes:true}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
